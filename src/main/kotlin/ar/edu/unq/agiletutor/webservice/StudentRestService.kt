@@ -22,13 +22,13 @@ class StudentRestService {
     private  lateinit var  studentService: StudentService
     private val builder: ResponseEntity.BodyBuilder? = null
 
-
+/*
    /**register a student*/
     @PostMapping("/api/register")
     fun registerStudent (@RequestBody studentdata :StudentDTO): StudentDTO {
         return StudentDTO.desdeModelo(studentService.register(studentdata.aModelo()))
     }
-
+*/
 
     /**register a user*/
     @PostMapping("/api/register")

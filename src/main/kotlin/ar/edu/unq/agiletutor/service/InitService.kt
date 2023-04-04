@@ -35,6 +35,6 @@ class InitService {
        studentService!!.register(student1)
 
         val student2= Alumno( 0,"Cristian", "Gonzalez","456","cristian@gmail.com",mutableSetOf() ,0.0,"")
-        studentService!!.register(student2)
+        studentService.register(student2)
     }
 }

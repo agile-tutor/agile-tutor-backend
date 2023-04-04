@@ -1,9 +1,8 @@
 package ar.edu.unq.agiletutor.model
 
-
-
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
+
 //import javax.persistence.*
 //import kotlin.jvm.Transient
 
@@ -11,63 +10,54 @@ import org.jetbrains.annotations.NotNull
 @Table(name = "asistencias")
 class Asistencia {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_asistence")
-    var id: Int?= null
-
+    @Column(name = "id_attendance")
+    var id: Long? = null
 
     @Column(nullable = false)
     @NotNull("el day es obligatorio")
-   // @Size(min = 1, max = 1, message = "el campo day debe tener un solo caracter")
-    var day: Int?= null
-
+    // @Size(min = 1, max = 1, message = "el campo day debe tener un solo caracter")
+    var day: Int? = null
 
     @Column(nullable = false)
     @NotNull("el check es obligatorio")
-   // @Size(min = 1, max = 1, message = "el campo check debe tener un solo caracter")
-    var check: String?= null
-
-
+    // @Size(min = 1, max = 1, message = "el campo check debe tener un solo caracter")
+    var attended: String? = null
 
     constructor() : super() {}
     constructor(
-        id: Int?,
+        id: Long?,
         day: Int?,
-        check: String
-           ) : super() {
+        attended: String
+    ) : super() {
         this.id = id
         this.day = day
-        this.check = check
+        this.attended = attended
 
     }
 
-    fun setday(day: Int){
+    fun setday(day: Int) {
         this.day = day
     }
 
-    fun getcday():Int? {
+    fun getday(): Int? {
         return day
     }
 
-
-    fun setcheck(check: String){
-        this.check = check
+    fun setattended(attended: String) {
+        this.attended = attended
     }
 
-
-    fun getcheck():String? {
-        return check
+    fun getattended(): String? {
+        return attended
     }
 
-
-
-    fun getAsistence():Int{
-        if ( getcheck()=="presente" )
-        {return 1}
-        else { return 0}
+    fun getasistence(): Int {
+        if (getattended() == "presente") {
+            return 1
+        } else {
+            return 0
+        }
     }
-
-
 }
