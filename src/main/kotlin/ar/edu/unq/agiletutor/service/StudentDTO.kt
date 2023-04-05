@@ -55,7 +55,7 @@ data class AttendanceDTO(
 ) {
     companion object {
         fun desdeModelo(asistencia: Asistencia): AttendanceDTO {
-            return AttendanceDTO(asistencia.id, asistencia.day, asistencia.attended)
+            return AttendanceDTO(asistencia.id, asistencia.day, asistencia.attended.toString())
         }
     }
 
@@ -63,7 +63,7 @@ data class AttendanceDTO(
         val attendance = Asistencia()
         attendance.id = id
         attendance.day = day
-        attendance.attended = attended
+        attendance.attended = attended.toBoolean()
         return attendance
     }
 }

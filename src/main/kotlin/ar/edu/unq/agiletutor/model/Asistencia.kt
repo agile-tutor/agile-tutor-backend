@@ -13,7 +13,7 @@ class Asistencia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_attendance")
-    var id: Long? = null
+    var id: Long? = 0
 
     @Column(nullable = false)
     @NotNull("el day es obligatorio")
@@ -23,18 +23,20 @@ class Asistencia {
     @Column(nullable = false)
     @NotNull("el check es obligatorio")
     // @Size(min = 1, max = 1, message = "el campo check debe tener un solo caracter")
-    var attended: String? = null
+    var attended: Boolean? = null
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "alumno_id")
+    var alumno: Alumno? = null
 
     constructor() : super() {}
     constructor(
-        id: Long?,
-        day: Int?,
-        attended: String
+        alumno: Alumno?,
+        day: Int?
     ) : super() {
-        this.id = id
+        this.alumno = alumno
         this.day = day
-        this.attended = attended
-
+        this.attended = false
     }
 
     fun setday(day: Int) {
@@ -45,19 +47,11 @@ class Asistencia {
         return day
     }
 
-    fun setattended(attended: String) {
+    fun setattended(attended: Boolean) {
         this.attended = attended
     }
 
-    fun getattended(): String? {
+    fun getattended(): Boolean? {
         return attended
-    }
-
-    fun getasistence(): Int {
-        if (getattended() == "presente") {
-            return 1
-        } else {
-            return 0
-        }
     }
 }
