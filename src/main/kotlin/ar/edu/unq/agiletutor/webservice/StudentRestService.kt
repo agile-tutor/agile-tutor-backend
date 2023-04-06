@@ -1,14 +1,12 @@
 package ar.edu.unq.agiletutor.webservice
 
-import ar.edu.unq.agiletutor.StudentRegisterMapper
-import ar.edu.unq.agiletutor.StudentViewMapper
+import ar.edu.unq.agiletutor.service.AttendanceDTO
 import ar.edu.unq.agiletutor.service.StudentDTO
 import ar.edu.unq.agiletutor.service.StudentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.HashMap
 
 
 @RestController
@@ -16,27 +14,27 @@ import java.util.HashMap
 class StudentRestService {
 
     @Autowired
-    private  lateinit var  studentService: StudentService
+    private lateinit var studentService: StudentService
     private val builder: ResponseEntity.BodyBuilder? = null
 
-/*
-   /**register a student*/
-    @PostMapping("/api/register")
-    fun registerStudent (@RequestBody studentdata :StudentDTO): StudentDTO {
-        return StudentDTO.desdeModelo(studentService.register(studentdata.aModelo()))
-    }
-*/
+    /*
+       /**register a student*/
+        @PostMapping("/api/register")
+        fun registerStudent (@RequestBody studentdata :StudentDTO): StudentDTO {
+            return StudentDTO.desdeModelo(studentService.register(studentdata.aModelo()))
+        }
+    */
 
     /**register a user*/
     @PostMapping("/api/register")
-    fun register (@RequestBody studentdata :StudentDTO): ResponseEntity<*> {
-        var response : ResponseEntity<*>?
+    fun register(@RequestBody studentdata: StudentDTO): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
 
         try {
 
-            val  userview = StudentDTO.desdeModelo(studentService.register(studentdata.aModelo()))
+            val userview = StudentDTO.desdeModelo(studentService.register(studentdata.aModelo()))
             ResponseEntity.status(201)
-            response =  ResponseEntity.ok().body(userview)
+            response = ResponseEntity.ok().body(userview)
         } catch (e: Exception) {
             ResponseEntity.status(404)
 
@@ -50,8 +48,20 @@ class StudentRestService {
     @CrossOrigin(origins = ["http://localhost:3000"])
     @GetMapping("/api/students")
     fun allStudents(): ResponseEntity<*> {
-        val students = studentService.findAll().map{StudentDTO.desdeModelo(it)}
+        val students = studentService.findAll().map { StudentDTO.desdeModelo(it) }
 
         return ResponseEntity.ok().body(students)
     }
+
+    @CrossOrigin(origins = ["http://localhost:3000"])
+    @PutMapping(value = ["/api/updateattendances"])
+    fun modifyAUser(
+        @RequestBody studentsAttendances: List<AttendanceDTO>
+    ): ResponseEntity<*>? {
+        var toUpdate = studentService.listaAsistenciaAListaModelo(studentsAttendances)
+        println(toUpdate)
+        return ResponseEntity.ok().body(studentService.updateAttendances(toUpdate))
+    }
+
+
 }

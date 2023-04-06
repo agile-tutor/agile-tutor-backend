@@ -61,8 +61,8 @@ data class AttendanceDTO(
 
     fun aModelo(): Asistencia {
         val attendance = Asistencia()
-        attendance.id = id
-        attendance.day = day
+        attendance.id = id!!.toLong()
+        attendance.day = day!!.toInt()
         attendance.attended = attended.toBoolean()
         return attendance
     }
