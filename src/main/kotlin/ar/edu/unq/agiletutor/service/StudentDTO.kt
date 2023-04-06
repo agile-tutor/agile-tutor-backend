@@ -1,8 +1,9 @@
 package ar.edu.unq.agiletutor.service
 
 
-import ar.edu.unq.agiletutor.model.Alumno
-import ar.edu.unq.agiletutor.model.Asistencia
+import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.model.Attendance
+
 
 data class StudentDTO (
                        var id:Long?,
@@ -16,7 +17,7 @@ data class StudentDTO (
 ) {
 
     companion object {
-        fun desdeModelo(student: Alumno): StudentDTO {
+        fun desdeModelo(student: Student): StudentDTO {
             val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
             return StudentDTO(
@@ -32,15 +33,15 @@ data class StudentDTO (
         }
     }
 
-    fun aModelo(): Alumno{
-        val student = Alumno()
+    fun aModelo(): Student{
+        val student = Student()
         student.id = id
         student.name = name
         student.surname = surname
         student.identifier = identifier
         student.email = email
-        //student.attendances = attendances!!.map {  AttendanceDTO (it.id,it.day,it.check).aModelo() }.toMutableSet()
-        student.attendances = mutableSetOf<Asistencia>()
+       student.attendances = attendances!!.map {  AttendanceDTO (it.id,it.day,it.check).aModelo() }.toMutableSet()
+       // student.attendances = mutableSetOf<Asistencia>()
         student.attendancepercentage = 0.0
         student.observations = ""
 
@@ -57,18 +58,21 @@ data class AttendanceDTO(
     var day: Int?,
     var check:String?
 
-) {
+)
+
+{
     companion object {
-        fun desdeModelo(asistencia: Asistencia): AttendanceDTO {
+        fun desdeModelo(asistencia: Attendance): AttendanceDTO {
             return AttendanceDTO(asistencia.id, asistencia.day, asistencia.check)
         }
     }
 
-    fun aModelo(): Asistencia {
-        val attendance = Asistencia()
+    fun aModelo(): Attendance {
+        val attendance = Attendance()
         attendance.id = id
         attendance.day = day
         attendance.check = check
         return attendance
     }
 }
+

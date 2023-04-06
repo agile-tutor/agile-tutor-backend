@@ -23,15 +23,10 @@ class StudentRestService {
     private val builder: ResponseEntity.BodyBuilder? = null
 
 
-   /**register a student*/
-    @PostMapping("/api/register")
-    fun registerStudent (@RequestBody studentdata :StudentDTO): StudentDTO {
-        return StudentDTO.desdeModelo(studentService.register(studentdata.aModelo()))
-    }
 
 
-    /**register a user*/
-    @PostMapping("/api/register")
+    /**register a student*/
+    @PostMapping("/api/students/register")
     fun register (@RequestBody studentdata :StudentDTO): ResponseEntity<*> {
         var response : ResponseEntity<*>?
 

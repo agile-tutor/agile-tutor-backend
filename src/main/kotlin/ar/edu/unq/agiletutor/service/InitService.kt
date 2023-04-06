@@ -1,8 +1,7 @@
 package ar.edu.unq.agiletutor.service
 
 
-import ar.edu.unq.agiletutor.StudentRegisterMapper
-import ar.edu.unq.agiletutor.model.Alumno
+import ar.edu.unq.agiletutor.model.Student
 import jakarta.annotation.PostConstruct
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,10 +30,16 @@ class InitService {
     }
 
     private fun fireInitialData() {
-        val student1 = Alumno(  0,"Ale","Fariña", "123","ale@gmail.com", mutableSetOf() ,0.0,""  )
+        val student1 = Student(  0,"Ale","Fariña", "123","ale@gmail.com" , mutableSetOf() ,0.0,""  )
        studentService!!.register(student1)
 
-        val student2= Alumno( 0,"Cristian", "Gonzalez","456","cristian@gmail.com",mutableSetOf() ,0.0,"")
+        val student2= Student( 0,"Cristian", "Gonzalez","456","cristian@gmail.com" ,mutableSetOf() ,0.0,"")
         studentService!!.register(student2)
+
+        val student3= Student( 0,"Pedro", "Picapiedra","456","pica@gmail.com" ,mutableSetOf() ,0.0,"")
+        studentService!!.register(student3)
+
+        val student4= Student( 0,"Pablo", "Marmol","456","marmol@gmail.com" ,mutableSetOf() ,0.0,"")
+        studentService!!.register(student4)
     }
 }

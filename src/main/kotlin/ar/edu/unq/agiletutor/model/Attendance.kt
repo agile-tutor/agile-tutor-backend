@@ -1,20 +1,19 @@
+
 package ar.edu.unq.agiletutor.model
+
 
 
 
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
-//import javax.persistence.*
-//import kotlin.jvm.Transient
+import java.io.Serializable
 
 @Entity
-@Table(name = "asistencias")
-class Asistencia {
-
+class Attendance:Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_asistence")
+    @Column(name = "id_asistencia")
     var id: Int?= null
 
 
@@ -27,7 +26,12 @@ class Asistencia {
     @Column(nullable = false)
     @NotNull("el check es obligatorio")
    // @Size(min = 1, max = 1, message = "el campo check debe tener un solo caracter")
-    var check: String?= null
+    var check: String?=null
+
+    @JoinColumn(nullable = false)
+    @ManyToOne(optional = true)
+    var alumno: Student? = null
+
 
 
 
@@ -35,11 +39,13 @@ class Asistencia {
     constructor(
         id: Int?,
         day: Int?,
-        check: String
+        check: String,
+        alumno: Student?
            ) : super() {
         this.id = id
         this.day = day
         this.check = check
+        this.alumno = alumno
 
     }
 
@@ -71,3 +77,4 @@ class Asistencia {
 
 
 }
+

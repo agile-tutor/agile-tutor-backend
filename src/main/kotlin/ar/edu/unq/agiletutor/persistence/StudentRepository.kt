@@ -1,6 +1,6 @@
 package ar.edu.unq.agiletutor.persistence
 
-import ar.edu.unq.agiletutor.model.Alumno
+import ar.edu.unq.agiletutor.model.Student
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository
 
     @Configuration
     @Repository
-    interface StudentRepository : JpaRepository<Alumno?, Int?> {
+    interface StudentRepository : JpaRepository<Student?, Int?> {
 
-        fun save(student: Alumno): Alumno
-        override fun findAll(): List<Alumno>
+        fun save(student: Student): Student
+        override fun findAll(): List<Student>
 
     }
