@@ -46,7 +46,6 @@ class StudentService {
     @Transactional
     fun updateAttendances(updatedAttendaces: List<Asistencia>) {
         updatedAttendaces.forEach {
-            println(it)
             attendanceRepository.setAttendanceInfoById(it.attended, it.id!!.toInt())
         }
     }

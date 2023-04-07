@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @EnableAutoConfiguration
+@CrossOrigin(origins = ["*"])
 class StudentRestService {
 
     @Autowired
@@ -45,7 +46,6 @@ class StudentRestService {
         return response!!
     }
 
-    @CrossOrigin(origins = ["http://localhost:3000"])
     @GetMapping("/api/students")
     fun allStudents(): ResponseEntity<*> {
         val students = studentService.findAll().map { StudentDTO.desdeModelo(it) }
@@ -53,7 +53,6 @@ class StudentRestService {
         return ResponseEntity.ok().body(students)
     }
 
-    @CrossOrigin(origins = ["http://localhost:3000"])
     @PutMapping(value = ["/api/updateattendances"])
     fun modifyAUser(
         @RequestBody studentsAttendances: List<AttendanceDTO>
