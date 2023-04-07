@@ -5,26 +5,54 @@ import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Tutor
 
 
+
+data class TutorLoginDTO (
+    var email: String,
+    var password:String
+
+    )
+
+
+data class TutorRegisterDTO (
+    var id:Long?,
+    var name: String? ,
+    var surname: String?,
+    var email: String?,
+    var password:String ?
+
+) {
+    fun aModelo(): Tutor {
+        val tutor = Tutor()
+        tutor.id = id
+        tutor.name = name
+        tutor.surname = surname
+        tutor.email = email
+        // tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
+        tutor.password = password
+        return tutor
+
+    }
+}
+
 data class TutorDTO (
         var id:Long?,
         var name: String? ,
         var surname: String?,
-        var email: String?,
-        var courses: List<CourseDTO>?,
-
+        var email: String?
+        //var courses: List<CourseDTO>?,
 
     ) {
 
         companion object {
             fun desdeModelo(tutor: Tutor): TutorDTO {
-                val coursesDTO = tutor.courses.map { CourseDTO.desdeModelo(it) }
+              //  val coursesDTO = tutor.courses.map { CourseDTO.desdeModelo(it) }
 
                 return TutorDTO(
                     tutor.id,
                     tutor.name,
                     tutor.surname,
                     tutor.email,
-                    coursesDTO
+                //    coursesDTO
 
                 )
             }
@@ -36,7 +64,7 @@ data class TutorDTO (
             tutor.name = name
             tutor.surname = surname
             tutor.email = email
-            tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
+           // tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
 
             return tutor
 

@@ -1,5 +1,6 @@
 package ar.edu.unq.agiletutor.service
 
+import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.persistence.StudentRepository
@@ -40,4 +41,30 @@ class StudentService {
             }
             return bool
         }
+
+
+    @Transactional
+    fun findByID(id: Int): Student {
+        val student =  repository.findById(id)
+        if ( ! (student.isPresent ))
+        {throw ItemNotFoundException("Student with Id:  $id not found") }
+        val newStudent=  student.get()
+        return newStudent
+    }
+
+    @Transactional
+    fun findByName(name: String): List<Student> {
+        val students= repository.findAll()
+        return students.filter { (it.name == name)} ?: throw ItemNotFoundException("Not found student")
+
+    }
+
+
+
+    @Transactional
+    fun update(id: Int , entity: StudentDTO) : Student {
+        if (! repository.existdById(id))
+        {throw ItemNotFoundException("Student with Id:  $id not found") }
+        return  repository.save (entity.aModelo())
+    }
 }

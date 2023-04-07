@@ -31,6 +31,11 @@ class Tutor: Serializable {
     var email: String? = null
 
 
+    @Column
+    @NotNull( "El password es obligatorio")
+    var password: String? = ""
+
+
     // @Column(nullable = false)
     @OneToMany(mappedBy = "tutor", cascade = [CascadeType.ALL], fetch = FetchType.EAGER )
     var courses: MutableSet<Course> = HashSet()
@@ -44,6 +49,7 @@ class Tutor: Serializable {
         name: String?,
         surname: String?,
         email: String?,
+        password: String?,
         courses:MutableSet<Course>,
 
         ) : super() {
@@ -51,6 +57,7 @@ class Tutor: Serializable {
         this.name = name
         this.surname = surname
         this.email = email
+        this.password = password
         this.courses = courses
 
     }
