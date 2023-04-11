@@ -6,14 +6,14 @@ import ar.edu.unq.agiletutor.model.Attendance
 
 
 data class StudentDTO (
-                       var id:Long?,
-                       var name: String? ,
-                       var surname: String?,
-                       var identifier:String?,
-                       var email:String?,
-                       var attendances: List<AttendanceDTO>?,
-                       var attendancepercentage:Double?,
-                       var observations:String?
+    var id:Long?,
+    var name: String?,
+    var surname: String?,
+    var identifier:String?,
+    var email:String?,
+    var attendances: List<AttendanceDTO>?,
+    var attendancepercentage:Double?,
+    var observations:String?
 ) {
 
     companion object {
@@ -40,8 +40,8 @@ data class StudentDTO (
         student.surname = surname
         student.identifier = identifier
         student.email = email
-       student.attendances = attendances!!.map {  AttendanceDTO (it.id,it.day,it.check).aModelo() }.toMutableSet()
-       // student.attendances = mutableSetOf<Asistencia>()
+       // student.attendances
+         attendances!!.map {  AttendanceDTO (it.id,it.day,it.check).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
         student.observations = ""
 
@@ -53,17 +53,18 @@ data class StudentDTO (
 }
 
 
+
 data class AttendanceDTO(
     var id :Int?,
     var day: Int?,
-    var check:String?
+    var check:Boolean
 
 )
 
 {
     companion object {
         fun desdeModelo(asistencia: Attendance): AttendanceDTO {
-            return AttendanceDTO(asistencia.id, asistencia.day, asistencia.check)
+            return AttendanceDTO(asistencia.id, asistencia.day,  asistencia.check=="presente")
         }
     }
 
@@ -71,8 +72,10 @@ data class AttendanceDTO(
         val attendance = Attendance()
         attendance.id = id
         attendance.day = day
-        attendance.check = check
+        attendance.check = if (check) {"presente"} else {"ausente"}
         return attendance
     }
+
+
 }
 

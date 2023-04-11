@@ -12,6 +12,7 @@ import java.util.HashMap
 
 @RestController
 @EnableAutoConfiguration
+@CrossOrigin("*")
 class StudentRestService {
 
     @Autowired

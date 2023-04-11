@@ -34,8 +34,9 @@ class Student: Serializable {
     var email: String? = null
 
 
-   // @Column(nullable = false)
-    @OneToMany(mappedBy = "student", cascade = [CascadeType.ALL], fetch = FetchType.EAGER )
+  @Column(nullable = false)
+   @OneToMany(/*mappedBy = "student",*/ cascade = [CascadeType.ALL], fetch = FetchType.EAGER )
+   //@JoinColumn(nullable = false)
    var attendances: MutableSet<Attendance> = HashSet()
 
 

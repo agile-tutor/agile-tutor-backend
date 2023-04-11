@@ -2,6 +2,7 @@ package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
+import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -60,6 +61,21 @@ class StudentService {
     }
 
 
+     @Transactional
+    fun  updateattendances(student:Student,attendances:List <AttendanceDTO>):Student{
+        student.attendances = attendances.map { it.aModelo() }.toMutableSet()
+        student.attendancepercentage = calcularPorcentajeDeAsistencias(attendances)
+        return repository.save (student)
+    }
+
+    private fun calcularPorcentajeDeAsistencias (attendances:List <AttendanceDTO>) : Double{
+       var  count = 0.0
+
+        for (attendance in attendances) {
+           if (attendance.check) {count ++  }
+        }
+        return (count * (100/6))
+    }
 
     @Transactional
     fun update(id: Int , entity: StudentDTO) : Student {

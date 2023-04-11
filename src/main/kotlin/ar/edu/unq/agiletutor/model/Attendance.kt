@@ -3,13 +3,13 @@ package ar.edu.unq.agiletutor.model
 
 
 
-
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
 @Entity
 class Attendance:Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,24 +28,25 @@ class Attendance:Serializable {
    // @Size(min = 1, max = 1, message = "el campo check debe tener un solo caracter")
     var check: String?=null
 
+    /*
     @JoinColumn(nullable = false)
     @ManyToOne(optional = true)
-    var alumno: Student? = null
-
+    var student: Student? = null
+*/
 
 
 
     constructor() : super() {}
     constructor(
-        id: Int?,
+       // id: Int?,
         day: Int?,
         check: String,
-        alumno: Student?
+        //student: Student?
            ) : super() {
-        this.id = id
+       // this.id = id
         this.day = day
         this.check = check
-        this.alumno = alumno
+
 
     }
 

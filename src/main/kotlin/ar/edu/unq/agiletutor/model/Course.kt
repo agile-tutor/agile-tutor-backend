@@ -9,7 +9,6 @@ import java.io.Serializable
 
 class Course:Serializable {
 
-
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id_course")
