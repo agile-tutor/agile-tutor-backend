@@ -22,6 +22,9 @@ class InitService {
     @Autowired
     private val studentService: StudentService? = null
 
+    @Autowired
+    private lateinit var senderService: EmailServiceImpl
+
     @PostConstruct
     fun initialize() {
 
@@ -33,6 +36,7 @@ class InitService {
 
     private fun fireInitialData() {
 
+        senderService.sendSimpleMessage("cristian.gonzalez.unq@gmail.com","probando","este es el mensaje")
         if (studentService!!.findAll().isEmpty()) {
 
             studentService.register(Alumno("Ale", "Fariña", "012", "ale@gmail.com", mutableSetOf(), 0.0, ""))

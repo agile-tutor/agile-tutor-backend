@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-
 @RestController
 @EnableAutoConfiguration
 @CrossOrigin(origins = ["*"])
@@ -61,6 +60,4 @@ class StudentRestService {
         println(toUpdate)
         return ResponseEntity.ok().body(studentService.updateAttendances(toUpdate))
     }
-
-
 }
