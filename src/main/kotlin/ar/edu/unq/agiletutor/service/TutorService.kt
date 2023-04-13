@@ -85,7 +85,7 @@ class TutorService {
 
     @Transactional
     fun update(id: Int , entity: TutorRegisterDTO) : Tutor {
-       if (! repository.existdById(id))
+       if (! repository.existsById(id))
             {throw ItemNotFoundException("Tutor with Id:  $id not found") }
       return  repository.save (entity.aModelo())
         }

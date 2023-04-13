@@ -79,7 +79,7 @@ class StudentService {
 
     @Transactional
     fun update(id: Int , entity: StudentDTO) : Student {
-        if (! repository.existdById(id))
+        if (! repository.existsById(id))
         {throw ItemNotFoundException("Student with Id:  $id not found") }
         return  repository.save (entity.aModelo())
     }
