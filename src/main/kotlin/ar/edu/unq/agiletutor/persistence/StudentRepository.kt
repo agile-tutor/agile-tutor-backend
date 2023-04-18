@@ -11,11 +11,11 @@ import java.util.*
 
 @Configuration
     @Repository
-    interface StudentRepository : CrudRepository<Student?, Int?> {
+    interface StudentRepository : CrudRepository<Student?, Long?> {
 
         fun save(student: Student): Student
         override fun findAll(): List<Student>
-        override fun findById(id: Int): Optional<Student?>
-        override fun existsById(id: Int): Boolean
+        override fun findById(id: Long): Optional<Student?>
+        override fun existsById(id: Long): Boolean
 
     }

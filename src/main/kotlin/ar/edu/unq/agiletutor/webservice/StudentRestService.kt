@@ -1,7 +1,5 @@
 package ar.edu.unq.agiletutor.webservice
 
-import ar.edu.unq.agiletutor.StudentRegisterMapper
-import ar.edu.unq.agiletutor.StudentViewMapper
 import ar.edu.unq.agiletutor.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -56,10 +54,10 @@ class StudentRestService {
     fun studentById(@PathVariable("id") id: Int): ResponseEntity<*> {
         var response : ResponseEntity<*>?
         try {
-            val studentView = StudentDTO.desdeModelo (studentService.findByID(id))
-
+            val studentView = StudentDTO.desdeModelo (studentService.findByID(id.toLong()))
             ResponseEntity.status(200)
             response = ResponseEntity.ok().body(studentView)
+
         } catch (e: Exception) {
             ResponseEntity.status(404)
             val resultado: MutableMap<String, String> = HashMap()
@@ -70,7 +68,7 @@ class StudentRestService {
     }
 
     /**get tutor by email**/
-    @GetMapping("/api/tutors/{email}")
+    @GetMapping("/api/students/{name}")
     fun studentsByName (@PathVariable("name") name: String): ResponseEntity<*> {
         var response : ResponseEntity<*>?
         try {
@@ -91,11 +89,11 @@ class StudentRestService {
 
 
     /** Update*/
-    @PutMapping("/api/tutors/{id}")
+    @PutMapping("/api/students/{id}")
     fun update (@PathVariable("id") id: Int, @RequestBody entity: StudentDTO): ResponseEntity<*> {
         var response : ResponseEntity<*>?
         try {
-            val userview = studentService.update(id,entity)
+            val userview = studentService.update(id.toLong(),entity)
 
             ResponseEntity.status(200)
             response = ResponseEntity.ok().body(userview)
@@ -107,6 +105,25 @@ class StudentRestService {
             response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
         return response !!
+    }
+
+    /**update attendances for a student */
+    @PostMapping("/api/students/attendances/update/{id}")
+    fun updateAttendancesForAStudent (@PathVariable("id") id: Int, @RequestBody attendances : List <AttendanceDTO>): ResponseEntity<*> {
+        var response : ResponseEntity<*>?
+
+        try {
+            val  studentview = StudentDTO.desdeModelo(studentService.updateattendances(id.toLong(),attendances))
+            ResponseEntity.status(201)
+            response =  ResponseEntity.ok().body(studentview)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Student with Id:   not found"] = id.toString()
+            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+        }
+        return response!!
     }
 
 

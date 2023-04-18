@@ -45,7 +45,7 @@ class StudentService {
 
 
     @Transactional
-    fun findByID(id: Int): Student {
+    fun findByID(id: Long): Student {
         val student =  repository.findById(id)
         if ( ! (student.isPresent ))
         {throw ItemNotFoundException("Student with Id:  $id not found") }
@@ -62,23 +62,24 @@ class StudentService {
 
 
      @Transactional
-    fun  updateattendances(student:Student,attendances:List <AttendanceDTO>):Student{
+    fun  updateattendances(studentId: Long, attendances:List <AttendanceDTO>):Student{
+       val student = findByID(studentId)
         student.attendances = attendances.map { it.aModelo() }.toMutableSet()
-        student.attendancepercentage = calcularPorcentajeDeAsistencias(attendances)
+        student.attendancepercentage = calcularPorcentajeDeAsistencias(student.attendances)
         return repository.save (student)
     }
 
-    private fun calcularPorcentajeDeAsistencias (attendances:List <AttendanceDTO>) : Double{
+    private fun calcularPorcentajeDeAsistencias (attendances:Set <Attendance>) : Double{
        var  count = 0.0
 
         for (attendance in attendances) {
-           if (attendance.check) {count ++  }
+           if (attendance.attended) {count ++  }
         }
-        return (count * (100/6))
+        return (count * (100/6).toDouble())
     }
 
     @Transactional
-    fun update(id: Int , entity: StudentDTO) : Student {
+    fun update(id: Long , entity: StudentDTO) : Student {
         if (! repository.existsById(id))
         {throw ItemNotFoundException("Student with Id:  $id not found") }
         return  repository.save (entity.aModelo())

@@ -1,7 +1,7 @@
+/*
 package ar.edu.unq.agiletutor.webservice
 
 import ar.edu.unq.agiletutor.service.AttendanceDTO
-import ar.edu.unq.agiletutor.service.AttendanceService
 import ar.edu.unq.agiletutor.service.StudentDTO
 import ar.edu.unq.agiletutor.service.StudentService
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.HashMap
+
 
 
 @RestController
@@ -27,8 +28,8 @@ class AttendanceRestService {
         var response : ResponseEntity<*>?
 
         try {
-            val  student = studentService.findByID(id)
-            val  studentview = StudentDTO.desdeModelo(studentService.updateattendances(student,attendances))
+
+            val  studentview = StudentDTO.desdeModelo(studentService.updateattendances(id,attendances))
             ResponseEntity.status(201)
             response =  ResponseEntity.ok().body(studentview)
         } catch (e: Exception) {
@@ -42,3 +43,5 @@ class AttendanceRestService {
     }
 
 }
+
+ */

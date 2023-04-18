@@ -24,9 +24,9 @@ class Attendance:Serializable {
 
 
     @Column(nullable = false)
-    @NotNull("el check es obligatorio")
+    @NotNull("el attended es obligatorio")
    // @Size(min = 1, max = 1, message = "el campo check debe tener un solo caracter")
-    var check: String?=null
+    var attended: Boolean = false
 
     /*
     @JoinColumn(nullable = false)
@@ -40,12 +40,12 @@ class Attendance:Serializable {
     constructor(
        // id: Int?,
         day: Int?,
-        check: String,
+        attended: Boolean,
         //student: Student?
            ) : super() {
        // this.id = id
         this.day = day
-        this.check = check
+        this.attended = attended
 
 
     }
@@ -59,22 +59,17 @@ class Attendance:Serializable {
     }
 
 
-    fun setcheck(check: String){
-        this.check = check
+    fun setattended(check: String){
+        this.attended = attended
     }
 
 
-    fun getcheck():String? {
-        return check
+    fun getattended():Boolean? {
+        return attended
     }
 
 
 
-    fun getAsistence():Int{
-        if ( getcheck()=="presente" )
-        {return 1}
-        else { return 0}
-    }
 
 
 }

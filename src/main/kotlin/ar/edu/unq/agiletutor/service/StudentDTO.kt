@@ -41,7 +41,7 @@ data class StudentDTO (
         student.identifier = identifier
         student.email = email
        // student.attendances
-         attendances!!.map {  AttendanceDTO (it.id,it.day,it.check).aModelo() }.toMutableSet()
+         attendances!!.map {  AttendanceDTO (it.id,it.day,it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
         student.observations = ""
 
@@ -57,14 +57,14 @@ data class StudentDTO (
 data class AttendanceDTO(
     var id :Int?,
     var day: Int?,
-    var check:Boolean
+    var attended:String
 
 )
 
 {
     companion object {
         fun desdeModelo(asistencia: Attendance): AttendanceDTO {
-            return AttendanceDTO(asistencia.id, asistencia.day,  asistencia.check=="presente")
+            return AttendanceDTO(asistencia.id, asistencia.day,  asistencia.attended.toString())
         }
     }
 
@@ -72,7 +72,7 @@ data class AttendanceDTO(
         val attendance = Attendance()
         attendance.id = id
         attendance.day = day
-        attendance.check = if (check) {"presente"} else {"ausente"}
+        attendance.attended = attended.toBoolean() // (attended=="true")
         return attendance
     }
 

@@ -1,6 +1,7 @@
 package ar.edu.unq.agiletutor.service
 
 
+import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Tutor
@@ -19,9 +20,6 @@ class InitService {
 
     @Value("\${spring.datasource.driverClassName:NONE}")
     private val className: String? = null
-
-    @Autowired
-    private val attendanceService: AttendanceService? = null
 
     @Autowired
     private val studentService: StudentService? = null
@@ -60,47 +58,50 @@ class InitService {
          val course3Saved = courseService!!.register(course3)
          val course4Saved = courseService!!.register(course4)
 
-         val firstattendacesDTO = mutableSetOf<AttendanceDTO>()
+
+
+         val firstattendaces = mutableSetOf<Attendance>()
          for (i in  (1..6) ){
-             firstattendacesDTO.add(AttendanceDTO(0,i,false))
+             firstattendaces.add(Attendance(i,false))
          }
 
-         val atendacesDTO = mutableSetOf<AttendanceDTO>()
-         atendacesDTO.add( AttendanceDTO(0,1,true))
-         atendacesDTO.add( AttendanceDTO(0,2,true))
-         atendacesDTO.add( AttendanceDTO(0,3,false))
-         atendacesDTO.add( AttendanceDTO(0,4,true))
-         atendacesDTO.add( AttendanceDTO(0,5,false))
-         atendacesDTO.add(AttendanceDTO(0,6,false))
+         val atendances = mutableSetOf<Attendance>()
+         atendances.add( Attendance(1,true))
+         atendances.add( Attendance(2,true))
+         atendances.add( Attendance(3,true))
+         atendances.add( Attendance(4,true))
+         atendances.add( Attendance(5,true))
+         atendances.add(Attendance(6,true))
 
-        val attendamces =  firstattendacesDTO.map { it.aModelo() }.toMutableSet()
-        val attendamces2 =  atendacesDTO.map { it.aModelo() }.toMutableSet()
+         val attendancesSecond = atendances.map{AttendanceDTO.desdeModelo(it)}
 
 
-         val student1 = Student(  0,"Ale","Fariña", "123","ale@gmail.com" , attendamces2,0.0,"" ,course1Saved )
-       studentService!!.register(student1)
+         val student1 = Student(  0,"Ale","Fariña", "123","ale@gmail.com" , firstattendaces,0.0,"" ,course1Saved )
+        val studentregistered1 =  studentService!!.register(student1)
 
-        val student2= Student( 0,"Cristian", "Gonzalez","456","cristian@gmail.com" ,attendamces2,0.0,"", course1Saved)
-        studentService!!.register(student2)
+        val student2= Student( 0,"Cristian", "Gonzalez","456","cristian@gmail.com" ,firstattendaces,0.0,"", course1Saved)
+         val studentregistered2 = studentService!!.register(student2)
 
-        val student3= Student( 0,"Pedro", "Picapiedra","456","pica@gmail.com" ,attendamces ,0.0,"", course2Saved)
+        val student3= Student( 0,"Pedro", "Picapiedra","456","pica@gmail.com" ,firstattendaces ,0.0,"", course2Saved)
         studentService!!.register(student3)
 
-        val student4= Student( 0,"Pablo", "Marmol","456","marmol@gmail.com" ,attendamces ,0.0,"",course2Saved)
+        val student4= Student( 0,"Pablo", "Marmol","456","marmol@gmail.com" ,firstattendaces ,0.0,"",course2Saved)
         studentService!!.register(student4)
 
-         val student5= Student( 0,"Alu1", "Marmol","456","alu1@gmail.com" ,attendamces ,0.0,"",course3Saved)
+         val student5= Student( 0,"Alu1", "Marmol","456","alu1@gmail.com" ,firstattendaces ,0.0,"",course3Saved)
          studentService!!.register(student5)
 
-         val student6= Student( 0,"Alu2", "Marmol","456","alu2@gmail.com" ,attendamces ,0.0,"",course3Saved)
+         val student6= Student( 0,"Alu2", "Marmol","456","alu2@gmail.com" ,firstattendaces,0.0,"",course3Saved)
          studentService!!.register(student6)
 
-         val student7= Student( 0,"Alu3", "Marmol","456","alu3@gmail.com" ,attendamces ,0.0,"",course4Saved)
+         val student7= Student( 0,"Alu3", "Marmol","456","alu3@gmail.com" ,firstattendaces ,0.0,"",course4Saved)
          studentService!!.register(student7)
 
 
-         val student8= Student( 0,"Alu4", "Marmol","456","alu4@gmail.com" ,attendamces ,0.0,"",course4Saved)
+         val student8= Student( 0,"Alu4", "Marmol","456","alu4@gmail.com" ,firstattendaces,0.0,"",course4Saved)
          studentService!!.register(student8)
+
+         studentService.updateattendances(studentregistered1.id!!,attendancesSecond)
 
     }
 }
