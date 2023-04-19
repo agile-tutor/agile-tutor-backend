@@ -75,7 +75,7 @@ data class TutorDTO (
 
 
     data class CourseDTO(
-        var id :Long?,
+        var id :Int?,
         var name: String?,
 
     )

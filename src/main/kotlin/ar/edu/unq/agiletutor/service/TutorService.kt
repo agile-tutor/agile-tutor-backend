@@ -2,6 +2,7 @@ package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
+import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Tutor
 import ar.edu.unq.agiletutor.persistence.TutorRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -89,6 +90,12 @@ class TutorService {
             {throw ItemNotFoundException("Tutor with Id:  $id not found") }
       return  repository.save (entity.aModelo())
         }
+
+    @Transactional
+    fun coursesFromATutor(id:Int): MutableList<Course>{
+       val tutor = findByID(id)
+       return tutor.courses.toMutableList()
+    }
 
 
 

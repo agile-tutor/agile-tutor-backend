@@ -74,5 +74,26 @@ class Student: Serializable {
 
     }
 
+     fun  presentes(): List<Attendance> {
+       return  attendances.filter { it.attended }
+    }
+
+     fun  ausentes(): List<Attendance> {
+        return  attendances.filter { ! (it.attended) }
+    }
+
+     fun cantidadDeAPresentes(): Int {
+       return  presentes().size
+    }
+
+     fun cantidadDeAusentes(): Int {
+        return  ausentes().size
+    }
+
+     fun calcularPorcentajeDeAsistencias():Double {
+        attendancepercentage = ( cantidadDeAPresentes() * (100/6)).toDouble()
+         return attendancepercentage
+    }
+
 
 }

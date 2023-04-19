@@ -19,7 +19,7 @@ class TutorRestService {
 
 
     /**register a tutor*/
-    @PostMapping("/api/tutors/register")
+    @PostMapping("/api/tutor/register")
     fun register(@RequestBody tutordata: TutorRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
@@ -39,7 +39,7 @@ class TutorRestService {
     }
 
 
-    @GetMapping("/api/tutors")
+    @GetMapping("/api/tutor")
     fun allTutors(): ResponseEntity<*> {
         val tutors = tutorService.findAll().map { TutorDTO.desdeModelo(it) }
 
@@ -47,7 +47,7 @@ class TutorRestService {
     }
 
     /**login a tutor*/
-    @PostMapping("/api/tutors/login")
+    @PostMapping("/api/tutor/login")
     fun login(@RequestBody tutor: TutorLoginDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
@@ -66,7 +66,7 @@ class TutorRestService {
 
 
     /**get tutor by id**/
-    @GetMapping("/api/tutors/{id}")
+    @GetMapping("/api/tutor/{id}")
     fun tutorById(@PathVariable("id") id: Int): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
@@ -84,7 +84,7 @@ class TutorRestService {
     }
 
     /**get tutor by email**/
-    @GetMapping("/api/tutors/{email}")
+    @GetMapping("/api/tutor/{email}")
     fun tutorByEmail(@PathVariable("email") email: String): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
@@ -103,7 +103,7 @@ class TutorRestService {
 
 
     /** Update*/
-    @PutMapping("/api/tutors/{id}")
+    @PutMapping("/api/tutor/{id}")
     fun update(@PathVariable("id") id: Int, @RequestBody entity: TutorRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
@@ -122,7 +122,7 @@ class TutorRestService {
     }
 
     /**Delete tutor by id*/
-    @DeleteMapping("/api/tutors/{id}")
+    @DeleteMapping("/api/tutor/{id}")
     fun deleteTutorById(@PathVariable("id") id: Int): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
@@ -140,6 +140,18 @@ class TutorRestService {
         }
         return response!!
     }
+
+    /**Courses From a Tutor*/
+    @GetMapping("/api/tutor/courses/{id}")
+    fun coursesFromATutor(@PathVariable("id") id: Int): ResponseEntity<*> {
+
+        val courses = tutorService.coursesFromATutor(id).map { CourseDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(courses)
+
+    }
+
+
 }
 
 

@@ -65,7 +65,8 @@ class StudentService {
     fun  updateattendances(studentId: Long, attendances:List <AttendanceDTO>):Student{
        val student = findByID(studentId)
         student.attendances = attendances.map { it.aModelo() }.toMutableSet()
-        student.attendancepercentage = calcularPorcentajeDeAsistencias(student.attendances)
+       // student.attendancepercentage = calcularPorcentajeDeAsistencias(student.attendances)
+        student.calcularPorcentajeDeAsistencias()
         return repository.save (student)
     }
 
@@ -84,4 +85,16 @@ class StudentService {
         {throw ItemNotFoundException("Student with Id:  $id not found") }
         return  repository.save (entity.aModelo())
     }
+
+    fun attendancesFromAStudent(id:Long): Set<Attendance>{
+       val student =  findByID(id)
+       return student.attendances
+    }
+
+    fun attendancesPercentageFromAStudent(id:Long): Double{
+        val student =  findByID(id)
+        return student.calcularPorcentajeDeAsistencias()
+    }
+
+
 }

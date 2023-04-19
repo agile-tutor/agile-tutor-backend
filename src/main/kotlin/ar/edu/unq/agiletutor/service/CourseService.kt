@@ -1,8 +1,10 @@
 package ar.edu.unq.agiletutor.service
 
+import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.model.Tutor
 import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CourseService {
+
+    @Autowired
+    private  lateinit var tutorService: TutorService
 
     @Autowired
     private  lateinit var repository: CourseRepository
@@ -41,4 +46,40 @@ class CourseService {
         val courses =  repository.findAll()
         return courses
     }
+
+
+    @Transactional
+    fun findByID(id: Int): Course {
+        val course =  repository.findById(id)
+        if ( ! (course.isPresent ))
+        {throw ItemNotFoundException("Course with Id:  $id not found") }
+        val newCourse=  course.get()
+        return newCourse
+    }
+
+
+    @Transactional
+    fun tutorFromACourse(id: Int):Tutor {
+        val course =  findByID(id)
+       return course.tutor!!
+    }
+
+    fun studentsFromACourse(id:Int): List<Student>{
+        val course = findByID(id)
+        return course.students.toMutableList()
+    }
+
+
+    fun studentsFromATutor(id:Int): List<Student>{
+        val students = mutableListOf<Student>()
+        val courses = tutorService.coursesFromATutor(id)
+        for (course in courses){
+            students.addAll ( studentsFromACourse(course.id!!) )
+        }
+        return students
+    }
+
+
+
+
 }

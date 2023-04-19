@@ -12,7 +12,7 @@ class Course:Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id_course")
-        var id: Long?= null
+        var id: Int?= null
 
 
         @Column(nullable = false)
@@ -36,7 +36,7 @@ class Course:Serializable {
 
     constructor() : super() {}
         constructor(
-            id: Long?,
+            id: Int?,
             name: String?,
             students:MutableSet<Student>,
             tutor: Tutor ?

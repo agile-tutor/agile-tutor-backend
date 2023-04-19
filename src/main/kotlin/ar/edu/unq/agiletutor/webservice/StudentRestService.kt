@@ -127,6 +127,28 @@ class StudentRestService {
     }
 
 
+    /**Attendances  From a Student*/
+    @GetMapping("/api/students/attendances/{id}")
+    fun attendancesFromAStudent(@PathVariable("id") id: Int): ResponseEntity<*> {
+
+        val attendances = studentService.attendancesFromAStudent(id.toLong()).map { AttendanceDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(attendances)
+
+    }
+
+
+    /** Percentage of Attendances  From a Student*/
+    @GetMapping("/api/students/attendances/{id}")
+    fun percentageOfAttendancesFromAStudent(@PathVariable("id") id: Int): ResponseEntity<*> {
+
+        val  percentageOfAttendances = studentService.attendancesPercentageFromAStudent(id.toLong())
+
+        return ResponseEntity.ok().body(percentageOfAttendances)
+
+    }
+
+
 
 
 
