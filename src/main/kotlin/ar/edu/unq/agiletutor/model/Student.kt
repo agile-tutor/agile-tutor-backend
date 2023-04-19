@@ -82,7 +82,7 @@ class Student: Serializable {
         return  attendances.filter { ! (it.attended) }
     }
 
-     fun cantidadDeAPresentes(): Int {
+     fun cantidadDePresentes(): Int {
        return  presentes().size
     }
 
@@ -91,8 +91,12 @@ class Student: Serializable {
     }
 
      fun calcularPorcentajeDeAsistencias():Double {
-        attendancepercentage = ( cantidadDeAPresentes() * (100/6)).toDouble()
+        attendancepercentage = ( cantidadDePresentes() * (100/6)).toDouble()
          return attendancepercentage
+    }
+
+    fun sinFaltas():Boolean{
+       return ( attendances.size == cantidadDePresentes() )
     }
 
 

@@ -148,6 +148,27 @@ class StudentRestService {
 
     }
 
+    /** students without absents */
+    @GetMapping("/api/students/attendances/presents")
+    fun studentsWithoutAbsents(): ResponseEntity<*> {
+
+        val  studentsWithoutAbsents = studentService.studentsWirhoutAbsents().map { StudentDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(studentsWithoutAbsents)
+
+    }
+
+
+    /** students with absents */
+    @GetMapping("/api/students/attendances/absents")
+    fun studentsWithAbsents(): ResponseEntity<*> {
+
+        val  studentsWithAbsents = studentService.studentsWithAbsents().map { StudentDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(studentsWithAbsents)
+
+    }
+
 
 
 

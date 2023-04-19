@@ -96,5 +96,14 @@ class StudentService {
         return student.calcularPorcentajeDeAsistencias()
     }
 
+    @Transactional
+    fun studentsWirhoutAbsents(): List<Student> {
+       return  findAll().filter { it.sinFaltas() }
+    }
+
+    @Transactional
+    fun studentsWithAbsents(): List<Student> {
+        return  findAll().filter { ! it.sinFaltas() }
+    }
 
 }
