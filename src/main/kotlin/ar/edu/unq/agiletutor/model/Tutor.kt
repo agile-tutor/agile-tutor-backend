@@ -13,7 +13,7 @@ class Tutor: Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tutor")
-    var id: Long?= null
+    var id: Int?= null
 
 
     @Column(nullable = false)
@@ -45,7 +45,7 @@ class Tutor: Serializable {
 
     constructor() : super() {}
     constructor(
-        id: Long?,
+        id: Int?,
         name: String?,
         surname: String?,
         email: String?,

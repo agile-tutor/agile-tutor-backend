@@ -14,7 +14,7 @@ data class TutorLoginDTO (
 
 
 data class TutorRegisterDTO (
-    var id:Long?,
+    var id:Int?,
     var name: String? ,
     var surname: String?,
     var email: String?,
@@ -35,7 +35,7 @@ data class TutorRegisterDTO (
 }
 
 data class TutorDTO (
-        var id:Long?,
+        var id:Int?,
         var name: String? ,
         var surname: String?,
         var email: String?
