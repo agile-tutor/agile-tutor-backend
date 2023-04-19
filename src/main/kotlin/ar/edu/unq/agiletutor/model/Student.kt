@@ -74,20 +74,24 @@ class Student: Serializable {
 
     }
 
-     fun  presentes(): List<Attendance> {
+     fun attended(): List<Attendance> {
        return  attendances.filter { it.attended }
     }
 
-     fun  ausentes(): List<Attendance> {
+    fun attendedDay(day:Int): Boolean {
+        return  attendances.any { it.day == day && it.attended  }
+    }
+
+     fun  absent(): List<Attendance> {
         return  attendances.filter { ! (it.attended) }
     }
 
      fun cantidadDePresentes(): Int {
-       return  presentes().size
+       return  attended().size
     }
 
      fun cantidadDeAusentes(): Int {
-        return  ausentes().size
+        return  absent().size
     }
 
      fun calcularPorcentajeDeAsistencias():Double {
@@ -96,8 +100,11 @@ class Student: Serializable {
     }
 
     fun sinFaltas():Boolean{
-       return ( attendances.size == cantidadDePresentes() )
+      // return ( attendances.size == cantidadDePresentes() )
+        return attendances.all { it.attended }
     }
+
+
 
 
 }

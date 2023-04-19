@@ -106,4 +106,22 @@ class StudentService {
         return  findAll().filter { ! it.sinFaltas() }
     }
 
+    @Transactional
+    fun attendedDays(id:Long): List<Attendance> {
+        val student =  findByID(id)
+        return student.attended()
+    }
+
+    @Transactional
+    fun absentdDays(id:Long): List<Attendance> {
+        val student =  findByID(id)
+        return student.absent()
+    }
+
+    @Transactional
+    fun studentsAttendedAtAParticularDay(day:Int): List<Student> {
+       return  findAll().filter { it.attendedDay(day) }
+    }
+
+
 }

@@ -76,6 +76,14 @@ data class AttendanceDTO(
         return attendance
     }
 
-
 }
 
+data class AttendanceViewDTO(
+    var day: Int?
+) {
+    companion object {
+        fun desdeModelo(asistencia: Attendance): AttendanceViewDTO {
+            return AttendanceViewDTO(asistencia.day)
+        }
+    }
+}

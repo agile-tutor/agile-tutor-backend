@@ -149,7 +149,7 @@ class StudentRestService {
     }
 
     /** students without absents */
-    @GetMapping("/api/students/attendances/presents")
+    @GetMapping("/api/students/attendances/attended")
     fun studentsWithoutAbsents(): ResponseEntity<*> {
 
         val  studentsWithoutAbsents = studentService.studentsWirhoutAbsents().map { StudentDTO.desdeModelo(it) }
@@ -160,7 +160,7 @@ class StudentRestService {
 
 
     /** students with absents */
-    @GetMapping("/api/students/attendances/absents")
+    @GetMapping("/api/students/attendances/absent")
     fun studentsWithAbsents(): ResponseEntity<*> {
 
         val  studentsWithAbsents = studentService.studentsWithAbsents().map { StudentDTO.desdeModelo(it) }
@@ -168,6 +168,39 @@ class StudentRestService {
         return ResponseEntity.ok().body(studentsWithAbsents)
 
     }
+
+    /** attended days from a student */
+    @GetMapping("/api/students/attendances/attended/days/{id}")
+    fun attendedDaysFromAStudent(@PathVariable("id") id: Int): ResponseEntity<*> {
+
+        val  attendedDays = studentService.attendedDays(id.toLong()).map { AttendanceViewDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(attendedDays)
+
+    }
+
+
+    /** absent days from a student */
+    @GetMapping("/api/students/attendances/absents/days/{id}")
+    fun absentDaysFromAStudent(@PathVariable("id") id: Int): ResponseEntity<*> {
+
+        val  absentDays = studentService.absentdDays(id.toLong()).map { AttendanceViewDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(absentDays)
+
+    }
+
+    /** students attended at a particular day  */
+    @GetMapping("/api/students/attendances/attended/{day}")
+    fun studentsAttendedAtAParticularDay(@PathVariable("day") day: Int): ResponseEntity<*> {
+
+        val  studentsAttendedAtAParticularDay = studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+
+    }
+
+
 
 
 
