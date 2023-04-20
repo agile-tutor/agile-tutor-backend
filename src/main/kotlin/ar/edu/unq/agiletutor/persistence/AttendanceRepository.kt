@@ -15,4 +15,8 @@ interface AttendanceRepository : JpaRepository<Asistencia?, Int?> {
     @Modifying
     @Query("update Asistencia a set a.attended = ?1 where a.id = ?2")
     fun setAttendanceInfoById(attended: Boolean?, id: Int?)
+
+
+    @Query("SELECT a FROM Asistencia a WHERE a.day=?1")
+    fun findByDay(day: Int): List<Asistencia>
 }

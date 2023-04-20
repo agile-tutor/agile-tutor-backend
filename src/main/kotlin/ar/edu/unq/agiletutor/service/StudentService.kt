@@ -18,6 +18,10 @@ class StudentService {
     @Autowired
     private lateinit var attendanceRepository: AttendanceRepository
 
+    @Autowired
+    private lateinit var senderService: EmailServiceImpl
+
+
     @Transactional
     fun register(student: Alumno): Alumno {
 
@@ -48,6 +52,7 @@ class StudentService {
         updatedAttendaces.forEach {
             attendanceRepository.setAttendanceInfoById(it.attended, it.id!!.toInt())
         }
+        senderService.notifyAllAbsent(1)
     }
 
     fun listaAsistenciaAListaModelo(listaDto: List<AttendanceDTO>): List<Asistencia> {
