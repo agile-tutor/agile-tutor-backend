@@ -5,6 +5,7 @@ import ar.edu.unq.agiletutor.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.util.HashMap
 
@@ -104,6 +105,27 @@ class CourseRestService {
        return ResponseEntity.ok().body(courses)
 
     }
+
+
+    /**update  students attendances from a course*/
+    @PostMapping("/api/students/attendances/update/{id}/{day}")
+    fun updateStudentsAttendancesFromACourse (@PathVariable("id") id: Int ,@PathVariable("day") day:Int, @RequestBody attendances : List <Boolean>): ResponseEntity<*> {
+        var response : ResponseEntity<*>?
+
+        try {
+            courseService.updateStudentsAttendancesFromACourse(id, day, attendances)
+            ResponseEntity.status(201)
+            response =  ResponseEntity.ok().body("students attendances Updated Ok")
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Course with Id not found"]   = id.toString()
+            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+        }
+        return response!!
+    }
+
 
 
 }

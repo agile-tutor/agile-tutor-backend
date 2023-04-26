@@ -13,7 +13,8 @@ data class StudentDTO (
     var email:String?,
     var attendances: List<AttendanceDTO>?,
     var attendancepercentage:Double?,
-    var observations:String?
+    var observations:String?,
+    var blocked:Boolean
 ) {
 
     companion object {
@@ -28,7 +29,8 @@ data class StudentDTO (
                 student.email,
                 asistenciasDTO,
                 student.attendancepercentage,
-                student.observations
+                student.observations,
+                student.blocked
             )
         }
     }
@@ -44,7 +46,7 @@ data class StudentDTO (
          attendances!!.map {  AttendanceDTO (it.id,it.day,it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
         student.observations = ""
-
+        student.blocked = blocked
        return student
 
     }

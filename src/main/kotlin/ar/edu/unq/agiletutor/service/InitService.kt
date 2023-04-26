@@ -37,7 +37,7 @@ class InitService {
 
         if (className == "com.mysql.cj.jdbc.Driver") {
             logger.info("Init Data Using Mysql DB")
-            fireInitialData()
+           // fireInitialData()
         }
     }
 
@@ -76,29 +76,29 @@ class InitService {
          val attendancesSecond = atendances.map{AttendanceDTO.desdeModelo(it)}
 
 
-         val student1 = Student(  0,"Ale","Fariña", "123","ale@gmail.com" , firstattendaces,0.0,"" ,course1Saved )
+         val student1 = Student(  0,"Ale","Fariña", "123","ale@gmail.com" , firstattendaces,0.0,"" ,course1Saved, false )
         val studentregistered1 =  studentService!!.register(student1)
 
-        val student2= Student( 0,"Cristian", "Gonzalez","456","cristian@gmail.com" ,firstattendaces,0.0,"", course1Saved)
+        val student2= Student( 0,"Cristian", "Gonzalez","456","cristian@gmail.com" ,firstattendaces,0.0,"", course1Saved,false)
          val studentregistered2 = studentService!!.register(student2)
 
-        val student3= Student( 0,"Pedro", "Picapiedra","456","pica@gmail.com" ,firstattendaces ,0.0,"", course2Saved)
+        val student3= Student( 0,"Pedro", "Picapiedra","456","pica@gmail.com" ,firstattendaces ,0.0,"", course2Saved,false)
         studentService!!.register(student3)
 
-        val student4= Student( 0,"Pablo", "Marmol","456","marmol@gmail.com" ,firstattendaces ,0.0,"",course2Saved)
+        val student4= Student( 0,"Pablo", "Marmol","456","marmol@gmail.com" ,firstattendaces ,0.0,"",course2Saved,false)
         studentService!!.register(student4)
 
-         val student5= Student( 0,"Alu1", "Marmol","456","alu1@gmail.com" ,firstattendaces ,0.0,"",course3Saved)
+         val student5= Student( 0,"Alu1", "Marmol","456","alu1@gmail.com" ,firstattendaces ,0.0,"",course3Saved,false)
          studentService!!.register(student5)
 
-         val student6= Student( 0,"Alu2", "Marmol","456","alu2@gmail.com" ,firstattendaces,0.0,"",course3Saved)
+         val student6= Student( 0,"Alu2", "Marmol","456","alu2@gmail.com" ,firstattendaces,0.0,"",course3Saved,false)
          studentService!!.register(student6)
 
-         val student7= Student( 0,"Alu3", "Marmol","456","alu3@gmail.com" ,firstattendaces ,0.0,"",course4Saved)
+         val student7= Student( 0,"Alu3", "Marmol","456","alu3@gmail.com" ,firstattendaces ,0.0,"",course4Saved,false)
          studentService!!.register(student7)
 
 
-         val student8= Student( 0,"Alu4", "Marmol","456","alu4@gmail.com" ,firstattendaces,0.0,"",course4Saved)
+         val student8= Student( 0,"Alu4", "Marmol","456","alu4@gmail.com" ,firstattendaces,0.0,"",course4Saved,false)
          studentService!!.register(student8)
 
          studentService.updateattendances(studentregistered1.id!!,attendancesSecond)

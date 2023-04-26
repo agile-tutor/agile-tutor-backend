@@ -13,115 +13,128 @@ import org.springframework.transaction.annotation.Transactional
 class StudentService {
 
     @Autowired
-    private  lateinit var repository: StudentRepository
+    private lateinit var repository: StudentRepository
 
 
     @Transactional
     fun register(student: Student): Student {
 
-        if ( existStudent(student) )  {
+        if (existStudent(student)) {
             throw UsernameExistException("Student with email:  ${student.email} is used")
         }
 
         val savedStudent = repository.save(student)
         return savedStudent
-         }
+    }
 
 
     @Transactional
     fun findAll(): List<Student> {
-        val students =  repository.findAll()
+        val students = repository.findAll()
         return students
     }
 
-    private fun existStudent(student:Student): Boolean {
-            var bool = false
-            val students = repository.findAll().toMutableList()
-            if ( students.isNotEmpty() ) {
-                bool =  students.any { it.email == student.email }
-            }
-            return bool
+    private fun existStudent(student: Student): Boolean {
+        var bool = false
+        val students = repository.findAll().toMutableList()
+        if (students.isNotEmpty()) {
+            bool = students.any { it.email == student.email }
         }
+        return bool
+    }
 
 
     @Transactional
     fun findByID(id: Long): Student {
-        val student =  repository.findById(id)
-        if ( ! (student.isPresent ))
-        {throw ItemNotFoundException("Student with Id:  $id not found") }
-        val newStudent=  student.get()
+        val student = repository.findById(id)
+        if (!(student.isPresent)) {
+            throw ItemNotFoundException("Student with Id:  $id not found")
+        }
+        val newStudent = student.get()
         return newStudent
     }
 
     @Transactional
     fun findByName(name: String): List<Student> {
-        val students= repository.findAll()
-        return students.filter { (it.name == name)} ?: throw ItemNotFoundException("Not found student")
+        val students = repository.findAll()
+        return students.filter { (it.name == name) } ?: throw ItemNotFoundException("Not found student")
 
     }
 
 
-     @Transactional
-    fun  updateattendances(studentId: Long, attendances:List <AttendanceDTO>):Student{
-       val student = findByID(studentId)
+    @Transactional
+    fun updateattendances(studentId: Long, attendances: List<AttendanceDTO>): Student {
+        val student = findByID(studentId)
         student.attendances = attendances.map { it.aModelo() }.toMutableSet()
-       // student.attendancepercentage = calcularPorcentajeDeAsistencias(student.attendances)
+        // student.attendancepercentage = calcularPorcentajeDeAsistencias(student.attendances)
         student.calcularPorcentajeDeAsistencias()
-        return repository.save (student)
+        return repository.save(student)
     }
 
-    private fun calcularPorcentajeDeAsistencias (attendances:Set <Attendance>) : Double{
-       var  count = 0.0
+    private fun calcularPorcentajeDeAsistencias(attendances: Set<Attendance>): Double {
+        var count = 0.0
 
         for (attendance in attendances) {
-           if (attendance.attended) {count ++  }
+            if (attendance.attended) {
+                count++
+            }
         }
-        return (count * (100/6).toDouble())
+        return (count * (100 / 6).toDouble())
     }
 
     @Transactional
-    fun update(id: Long , entity: StudentDTO) : Student {
-        if (! repository.existsById(id))
-        {throw ItemNotFoundException("Student with Id:  $id not found") }
-        return  repository.save (entity.aModelo())
+    fun update(id: Long, entity: StudentDTO): Student {
+        if (!repository.existsById(id)) {
+            throw ItemNotFoundException("Student with Id:  $id not found")
+        }
+        return repository.save(entity.aModelo())
     }
 
-    fun attendancesFromAStudent(id:Long): Set<Attendance>{
-       val student =  findByID(id)
-       return student.attendances
+    fun attendancesFromAStudent(id: Long): Set<Attendance> {
+        val student = findByID(id)
+        return student.attendances
     }
 
-    fun attendancesPercentageFromAStudent(id:Long): Double{
-        val student =  findByID(id)
+    fun attendancesPercentageFromAStudent(id: Long): Double {
+        val student = findByID(id)
         return student.calcularPorcentajeDeAsistencias()
     }
 
     @Transactional
     fun studentsWirhoutAbsents(): List<Student> {
-       return  findAll().filter { it.sinFaltas() }
+        return findAll().filter { it.sinFaltas() }
     }
 
     @Transactional
     fun studentsWithAbsents(): List<Student> {
-        return  findAll().filter { ! it.sinFaltas() }
+        return findAll().filter { !it.sinFaltas() }
     }
 
     @Transactional
-    fun attendedDays(id:Long): List<Attendance> {
-        val student =  findByID(id)
+    fun attendedDays(id: Long): List<Attendance> {
+        val student = findByID(id)
         return student.attended()
     }
 
     @Transactional
-    fun absentdDays(id:Long): List<Attendance> {
-        val student =  findByID(id)
+    fun absentdDays(id: Long): List<Attendance> {
+        val student = findByID(id)
         return student.absent()
     }
 
     @Transactional
-    fun studentsAttendedAtAParticularDay(day:Int): List<Student> {
-       return  findAll().filter { it.attendedDay(day) }
+    fun studentsAttendedAtAParticularDay(day: Int): List<Student> {
+        return findAll().filter { it.attendedDay(day) }
     }
+
+    @Transactional
+    fun blockOrUnblockAStudent(id: Long, blocked: Boolean): Student {
+        val student = findByID(id)
+        student.blocked = blocked
+        return repository.save(student)
+    }
+
+
 
 
 }

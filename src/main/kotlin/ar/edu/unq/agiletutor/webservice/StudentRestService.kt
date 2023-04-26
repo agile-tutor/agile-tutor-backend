@@ -93,10 +93,10 @@ class StudentRestService {
     fun update (@PathVariable("id") id: Int, @RequestBody entity: StudentDTO): ResponseEntity<*> {
         var response : ResponseEntity<*>?
         try {
-            val userview = studentService.update(id.toLong(),entity)
+            val student = studentService.update(id.toLong(),entity)
 
             ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(userview)
+            response = ResponseEntity.ok().body(student)
         } catch (e: Exception) {
             ResponseEntity.status(404)
 
@@ -139,7 +139,7 @@ class StudentRestService {
 
 
     /** Percentage of Attendances  From a Student*/
-    @GetMapping("/api/students/attendances/{id}")
+    @GetMapping("/api/students/attendances/percentage/{id}")
     fun percentageOfAttendancesFromAStudent(@PathVariable("id") id: Int): ResponseEntity<*> {
 
         val  percentageOfAttendances = studentService.attendancesPercentageFromAStudent(id.toLong())
@@ -200,9 +200,15 @@ class StudentRestService {
 
     }
 
+    /** Block or unblock a student */
+    @GetMapping("/api/students/block/{id}")
+    fun blockOrUnBlockAStudent(@PathVariable("id") id: Int, @RequestBody blocked:Boolean ): ResponseEntity<*> {
 
+        val  student = StudentDTO.desdeModelo(studentService.blockOrUnblockAStudent(id.toLong(),blocked ) )
 
+        return ResponseEntity.ok().body(student)
 
+    }
 
 
 

@@ -50,6 +50,10 @@ class Student: Serializable {
     var course: Course? = null
 
 
+    @Column
+    var blocked:Boolean = false
+
+
     constructor() : super() {}
     constructor(
         id: Long?,
@@ -60,7 +64,8 @@ class Student: Serializable {
         attendances:MutableSet<Attendance>,
         attendancepercentage: Double,
         observations: String,
-        course:Course?
+        course:Course,
+        blocked:Boolean
     ) : super() {
         this.id = id
         this.name = name
@@ -71,6 +76,7 @@ class Student: Serializable {
         this.attendancepercentage = attendancepercentage
         this.observations = observations
         this.course = course
+        this.blocked = blocked
 
     }
 

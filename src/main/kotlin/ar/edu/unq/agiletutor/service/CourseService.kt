@@ -2,6 +2,7 @@ package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
+import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Tutor
@@ -80,6 +81,22 @@ class CourseService {
     }
 
 
+    @Transactional
+    fun updateStudentsAttendancesFromACourse(id:Int, day:Int, booleans:List<Boolean>) {
+        val course = findByID(id)
+        for (student in course.students) {
+            val boolean = booleans.iterator().next()
+            updateAttendance(day,boolean, student.attendances.toMutableList())
+            repository.save(course)
+           }
+    }
+
+      private fun updateAttendance(day:Int,boolean:Boolean, attendances:MutableList<Attendance>){
+          val attendance = attendances.get(day)
+          attendance.attended = boolean
+          attendances.set(day, attendance)
+
+      }
+    }
 
 
-}

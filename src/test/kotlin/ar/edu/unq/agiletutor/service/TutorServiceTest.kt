@@ -31,7 +31,7 @@ internal class TutorServiceTest {
 
     @BeforeEach
     fun setUp() {
-        tutorRepository.deleteAll(tutors)
+        
          tutor1 = Tutor(0,"Alejandro","Fariña","ale@gmail.com", "passtut1",mutableSetOf())
          tutor2 = Tutor(0,"Cristian","Gonzalez","cris@gmail.com", "passtut2",mutableSetOf())
          tutorData =  TutorRegisterDTO (0,"Alejandro","Fariña","otromaildeale@gmail.com","otropassdeale")
