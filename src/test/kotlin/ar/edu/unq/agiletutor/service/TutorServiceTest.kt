@@ -168,7 +168,7 @@ internal class TutorServiceTest {
 
     @AfterEach
     fun tearDown() {
-        tutorRepository.deleteAll(tutors)
+        tutorRepository.deleteAll()
     }
 
 }
