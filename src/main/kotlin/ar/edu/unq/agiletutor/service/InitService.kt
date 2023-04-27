@@ -103,5 +103,7 @@ class InitService {
 
          studentService.updateattendances(studentregistered1.id!!,attendancesSecond)
 
+         println(studentService.findAll())
+
     }
 }
