@@ -8,6 +8,7 @@ import ar.edu.unq.agiletutor.persistence.NotifyerRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 
@@ -40,24 +41,29 @@ class EmailServiceImpl {
     }
 
     fun notifyAllAbsent(day: Int) {
-        val notifyer: Notifyer = getNotifyer()
         var attendaceList: List<Asistencia> = attendanceRepository.findByDay(day).filter { it -> !it.attended!! }
-        attendaceList.map { it -> it.alumno!! }.forEach { it -> notifyer.addabsent(it) }
+        this.addAbsent(attendaceList)
+    }
+
+    fun addAbsent(attendacesList: List<Asistencia>) {
+        val notifyer: Notifyer = getNotifyer()
+        attendacesList.forEach { it -> notifyer.addabsent(it.alumno!!) }
+        this.saveNotifyer(notifyer)
+    }
+
+    @Scheduled(cron = "0 0 22 * * *")//a las 22 horas
+    fun emailAbsent() {
+        val notifyer: Notifyer = getNotifyer()
         notifyer.getabsent()!!
             .forEach { it -> this.sendSimpleMessage(it.email!!, notifyer.getSubjectEmail(), notifyer.getTextEmail()) }
         notifyer.removeall()
         this.saveNotifyer(notifyer)
     }
 
-    /*
-        fun addAbsent(attendacesList: List<Asistencia>) {
-            val notifyer: Notifyer = getNotifyer()
-            attendacesList.forEach {  it -> println(it)}
-
-            attendacesList.forEach { it -> notifyer.addabsent(it.alumno!!) }
-            this.saveNotifyer(notifyer)
-        }
-    */
+    @Scheduled(cron = "1 * * * * *")//cada un minuto
+    fun pruebaCronJob() {
+      println("adentro del cronJob")
+    }
     fun changeSubjectText(text: String) {
         val notifyer: Notifyer = getNotifyer()
         notifyer.setSubjectEmail(text)

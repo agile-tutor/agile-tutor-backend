@@ -1,6 +1,10 @@
 package ar.edu.unq.agiletutor.model
 
 import jakarta.persistence.*
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
+
 
 @Entity
 @Table(name = "notifyer")
@@ -38,6 +42,7 @@ class Notifyer {
     }
 
     fun addabsent(alumno: Alumno) {
+
         this.absent.add(alumno)
     }
 
@@ -48,4 +53,7 @@ class Notifyer {
     fun removeall() {
         this.absent = HashSet()
     }
+
+
+
 }
