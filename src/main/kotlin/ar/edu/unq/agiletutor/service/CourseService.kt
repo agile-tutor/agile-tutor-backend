@@ -31,8 +31,7 @@ class CourseService {
             throw UsernameExistException("Course with name:  ${course.name} is used")
         }
 
-        val savedCourse = repository.save(course)
-        return savedCourse
+        return repository.save(course)
     }
 
     private fun existSCourse(course: Course): Boolean {
@@ -46,10 +45,8 @@ class CourseService {
 
     @Transactional
     fun findAll(): List<Course> {
-        val courses = repository.findAll()
-        return courses
+        return repository.findAll()
     }
-
 
     @Transactional
     fun findByID(id: Int): Course {
@@ -57,10 +54,8 @@ class CourseService {
         if (!(course.isPresent)) {
             throw ItemNotFoundException("Course with Id:  $id not found")
         }
-        val newCourse = course.get()
-        return newCourse
+        return course.get()
     }
-
 
     @Transactional
     fun tutorFromACourse(id: Int): Tutor {
@@ -73,7 +68,6 @@ class CourseService {
         return course.students.toMutableList()
     }
 
-
     fun studentsFromATutor(id: Int): List<Student> {
         val students = mutableListOf<Student>()
         val courses = tutorService.coursesFromATutor(id)
@@ -82,7 +76,6 @@ class CourseService {
         }
         return students
     }
-
 
     @Transactional
     fun updateStudentsAttendancesFromACourse(id: Int, studentAttendance: List<StudentAttendanceDTO>) {

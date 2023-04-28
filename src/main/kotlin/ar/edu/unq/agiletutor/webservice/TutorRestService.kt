@@ -1,6 +1,5 @@
 package ar.edu.unq.agiletutor.webservice
 
-
 import ar.edu.unq.agiletutor.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -16,7 +15,6 @@ class TutorRestService {
     @Autowired
     private lateinit var tutorService: TutorService
     private val builder: ResponseEntity.BodyBuilder? = null
-
 
     /**register a tutor*/
     @PostMapping("/api/tutor/register")
@@ -37,7 +35,6 @@ class TutorRestService {
         }
         return response!!
     }
-
 
     @GetMapping("/api/tutor")
     fun allTutors(): ResponseEntity<*> {
@@ -63,7 +60,6 @@ class TutorRestService {
         }
         return response!!
     }
-
 
     /**get tutor by id**/
     @GetMapping("/api/tutor/{id}")
@@ -100,7 +96,6 @@ class TutorRestService {
         }
         return response!!
     }
-
 
     /** Update*/
     @PutMapping("/api/tutor/{id}")
@@ -148,22 +143,5 @@ class TutorRestService {
         val courses = tutorService.coursesFromATutor(id).map { CourseDTO.desdeModelo(it) }
 
         return ResponseEntity.ok().body(courses)
-
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

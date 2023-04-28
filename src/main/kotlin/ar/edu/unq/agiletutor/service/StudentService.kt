@@ -15,7 +15,6 @@ class StudentService {
     @Autowired
     private lateinit var repository: StudentRepository
 
-
     @Transactional
     fun register(student: Student): Student {
 
@@ -23,15 +22,12 @@ class StudentService {
             throw UsernameExistException("Student with email:  ${student.email} is used")
         }
 
-        val savedStudent = repository.save(student)
-        return savedStudent
+        return repository.save(student)
     }
-
 
     @Transactional
     fun findAll(): List<Student> {
-        val students = repository.findAll()
-        return students
+        return repository.findAll()
     }
 
     private fun existStudent(student: Student): Boolean {
@@ -43,24 +39,20 @@ class StudentService {
         return bool
     }
 
-
     @Transactional
     fun findByID(id: Long): Student {
         val student = repository.findById(id)
         if (!(student.isPresent)) {
             throw ItemNotFoundException("Student with Id:  $id not found")
         }
-        val newStudent = student.get()
-        return newStudent
+        return student.get()
     }
 
     @Transactional
     fun findByName(name: String): List<Student> {
         val students = repository.findAll()
         return students.filter { (it.name == name) } ?: throw ItemNotFoundException("Not found student")
-
     }
-
 
     @Transactional
     fun updateattendances(studentId: Long, attendances: List<AttendanceDTO>): Student {
@@ -133,8 +125,4 @@ class StudentService {
         student.blocked = blocked
         return repository.save(student)
     }
-
-
-
-
 }

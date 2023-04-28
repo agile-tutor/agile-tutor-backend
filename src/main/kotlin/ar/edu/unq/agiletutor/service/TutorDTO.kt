@@ -1,16 +1,12 @@
 package ar.edu.unq.agiletutor.service
 
-
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Tutor
-
 
 data class TutorLoginDTO(
     var email: String,
     var password: String
-
 )
-
 
 data class TutorRegisterDTO(
     var id: Int?,
@@ -18,7 +14,6 @@ data class TutorRegisterDTO(
     var surname: String?,
     var email: String?,
     var password: String?
-
 ) {
     fun aModelo(): Tutor {
         val tutor = Tutor()
@@ -29,7 +24,6 @@ data class TutorRegisterDTO(
         // tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
         tutor.password = password
         return tutor
-
     }
 }
 
@@ -52,7 +46,6 @@ data class TutorDTO(
                 tutor.surname,
                 tutor.email,
                 //    coursesDTO
-
             )
         }
     }
@@ -64,14 +57,9 @@ data class TutorDTO(
         tutor.surname = surname
         tutor.email = email
         // tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
-
         return tutor
-
     }
-
-
 }
-
 
 data class CourseDTO(
     var id: Int?,
@@ -92,18 +80,7 @@ data class CourseDTO(
     }
 }
 
-
 data class StudentAttendanceDTO(
     var studentId: Int,
     var attendance: AttendanceDTO
-    ) {
-/*
-    fun getStudentId(): Int {
-        return studentId
-    }
-
-    fun getAttendance(): AttendanceDTO {
-        return attendance
-    }*/
-}
-
+)

@@ -3,27 +3,23 @@ package ar.edu.unq.agiletutor.model
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
-//import javax.persistence.*
 
 @Entity
 @Table(name = "student")
-class Student: Serializable {
+class Student : Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_student")
-    var id: Long?= null
-
+    var id: Long? = null
 
     @Column(nullable = false)
-    @NotNull( "El nonbre es obligatorio")
+    @NotNull("El nonbre es obligatorio")
     var name: String? = null
 
     @Column(nullable = false)
-    @NotNull( "el apellido es obligatorio")
+    @NotNull("el apellido es obligatorio")
     var surname: String? = null
-
-
 
     @Column(nullable = false)
     @NotNull("El número identificador es obligatorio")
@@ -33,12 +29,10 @@ class Student: Serializable {
     @NotNull("El mail es obligatorio")
     var email: String? = null
 
-
-  //@Column(nullable = false)
-   @OneToMany(/*mappedBy = "student",*/ cascade = [CascadeType.ALL], fetch = FetchType.EAGER )
-   //@JoinColumn(nullable = false)
-   var attendances: MutableSet<Attendance> = HashSet()
-
+    //@Column(nullable = false)
+    @OneToMany(/*mappedBy = "student",*/ cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    //@JoinColumn(nullable = false)
+    var attendances: MutableSet<Attendance> = HashSet()
 
     @Column(nullable = false)
     var attendancepercentage: Double = 0.0
@@ -49,10 +43,8 @@ class Student: Serializable {
     @ManyToOne(optional = true)
     var course: Course? = null
 
-
     @Column
-    var blocked:Boolean = false
-
+    var blocked: Boolean = false
 
     constructor() : super() {}
     constructor(
@@ -61,11 +53,11 @@ class Student: Serializable {
         surname: String?,
         identifier: String?,
         email: String?,
-        attendances:MutableSet<Attendance>,
+        attendances: MutableSet<Attendance>,
         attendancepercentage: Double,
         observations: String,
-        course:Course,
-        blocked:Boolean
+        course: Course,
+        blocked: Boolean
     ) : super() {
         this.id = id
         this.name = name
@@ -77,40 +69,35 @@ class Student: Serializable {
         this.observations = observations
         this.course = course
         this.blocked = blocked
-
     }
 
-     fun attended(): List<Attendance> {
-       return  attendances.filter { it.attended }
+    fun attended(): List<Attendance> {
+        return attendances.filter { it.attended }
     }
 
-    fun attendedDay(day:Int): Boolean {
-        return  attendances.any { it.day == day && it.attended  }
+    fun attendedDay(day: Int): Boolean {
+        return attendances.any { it.day == day && it.attended }
     }
 
-     fun  absent(): List<Attendance> {
-        return  attendances.filter { ! (it.attended) }
+    fun absent(): List<Attendance> {
+        return attendances.filter { !(it.attended) }
     }
 
-     fun cantidadDePresentes(): Int {
-       return  attended().size
+    fun cantidadDePresentes(): Int {
+        return attended().size
     }
 
-     fun cantidadDeAusentes(): Int {
-        return  absent().size
+    fun cantidadDeAusentes(): Int {
+        return absent().size
     }
 
-     fun calcularPorcentajeDeAsistencias():Double {
-        attendancepercentage = ( cantidadDePresentes() * (100/6)).toDouble()
-         return attendancepercentage
+    fun calcularPorcentajeDeAsistencias(): Double {
+        attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
+        return attendancepercentage
     }
 
-    fun sinFaltas():Boolean{
-      // return ( attendances.size == cantidadDePresentes() )
+    fun sinFaltas(): Boolean {
+        // return ( attendances.size == cantidadDePresentes() )
         return attendances.all { it.attended }
     }
-
-
-
-
 }

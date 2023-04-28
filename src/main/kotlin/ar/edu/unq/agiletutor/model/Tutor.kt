@@ -4,44 +4,36 @@ import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
-
 @Entity
 @Table(name = "tutor")
 
-class Tutor: Serializable {
+class Tutor : Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tutor")
-    var id: Int?= null
-
+    var id: Int? = null
 
     @Column(nullable = false)
-    @NotNull( "El nonbre es obligatorio")
+    @NotNull("El nonbre es obligatorio")
     var name: String? = null
 
     @Column(nullable = false)
-    @NotNull( "el apellido es obligatorio")
+    @NotNull("el apellido es obligatorio")
     var surname: String? = null
-
 
 
     @Column(nullable = false, unique = true)
     @NotNull("El mail es obligatorio")
     var email: String? = null
 
-
     @Column
-    @NotNull( "El password es obligatorio")
+    @NotNull("El password es obligatorio")
     var password: String? = ""
 
-
     // @Column(nullable = false)
-    @OneToMany(mappedBy = "tutor", cascade = [CascadeType.ALL], fetch = FetchType.EAGER )
+    @OneToMany(mappedBy = "tutor", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var courses: MutableSet<Course> = HashSet()
-
-
-
 
     constructor() : super() {}
     constructor(
@@ -50,7 +42,7 @@ class Tutor: Serializable {
         surname: String?,
         email: String?,
         password: String?,
-        courses:MutableSet<Course>,
+        courses: MutableSet<Course>,
 
         ) : super() {
         this.id = id
@@ -59,10 +51,5 @@ class Tutor: Serializable {
         this.email = email
         this.password = password
         this.courses = courses
-
     }
-
-
-
-
 }

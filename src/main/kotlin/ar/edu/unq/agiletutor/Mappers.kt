@@ -14,7 +14,6 @@ package ar.edu.unq.agiletutor
 data class AsistanceViewMapper(
     val day: Int?,
     val check:String
-
 )
 
 data class StudentRegisterMapper(
@@ -22,5 +21,4 @@ data class StudentRegisterMapper(
     val surname: String?,
     val identifier:String?,
     val email:String?,
-   
 )

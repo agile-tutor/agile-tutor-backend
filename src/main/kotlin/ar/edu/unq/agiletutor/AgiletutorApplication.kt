@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class AgiletutorApplication
 
 fun main(args: Array<String>) {
-	runApplication<AgiletutorApplication>(*args)
+    runApplication<AgiletutorApplication>(*args)
 }
