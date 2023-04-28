@@ -5,20 +5,19 @@ import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Tutor
 
 
-
-data class TutorLoginDTO (
+data class TutorLoginDTO(
     var email: String,
-    var password:String
+    var password: String
 
-    )
+)
 
 
-data class TutorRegisterDTO (
-    var id:Int?,
-    var name: String? ,
+data class TutorRegisterDTO(
+    var id: Int?,
+    var name: String?,
     var surname: String?,
     var email: String?,
-    var password:String ?
+    var password: String?
 
 ) {
     fun aModelo(): Tutor {
@@ -34,66 +33,77 @@ data class TutorRegisterDTO (
     }
 }
 
-data class TutorDTO (
-        var id:Int?,
-        var name: String? ,
-        var surname: String?,
-        var email: String?
-        //var courses: List<CourseDTO>?,
+data class TutorDTO(
+    var id: Int?,
+    var name: String?,
+    var surname: String?,
+    var email: String?
+    //var courses: List<CourseDTO>?,
 
-    ) {
+) {
 
-        companion object {
-            fun desdeModelo(tutor: Tutor): TutorDTO {
-              //  val coursesDTO = tutor.courses.map { CourseDTO.desdeModelo(it) }
+    companion object {
+        fun desdeModelo(tutor: Tutor): TutorDTO {
+            //  val coursesDTO = tutor.courses.map { CourseDTO.desdeModelo(it) }
 
-                return TutorDTO(
-                    tutor.id,
-                    tutor.name,
-                    tutor.surname,
-                    tutor.email,
+            return TutorDTO(
+                tutor.id,
+                tutor.name,
+                tutor.surname,
+                tutor.email,
                 //    coursesDTO
 
-                )
-            }
+            )
         }
+    }
 
-        fun aModelo(): Tutor {
-            val tutor = Tutor()
-            tutor.id = id
-            tutor.name = name
-            tutor.surname = surname
-            tutor.email = email
-           // tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
+    fun aModelo(): Tutor {
+        val tutor = Tutor()
+        tutor.id = id
+        tutor.name = name
+        tutor.surname = surname
+        tutor.email = email
+        // tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
 
-            return tutor
-
-        }
-
+        return tutor
 
     }
 
 
-    data class CourseDTO(
-        var id :Int?,
-        var name: String?,
+}
 
-    )
 
-    {
-        companion object {
-            fun desdeModelo(course: Course): CourseDTO {
-                return CourseDTO(course.id, course.name)
-            }
-        }
+data class CourseDTO(
+    var id: Int?,
+    var name: String?,
 
-        fun aModelo(): Course {
-            val course = Course()
-            course.id = id
-            course .name = name
-            return course
+    ) {
+    companion object {
+        fun desdeModelo(course: Course): CourseDTO {
+            return CourseDTO(course.id, course.name)
         }
     }
 
+    fun aModelo(): Course {
+        val course = Course()
+        course.id = id
+        course.name = name
+        return course
+    }
+}
 
+
+data class StudentAttendanceDTO(
+    var studentId: Int,
+    var attendance: AttendanceDTO
+    ) {
+/*
+    fun getStudentId(): Int {
+        return studentId
+    }
+
+    fun getAttendance(): AttendanceDTO {
+        return attendance
+    }*/
+}
 

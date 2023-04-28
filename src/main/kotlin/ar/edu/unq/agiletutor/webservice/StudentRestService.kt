@@ -106,7 +106,7 @@ class StudentRestService {
         }
         return response !!
     }
-
+/*
     /**update attendances for a student */
     @PostMapping("/api/students/attendances/update/{id}")
     fun updateAttendancesForAStudent (@PathVariable("id") id: Int, @RequestBody attendances : List <AttendanceDTO>): ResponseEntity<*> {
@@ -125,7 +125,7 @@ class StudentRestService {
         }
         return response!!
     }
-
+*/
 
     /**Attendances  From a Student*/
     @GetMapping("/api/students/attendances/{id}")

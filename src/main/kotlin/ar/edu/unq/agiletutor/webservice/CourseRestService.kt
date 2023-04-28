@@ -108,12 +108,12 @@ class CourseRestService {
 
 
     /**update  students attendances from a course*/
-    @PostMapping("/api/students/attendances/update/{id}/{day}")
-    fun updateStudentsAttendancesFromACourse (@PathVariable("id") id: Int ,@PathVariable("day") day:Int, @RequestBody attendances : List <Boolean>): ResponseEntity<*> {
+//    @PostMapping("/api/students/attendances/update/{id}/{day}")
+    @PostMapping("/api/students/attendances/update/{id}")
+    fun updateStudentsAttendancesFromACourse (@PathVariable("id") id: Int, @RequestBody attendances : List <StudentAttendanceDTO>): ResponseEntity<*> {
         var response : ResponseEntity<*>?
-
         try {
-            courseService.updateStudentsAttendancesFromACourse(id, day, attendances)
+            courseService.updateStudentsAttendancesFromACourse(id, attendances)
             ResponseEntity.status(201)
             response =  ResponseEntity.ok().body("students attendances Updated Ok")
         } catch (e: Exception) {
