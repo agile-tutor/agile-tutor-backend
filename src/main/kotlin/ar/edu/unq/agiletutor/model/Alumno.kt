@@ -4,9 +4,6 @@ import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
-//import javax.persistence.*
-//import kotlin.jvm.Transient
-
 @Entity
 @Table(name = "alumnos")
 class Alumno : Serializable {

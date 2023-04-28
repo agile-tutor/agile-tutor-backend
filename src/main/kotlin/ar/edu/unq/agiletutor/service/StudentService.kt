@@ -48,11 +48,11 @@ class StudentService {
     }
 
     @Transactional
-    fun updateAttendances(updatedAttendaces: List<Asistencia>) {
+    fun updateAttendances(updatedAttendaces: List<Asistencia>, day: Int) {
         updatedAttendaces.forEach {
             attendanceRepository.setAttendanceInfoById(it.attended, it.id!!.toInt())
         }
-        senderService.notifyAllAbsent(1)
+        senderService.notifyAllAbsent(day)
     }
 
     fun listaAsistenciaAListaModelo(listaDto: List<AttendanceDTO>): List<Asistencia> {

@@ -1,9 +1,6 @@
 package ar.edu.unq.agiletutor.service
 
-
-import ar.edu.unq.agiletutor.StudentRegisterMapper
 import ar.edu.unq.agiletutor.model.Alumno
-import ar.edu.unq.agiletutor.model.Notifyer
 import jakarta.annotation.PostConstruct
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,9 +20,6 @@ class InitService {
     @Autowired
     private val studentService: StudentService? = null
 
-    @Autowired
-    private lateinit var senderService: EmailServiceImpl
-
     @PostConstruct
     fun initialize() {
 
@@ -36,12 +30,7 @@ class InitService {
     }
 
     private fun fireInitialData() {
-        /*      if (!senderService.existsAny()) {
-                  var notifyer: Notifyer = Notifyer()
-                  senderService.saveNotifyer(notifyer)
-                  senderService.sendSimpleMessage("cristian.gonzalez.unq@gmail.com", notifyer.textemail, "este es el mensaje")
-              }
-        */      if (studentService!!.findAll().isEmpty()) {
+        if (studentService!!.findAll().isEmpty()) {
 
             studentService.register(Alumno("Ale", "Fariña", "012", "ale@gmail.com", mutableSetOf(), 0.0, ""))
             studentService.register(
@@ -124,7 +113,6 @@ class InitService {
                     ""
                 )
             )
-
         }
     }
 }

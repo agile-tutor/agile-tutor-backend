@@ -1,10 +1,10 @@
 package ar.edu.unq.agiletutor.service
 
-import ar.edu.unq.agiletutor.model.Alumno
 import ar.edu.unq.agiletutor.model.Asistencia
 import ar.edu.unq.agiletutor.model.Notifyer
 import ar.edu.unq.agiletutor.persistence.AttendanceRepository
 import ar.edu.unq.agiletutor.persistence.NotifyerRepository
+import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
@@ -28,17 +28,22 @@ class EmailServiceImpl {
         return notifyerRepository.findAll().isNotEmpty()
     }
 
+    @Transactional
     fun saveNotifyer(notifyer: Notifyer) {
+        println(notifyer.getabsent()!!.size.toString() + "savenoti")
         notifyerRepository.save(notifyer)
     }
 
+    @Transactional
     fun getNotifyer(): Notifyer {
         if (!this.existsAny()) {
-            var notifyer: Notifyer = Notifyer()
+            val notifyer = Notifyer()
             this.saveNotifyer(notifyer)
         }
+        println(notifyerRepository.findAll()[0]!!.toString() + "notifiers")
         return notifyerRepository.findAll()[0]!!
     }
+
 
     fun notifyAllAbsent(day: Int) {
         var attendaceList: List<Asistencia> = attendanceRepository.findByDay(day).filter { it -> !it.attended!! }
@@ -51,19 +56,6 @@ class EmailServiceImpl {
         this.saveNotifyer(notifyer)
     }
 
-    @Scheduled(cron = "0 0 22 * * *")//a las 22 horas
-    fun emailAbsent() {
-        val notifyer: Notifyer = getNotifyer()
-        notifyer.getabsent()!!
-            .forEach { it -> this.sendSimpleMessage(it.email!!, notifyer.getSubjectEmail(), notifyer.getTextEmail()) }
-        notifyer.removeall()
-        this.saveNotifyer(notifyer)
-    }
-
-    @Scheduled(cron = "1 * * * * *")//cada un minuto
-    fun pruebaCronJob() {
-      println("adentro del cronJob")
-    }
     fun changeSubjectText(text: String) {
         val notifyer: Notifyer = getNotifyer()
         notifyer.setSubjectEmail(text)
@@ -83,5 +75,38 @@ class EmailServiceImpl {
         message.setSubject(subject)
         message.setText(text)
         emailSender.send(message)
+    }
+
+    @Scheduled(cron = "*/5 * * * * *")//cada un minuto
+    fun pruebaCronJob() {
+        println("adentro del cronJob")
+    }
+
+    //@Scheduled(cron = "0 0 22 * * *")//a las 22 horas
+    @Transactional
+    @Scheduled(cron = "*/20 * * * * *")//cada un minuto
+    fun emailAbsent() {
+        var notifyer: Notifyer = getNotifyer()
+        println("todes" + notifyer.getabsent()!!.size)
+        notifyer.getabsent()!!
+            .forEach { it ->
+                this.sendSimpleMessage(
+                    it.email!!,
+                    notifyer.getSubjectEmail(),
+                    notifyer.getTextEmail(it.name!!)
+                )
+            }
+        notifyer.getabsent()!!
+        /*
+                    .forEach {
+                        println(
+                            it.email!! + "impresion" + notifyer.getSubjectEmail() + " " + notifyer.getTextEmail(
+                                it.name!!
+                            )
+                        )
+                    }
+        */
+        notifyer.removeall()
+        saveNotifyer(notifyer)
     }
 }

@@ -52,12 +52,13 @@ class StudentRestService {
         return ResponseEntity.ok().body(students)
     }
 
-    @PutMapping(value = ["/api/updateattendances"])
+    @PutMapping(value = ["/api/updateattendances/{day}"])
     fun modifyAUser(
+        @PathVariable("day") day: Int,
         @RequestBody studentsAttendances: List<AttendanceDTO>
     ): ResponseEntity<*>? {
         var toUpdate = studentService.listaAsistenciaAListaModelo(studentsAttendances)
         println(toUpdate)
-        return ResponseEntity.ok().body(studentService.updateAttendances(toUpdate))
+        return ResponseEntity.ok().body(studentService.updateAttendances(toUpdate, day))
     }
 }
