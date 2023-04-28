@@ -27,10 +27,8 @@ class InitService {
     @Autowired
     private val courseService: CourseService? = null
 
-
     @Autowired
     private val tutorService: TutorService? = null
-
 
     @PostConstruct
     fun initialize() {
@@ -78,7 +76,18 @@ class InitService {
 
 
         val student1 =
-            Student(0, "Ale", "Fariña", "123", "ale@gmail.com", firstattendaces, 0.0, "", course1Saved, false)
+            Student(
+                0,
+                "Ale",
+                "Fariña",
+                "123",
+                "ale@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course1Saved,
+                false
+            )
         val studentregistered1 = studentService!!.register(student1)
 
         val student2 = Student(
@@ -96,29 +105,238 @@ class InitService {
         val studentregistered2 = studentService!!.register(student2)
 
         val student3 =
-            Student(0, "Pedro", "Picapiedra", "456", "pica@gmail.com", firstattendaces, 0.0, "", course2Saved, false)
+            Student(
+                0, "Pedro",
+                "Picapiedra",
+                "456",
+                "pica@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
         studentService!!.register(student3)
 
         val student4 =
-            Student(0, "Pablo", "Marmol", "456", "marmol@gmail.com", firstattendaces, 0.0, "", course2Saved, false)
+            Student(
+                0,
+                "Pablo",
+                "Marmol",
+                "456",
+                "marmol@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
         studentService!!.register(student4)
 
         val student5 =
-            Student(0, "Alu1", "Marmol", "456", "alu1@gmail.com", firstattendaces, 0.0, "", course3Saved, false)
+            Student(
+                0, "Super",
+                "Sonico",
+                "456",
+                "super@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course3Saved,
+                false
+            )
         studentService!!.register(student5)
 
         val student6 =
-            Student(0, "Alu2", "Marmol", "456", "alu2@gmail.com", firstattendaces, 0.0, "", course3Saved, false)
+            Student(
+                0,
+                "Jane",
+                "Jetson",
+                "456",
+                "jane@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course3Saved,
+                false
+            )
         studentService!!.register(student6)
 
         val student7 =
-            Student(0, "Alu3", "Marmol", "456", "alu3@gmail.com", firstattendaces, 0.0, "", course4Saved, false)
+            Student(
+                0,
+                "Alu3",
+                "Marmol",
+                "456",
+                "alu3@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course4Saved,
+                false
+            )
         studentService!!.register(student7)
 
 
         val student8 =
-            Student(0, "Alu4", "Marmol", "456", "alu4@gmail.com", firstattendaces, 0.0, "", course4Saved, false)
+            Student(
+                0,
+                "Alu4",
+                "Marmol",
+                "456",
+                "alu4@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course4Saved,
+                false
+            )
         studentService!!.register(student8)
+
+        val student9 =
+            Student(
+                0, "Pebbles",
+                "Picapiedra",
+                "456",
+                "pebbles@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
+        studentService!!.register(student9)
+
+        val student10 =
+            Student(
+                0,
+                "Bam-Bam",
+                "Marmol",
+                "456",
+                "bambam@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
+        studentService!!.register(student10)
+
+        val student11 =
+            Student(
+                0, "Vilma",
+                "Picapiedra",
+                "456",
+                "vilma@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
+        studentService!!.register(student11)
+
+        val student12 =
+            Student(
+                0,
+                "Betty",
+                "Marmol",
+                "456",
+                "betty@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
+        studentService!!.register(student12)
+
+        val student13 =
+            Student(
+                0, "Mr",
+                "Slate",
+                "456",
+                "slate@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
+        studentService!!.register(student13)
+
+        val student14 =
+            Student(
+                0,
+                "Creepella",
+                "Gruesome",
+                "456",
+                "creepella@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course2Saved,
+                false
+            )
+        studentService!!.register(student14)
+
+        val student15 =
+            Student(
+                0, "Elroy",
+                "Jetson",
+                "456",
+                "elroy@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course3Saved,
+                false
+            )
+        studentService!!.register(student15)
+
+        val student16 =
+            Student(
+                0,
+                "Lucero",
+                "Sonico",
+                "456",
+                "lucero@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course3Saved,
+                false
+            )
+        studentService!!.register(student16)
+
+        val student17 =
+            Student(
+                0, "Senor",
+                "Espacial",
+                "456",
+                "espacial@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course3Saved,
+                false
+            )
+        studentService!!.register(student17)
+
+        val student18 =
+            Student(
+                0,
+                "Mrs",
+                "Spacely",
+                "456",
+                "spacely@gmail.com",
+                firstattendaces,
+                0.0,
+                "",
+                course3Saved,
+                false
+            )
+        studentService!!.register(student18)
 
         studentService.updateattendances(studentregistered1.id!!, attendancesSecond)
 
