@@ -35,6 +35,7 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.30")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.0.5")
 }
 
 tasks.withType<KotlinCompile> {

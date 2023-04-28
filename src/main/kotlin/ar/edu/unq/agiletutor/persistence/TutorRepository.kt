@@ -1,6 +1,5 @@
 package ar.edu.unq.agiletutor.persistence
 
-
 import ar.edu.unq.agiletutor.model.Tutor
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.repository.CrudRepository

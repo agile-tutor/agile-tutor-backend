@@ -94,7 +94,7 @@ class InitService {
             "Cristian",
             "Gonzalez",
             "456",
-            "cristian@gmail.com",
+            "cristian.gonzalez.unq@gmail.com",
             firstattendaces,
             0.0,
             "",
