@@ -84,14 +84,14 @@ class EmailServiceImpl {
         emailSender.send(message)
     }
 
-    @Scheduled(cron = "*/5 * * * * *")//cada un minuto
+    @Scheduled(cron = "*/5 * * * * *")//cada cinco segundos
     fun pruebaCronJob() {
         println("adentro del cronJob de 5 segundos")
     }
 
     //@Scheduled(cron = "0 0 22 * * *")//a las 22 horas
     @Transactional
-    @Scheduled(cron = "*/20 * * * * *")//cada un minuto
+    @Scheduled(cron = "*/20 * * * * *")//cada 20 segundos
     fun emailAbsent() {
         var notifyer: Notifyer = getNotifyer()
         println("todes" + notifyer.getabsent()!!.size)

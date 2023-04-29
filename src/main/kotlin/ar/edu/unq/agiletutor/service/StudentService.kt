@@ -120,9 +120,10 @@ class StudentService {
     }
 
     @Transactional
-    fun blockOrUnblockAStudent(id: Long, blocked: Boolean): Student {
+    fun blockOrUnblockAStudent(id: Long, blocked: String): Student {
         val student = findByID(id)
-        student.blocked = blocked
+        println(blocked)
+        student.blocked = blocked.toBoolean()
         return repository.save(student)
     }
 }

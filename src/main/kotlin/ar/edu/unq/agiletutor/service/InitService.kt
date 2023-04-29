@@ -80,7 +80,7 @@ class InitService {
                 "Ale",
                 "Fariña",
                 "123",
-                "ale@gmail.com",
+                "algoritmosale@gmail.com",
                 firstattendaces,
                 0.0,
                 "",
