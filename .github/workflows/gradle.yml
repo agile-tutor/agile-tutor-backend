@@ -38,7 +38,7 @@ jobs:
         mysql database: 'agiletutorDB' # Optional, default value is "test". The specified database which will be create
         # mysql root password: ${{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
         mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-        mysql password: ${{ secrets.DatabasePassword }} # Required if "mysql user" exists. The password for the "mysql user"
+        mysql password: 'Ttip2023@' # ${{ secrets.DatabasePassword }} # Required if "mysql user" exists. The password for the "mysql user"
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
