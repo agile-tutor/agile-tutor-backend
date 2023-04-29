@@ -74,12 +74,17 @@ class StudentService {
         return (count * (100 / 6).toDouble())
     }
 
+
     @Transactional
     fun update(id: Long, entity: StudentDTO): Student {
-        if (!repository.existsById(id)) {
-            throw ItemNotFoundException("Student with Id:  $id not found")
-        }
-        return repository.save(entity.aModelo())
+       val student = findByID(id)
+        student.name =  entity.name
+        student.surname = entity.surname
+        student.identifier = entity.identifier
+        student.email = entity.email
+        student.observations = entity.observations!!
+        student.blocked = entity.blocked
+        return repository.save(student)
     }
 
     fun attendancesFromAStudent(id: Long): Set<Attendance> {
