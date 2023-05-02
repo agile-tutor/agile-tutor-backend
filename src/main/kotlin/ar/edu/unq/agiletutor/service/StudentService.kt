@@ -58,7 +58,6 @@ class StudentService {
     fun updateattendances(studentId: Long, attendances: List<AttendanceDTO>): Student {
         val student = findByID(studentId)
         student.attendances = attendances.map { it.aModelo() }.toMutableSet()
-        // student.attendancepercentage = calcularPorcentajeDeAsistencias(student.attendances)
         student.calcularPorcentajeDeAsistencias()
         return repository.save(student)
     }
@@ -123,6 +122,12 @@ class StudentService {
     fun studentsAttendedAtAParticularDay(day: Int): List<Student> {
         return findAll().filter { it.attendedDay(day) }
     }
+
+    @Transactional
+    fun studentsAbsentAtAParticularDay(day: Int): List<Student> {
+        return findAll().filter { ! it.attendedDay(day) }
+    }
+
 
     @Transactional
     fun blockOrUnblockAStudent(id: Long, blocked: String): Student {

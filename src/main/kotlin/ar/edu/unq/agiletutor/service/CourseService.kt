@@ -5,7 +5,6 @@ import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Tutor
-import ar.edu.unq.agiletutor.persistence.AttendanceRepository
 import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,8 +26,8 @@ class CourseService {
     @Autowired
     private lateinit var senderService: EmailServiceImpl
 
-    @Autowired
-    private lateinit var attendanceRepository: AttendanceRepository
+   // @Autowired
+   // private lateinit var attendanceRepository: AttendanceRepository
 
     @Transactional
     fun register(course: Course): Course {
@@ -83,13 +82,47 @@ class CourseService {
         return students
     }
 
+
+
+
     @Transactional
-    fun updateStudentsAttendancesFromACourse(courseId: Int, studentAttendance: List<StudentAttendanceDTO>) {
-        //val course = findByID(id)
-        studentAttendance.forEach {
-            attendanceRepository.setAttendanceInfoById(it.attendance.attended.toBoolean(), it.attendance.id)
+    fun studentsAbsentAtaDayFromACourse (id:Int, day: Int): List<Student> {
+        return studentsFromACourse(id).filter { ! it.attendedDay(day) }
+    }
+
+
+
+
+    @Transactional
+    fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendance: List<StudentAttendanceDTO>) {
+        val course = findByID(id)
+        studentAttendance.sortedBy { it.studentId }
+        for (student in course.students.sortedBy { it.id }) {
+            updateAttendanceAtADay( studentAttendance.first(), student)
+            student.calcularPorcentajeDeAsistencias()
+            studentAttendance.iterator().next()
         }
-        senderService.notifyAllAbsent(studentAttendance[0].attendance.day!!, courseId)
+        repository.save(course)
+       val students =  studentsAbsentAtaDayFromACourse(id,studentAttendance.first().attendance.day!!)
+       senderService.notifyAllAbsent(students)
+
+    }
+
+    private fun updateAttendanceAtADay(studentUpdated:StudentAttendanceDTO,student:Student ){
+        val day = studentUpdated.attendance.day!!
+        val attendance = student.attendances.toMutableList().get(day)
+        attendance.attended = studentUpdated.attendance.attended.toBoolean()
+        student.attendances.toMutableList().set(day, attendance)
+
+    }
+
+  //  @Transactional
+   // fun updateStudentsAttendancesFromACourse(courseId: Int, studentAttendance: List<StudentAttendanceDTO>) {
+        //val course = findByID(id)
+     //   studentAttendance.forEach {
+       //     attendanceRepository.setAttendanceInfoById(it.attendance.attended.toBoolean(), it.attendance.id)
+       // }
+     //   senderService.notifyAllAbsent(studentAttendance[0].attendance.day!!, courseId)
        /*     var studentToUpdate = studenRepository.findById(it.studentId.toLong()).get()
             var atendancesUpdated = updateAttendance(
                 it.attendance.day!!,
@@ -108,7 +141,7 @@ class CourseService {
                   val boolean = booleans.iterator().next()
                   updateAttendance(day,boolean, student.attendances.toMutableList())
         repository.save(course)*/
-    }
+  //  }
 /*
     private fun updateAttendance(
         day: Int,

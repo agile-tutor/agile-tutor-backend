@@ -16,6 +16,6 @@ interface StudentRepository : CrudRepository<Student?, Long?> {
     override fun findAll(): List<Student>
     override fun findById(id: Long): Optional<Student?>
     override fun existsById(id: Long): Boolean
-    @Query("SELECT s FROM Student s inner join Attendance a on a.id= ?1 and s.course.id= ?2 where a.attended=false")
-    fun findAbsentByDayAndCourse(day: Int, courseID: Int): List<Student>
+   // @Query("SELECT s FROM Student s inner join Attendance a on a.id= ?1 and s.course.id= ?2 where a.attended=false")
+    //fun findAbsentByDayAndCourse(day: Int, courseID: Int): List<Student>
 }

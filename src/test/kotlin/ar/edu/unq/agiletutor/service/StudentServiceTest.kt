@@ -1,27 +1,33 @@
 package ar.edu.unq.agiletutor.service
 
+import ar.edu.unq.agiletutor.ItemNotFoundException
+import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Tutor
-import jakarta.annotation.PostConstruct
-import org.apache.commons.logging.LogFactory
+import ar.edu.unq.agiletutor.persistence.CourseRepository
+import ar.edu.unq.agiletutor.persistence.StudentRepository
+import ar.edu.unq.agiletutor.persistence.TutorRepository
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import org.springframework.boot.test.context.SpringBootTest
 
-@Service
-@Transactional
-class InitService {
-
-    protected val logger = LogFactory.getLog(javaClass)
-
-    @Value("\${spring.datasource.driverClassName:NONE}")
-    private val className: String? = null
+@SpringBootTest
+internal class StudentServiceTest {
 
     @Autowired
-    private val studentService: StudentService? = null
+    lateinit var studentService : StudentService
+
+    @Autowired
+    lateinit var tutorRepository: TutorRepository
+
+    @Autowired
+    lateinit var courseRepository: CourseRepository
+
+    @Autowired
+    lateinit var studentRepository: StudentRepository
+
 
     @Autowired
     private val courseService: CourseService? = null
@@ -29,18 +35,20 @@ class InitService {
     @Autowired
     private val tutorService: TutorService? = null
 
-    @PostConstruct
-    fun initialize() {
 
-        if (className == "com.mysql.cj.jdbc.Driver") {
-            logger.info("Init Data Using Mysql DB")
-           // if (studentService!!.findAll().isEmpty()) {
-              // fireInitialData()
-          //  }
-        }
-    }
+    var tutors = listOf<Tutor>()
+    var students = listOf<Student>()
 
-    private fun fireInitialData() {
+    lateinit var student1: Student
+    lateinit var student2: Student
+
+    lateinit var tutor1: Tutor
+    lateinit var tutor2: Tutor
+    lateinit var tutorData: TutorRegisterDTO
+
+
+    @BeforeEach
+    fun setUp() {
 
         val tutor1 = Tutor(0, "tutor1", "ape1", "tutor1@gmail.com", "passtut1", mutableSetOf())
         val tutor2 = Tutor(0, "tutor2", "ape2", "tutor2@gmail.com", "passtut2", mutableSetOf())
@@ -56,7 +64,6 @@ class InitService {
         val course2Saved = courseService.register(course2)
         val course3Saved = courseService.register(course3)
         val course4Saved = courseService.register(course4)
-
 
         val firstattendaces = mutableSetOf<Attendance>()
         for (i in (1..6)) {
@@ -74,7 +81,7 @@ class InitService {
         val attendancesSecond = atendances.map { AttendanceDTO.desdeModelo(it) }
 
 
-        val student1 =
+         student1 =
             Student(
                 0,
                 "Ale",
@@ -87,9 +94,9 @@ class InitService {
                 course1Saved,
                 false
             )
-        val studentregistered1 = studentService!!.register(student1)
+       // val studentregistered1 = studentService!!.register(student1)
 
-        val student2 = Student(
+        student2 = Student(
             0,
             "Cristian",
             "Gonzalez",
@@ -101,7 +108,7 @@ class InitService {
             course1Saved,
             false
         )
-        val studentregistered2 = studentService.register(student2)
+       // val studentregistered2 = studentService.register(student2)
 
         val student3 =
             Student(
@@ -115,7 +122,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student3)
+        //  val studentregistered3 = studentService.register(student3)
 
         val student4 =
             Student(
@@ -130,7 +137,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student4)
+        //    val studentregistered4  =  studentService.register(student4)
 
         val student5 =
             Student(
@@ -144,7 +151,7 @@ class InitService {
                 course3Saved,
                 false
             )
-        studentService.register(student5)
+       // val studentregistered5  =studentService.register(student5)
 
         val student6 =
             Student(
@@ -159,7 +166,7 @@ class InitService {
                 course3Saved,
                 false
             )
-        studentService.register(student6)
+        //  val studentregistered6  = studentService.register(student6)
 
         val student7 =
             Student(
@@ -174,7 +181,7 @@ class InitService {
                 course4Saved,
                 false
             )
-        studentService.register(student7)
+        //  val studentregistered7  =  studentService.register(student7)
 
         val student8 =
             Student(
@@ -189,7 +196,7 @@ class InitService {
                 course4Saved,
                 false
             )
-        studentService.register(student8)
+        //  val studentregistered8  = studentService.register(student8)
 
         val student9 =
             Student(
@@ -203,7 +210,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student9)
+        //  val studentregistered9= studentService.register(student9)
 
         val student10 =
             Student(
@@ -218,7 +225,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student10)
+        // val studentregistered10   =studentService.register(student10)
 
         val student11 =
             Student(
@@ -232,7 +239,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student11)
+        //  val studentregistered211 =  studentService.register(student11)
 
         val student12 =
             Student(
@@ -247,7 +254,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student12)
+        //  val studentregistered12  = studentService.register(student12)
 
         val student13 =
             Student(
@@ -261,7 +268,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student13)
+        //  val studentregistered13 =  studentService.register(student13)
 
         val student14 =
             Student(
@@ -276,7 +283,7 @@ class InitService {
                 course2Saved,
                 false
             )
-        studentService.register(student14)
+        // val studentregistered14  = studentService.register(student14)
 
         val student15 =
             Student(
@@ -290,7 +297,7 @@ class InitService {
                 course3Saved,
                 false
             )
-        studentService.register(student15)
+        //  val studentregistered15  = studentService.register(student15)
 
         val student16 =
             Student(
@@ -305,7 +312,7 @@ class InitService {
                 course3Saved,
                 false
             )
-        studentService.register(student16)
+        //  val studentregistered16  = studentService.register(student16)
 
         val student17 =
             Student(
@@ -319,7 +326,7 @@ class InitService {
                 course3Saved,
                 false
             )
-        studentService.register(student17)
+        // val studentregistered17  =  studentService.register(student17)
 
         val student18 =
             Student(
@@ -334,8 +341,61 @@ class InitService {
                 course3Saved,
                 false
             )
-        studentService.register(student18)
+        //  val studentregistered18 =  studentService.register(student18)
 
-        studentService.updateattendances(studentregistered1.id!!, attendancesSecond)
+
     }
+
+
+
+    /**get  Students */
+    @Test
+    fun al_solicitar_a_una_DB_sin_estudiantes_no_devuelve_ninguno() {
+        students = studentService.findAll()
+        Assertions.assertTrue(students.isEmpty())
+    }
+
+    @Test
+    fun al_solicitar_a_La_DB_todos_los_estudiantes_Devuelve_la_cantidad_de_estudiantes_registrados() {
+        studentService.register(student1)
+        studentService.register(student2)
+        students = studentService.findAll()
+        Assertions.assertTrue(students.isNotEmpty())
+        Assertions.assertEquals(2, students.size)
+    }
+
+
+
+    /** find a Student By Id */
+    @Test
+    fun al_intentar_buscar_un_estudiante_con_id_no_existente_Lanza_excepcion() {
+        studentService.register(student1)
+        assertThrows<ItemNotFoundException> { studentService.findByID(0) }
+    }
+
+
+    @Test
+    fun Si_el_id_es_existente_Retorna_al_estudiante_asociado_con_ese_id_() {
+        val studentRegistered = studentService.register(student1)
+        val studentFound = studentService.findByID(studentRegistered.id!!)
+        Assertions.assertEquals(studentRegistered.id, studentFound.id)
+        Assertions.assertEquals(studentRegistered.name, studentFound.name)
+        Assertions.assertEquals(studentRegistered.surname, studentFound.surname)
+        Assertions.assertEquals(studentRegistered.email, studentFound.email)
+
+
+    }
+
+
+
+
+    @AfterEach
+    fun tearDown() {
+       // studentRepository.deleteAll()
+  //      courseRepository.deleteAll()
+    //    tutorRepository.deleteAll()
+    }
+
+
+
 }

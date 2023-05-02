@@ -1,3 +1,4 @@
+/*
 package ar.edu.unq.agiletutor.persistence
 
 import ar.edu.unq.agiletutor.model.Attendance
@@ -18,3 +19,5 @@ interface AttendanceRepository : JpaRepository<Attendance?, Int?> {
     @Query("SELECT a FROM Attendance a WHERE a.day=?1")
     fun findByDay(day: Int): List<Attendance>
 }
+
+ */

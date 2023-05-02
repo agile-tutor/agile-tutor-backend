@@ -2,7 +2,6 @@ package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.model.Notifyer
 import ar.edu.unq.agiletutor.model.Student
-import ar.edu.unq.agiletutor.persistence.AttendanceRepository
 import ar.edu.unq.agiletutor.persistence.NotifyerRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import jakarta.transaction.Transactional
@@ -19,8 +18,8 @@ class EmailServiceImpl {
     @Autowired
     private lateinit var notifyerRepository: NotifyerRepository
 
-    @Autowired
-    private lateinit var attendanceRepository: AttendanceRepository
+  //  @Autowired
+   // private lateinit var attendanceRepository: AttendanceRepository
 
     @Autowired
     private lateinit var studentRepository: StudentRepository
@@ -46,6 +45,7 @@ class EmailServiceImpl {
         return notifyerRepository.findAll()[0]!!
     }
 
+    /*
     fun notifyAllAbsent(dayAttend: Int, courseId: Int) {
         val absentList = studentRepository.findAll().filter {
             it.course!!.id == courseId
@@ -56,6 +56,16 @@ class EmailServiceImpl {
         }
         this.addAbsent(absentList)
     }
+*/
+
+   fun notifyAllAbsent (absents: List <Student>) {
+       if  (absents.isNotEmpty()) {
+           val notifyer: Notifyer = getNotifyer()
+           notifyer.absent.addAll(absents.toMutableSet())
+           saveNotifyer(notifyer)
+       }
+   }
+
 
     fun addAbsent(absentList: List<Student>) {
         val notifyer: Notifyer = getNotifyer()
