@@ -183,9 +183,9 @@ class StudentRestService {
 
     /** Block or unblock a student */
     @GetMapping("/api/students/block/{id}")
-    fun blockOrUnBlockAStudent(@PathVariable("id") id: Int, @RequestBody blocked: String): ResponseEntity<*> {
+    fun blockOrUnBlockAStudent(@PathVariable("id") id: Int, @RequestBody blocked: Boolean): ResponseEntity<*> {
 
-        val student = StudentDTO.desdeModelo(studentService.blockOrUnblockAStudent(id.toLong(), blocked))
+        val student = StudentDTO.desdeModelo(studentService.blockOrUnblockAStudent(id.toLong(), blocked ))
 
         return ResponseEntity.ok().body(student)
     }

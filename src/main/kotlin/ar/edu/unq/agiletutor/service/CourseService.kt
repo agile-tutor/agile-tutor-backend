@@ -18,6 +18,9 @@ class CourseService {
     private lateinit var tutorService: TutorService
 
     @Autowired
+    private lateinit var studentService: StudentService
+
+    @Autowired
     private lateinit var repository: CourseRepository
 
     @Autowired
@@ -115,6 +118,32 @@ class CourseService {
         student.attendances.toMutableList().set(day, attendance)
 
     }
+
+   fun  addAStudentToACourse(student:Student, id:Int){
+       val course = findByID(id)
+       student.course = course
+       course.students.add(student)
+       repository.save(course)
+
+   }
+
+    fun removeAStudentFromACourse(student:Student, id:Int){
+        val course = findByID(id)
+        course.students.remove(student)
+        repository.save(course)
+    }
+
+    @Transactional
+    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int){
+        val courseMoved = findByID(id_course)
+        val student = studentService.findByID(id)
+        val course = findByID(student.course!!.id!!)
+        addAStudentToACourse(student, id_course)
+        removeAStudentFromACourse(student,student.course!!.id!!)
+
+    }
+
+
 
   //  @Transactional
    // fun updateStudentsAttendancesFromACourse(courseId: Int, studentAttendance: List<StudentAttendanceDTO>) {

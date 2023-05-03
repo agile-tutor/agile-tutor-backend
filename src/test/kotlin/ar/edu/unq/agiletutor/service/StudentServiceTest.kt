@@ -41,6 +41,7 @@ internal class StudentServiceTest {
 
     lateinit var student1: Student
     lateinit var student2: Student
+    lateinit var studentData: StudentDTO
 
     lateinit var tutor1: Tutor
     lateinit var tutor2: Tutor
@@ -80,6 +81,19 @@ internal class StudentServiceTest {
 
         val attendancesSecond = atendances.map { AttendanceDTO.desdeModelo(it) }
 
+        studentData =
+            StudentDTO(
+                0,
+                "Ale",
+                "Trucho",
+                "500",
+                "mailfalso@gmail.com",
+
+                mutableListOf(),
+                0.0,
+                "Uma Observación",
+                true
+            )
 
          student1 =
             Student(
@@ -382,10 +396,51 @@ internal class StudentServiceTest {
         Assertions.assertEquals(studentRegistered.name, studentFound.name)
         Assertions.assertEquals(studentRegistered.surname, studentFound.surname)
         Assertions.assertEquals(studentRegistered.email, studentFound.email)
-
-
     }
 
+
+
+
+    /** update a student* */
+    @Test
+    fun al_intentar_actualizar_un_estudiante_con_id_no_existente_Lanza_excepcion() {
+        studentService.register(student1)
+        assertThrows<ItemNotFoundException> {  studentService.update(0, studentData)}
+    }
+
+    @Test
+    fun Si_el_id_es_existente_Actualiza_al_estudiante_asociado_con_ese_id_() {
+        val studentRegistered = studentService.register(student1)
+        val updated = studentService.update(studentRegistered.id!!, studentData)
+        val restored= studentService.findByID(studentRegistered.id!!)
+        Assertions.assertEquals(updated.id, restored.id)
+        Assertions.assertEquals(updated.name, restored.name)
+        Assertions.assertEquals(updated.surname, restored.surname)
+        Assertions.assertEquals(updated.email, restored.email)
+        Assertions.assertEquals(updated.attendancepercentage, restored.attendancepercentage)
+        Assertions.assertEquals(updated.blocked, restored.blocked)
+    }
+
+
+    /** Delete a student By Id */
+    @Test
+    fun al_intentar_borrar_un_estudsiante_con_id_no_existente_lanza_excepcionm_y_La_DB_se_mantiene_sin_alterar() {
+        studentService.register(student1)
+        val students = studentService.findAll()
+
+        assertThrows<ItemNotFoundException> {  studentService.deleteById(0)}
+
+        Assertions.assertTrue(students.isNotEmpty())
+    }
+
+    @Test
+    fun Si_el_id_es_existente_el_estudiante_asociado_con_ese_id_es_eliminado_() {
+        val studentRegistered = studentService.register(student1)
+        studentService.deleteById(studentRegistered .id!!)
+        val tutors = studentService.findAll()
+
+        Assertions.assertTrue(tutors.isEmpty())
+    }
 
 
 

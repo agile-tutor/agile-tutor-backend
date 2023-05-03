@@ -130,10 +130,18 @@ class StudentService {
 
 
     @Transactional
-    fun blockOrUnblockAStudent(id: Long, blocked: String): Student {
+    fun blockOrUnblockAStudent(id: Long, blocked: Boolean): Student {
         val student = findByID(id)
-        println(blocked)
-        student.blocked = blocked.toBoolean()
+        student.blocked = blocked
         return repository.save(student)
+    }
+
+    @Transactional
+    fun deleteById(id: Long) {
+        val student = repository.findById(id)
+        if (!(student .isPresent)) {
+            throw ItemNotFoundException("Student with Id:  $id not found")
+        }
+        repository.deleteById(id)
     }
 }
