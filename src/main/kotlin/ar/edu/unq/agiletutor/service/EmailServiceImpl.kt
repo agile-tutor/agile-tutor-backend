@@ -10,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 
 @Component
@@ -18,8 +19,12 @@ class EmailServiceImpl {
     @Autowired
     private lateinit var notifyerRepository: NotifyerRepository
 
-  //  @Autowired
-   // private lateinit var attendanceRepository: AttendanceRepository
+    //  @Autowired
+    // private lateinit var attendanceRepository: AttendanceRepository
+
+    @Autowired
+    private lateinit var studentService: StudentService
+
 
     @Autowired
     private lateinit var studentRepository: StudentRepository
@@ -27,9 +32,17 @@ class EmailServiceImpl {
     @Autowired
     private lateinit var emailSender: JavaMailSender
 
+    private var currentDay = 0
+
+    private lateinit var notifier : Notifyer
+
+
+
+
     fun existsAny(): Boolean {
         return notifyerRepository.findAll().isNotEmpty()
     }
+
 
     @Transactional
     fun saveNotifyer(notifyer: Notifyer) {
@@ -42,10 +55,10 @@ class EmailServiceImpl {
             val notifyer = Notifyer()
             this.saveNotifyer(notifyer)
         }
-        return notifyerRepository.findAll()[0]!!
+        return notifyerRepository.findAll().first()!!
     }
 
-    /*
+/*
     fun notifyAllAbsent(dayAttend: Int, courseId: Int) {
         val absentList = studentRepository.findAll().filter {
             it.course!!.id == courseId
@@ -56,23 +69,26 @@ class EmailServiceImpl {
         }
         this.addAbsent(absentList)
     }
+
 */
 
-   fun notifyAllAbsent (absents: List <Student>) {
-       if  (absents.isNotEmpty()) {
-           val notifyer: Notifyer = getNotifyer()
-           notifyer.absent.addAll(absents.toMutableSet())
-           saveNotifyer(notifyer)
-       }
-   }
 
 
+    fun saveAllAbsent(absents: MutableSet<Student>) {
+        if (absents.isNotEmpty()) {
+            val notifyer: Notifyer = getNotifyer()
+            notifyer.setAbsents( absents)
+            saveNotifyer(notifyer)
+        }
+    }
+
+/*
     fun addAbsent(absentList: List<Student>) {
         val notifyer: Notifyer = getNotifyer()
         absentList.forEach { notifyer.addabsent(it) }
         this.saveNotifyer(notifyer)
     }
-
+*/
     fun changeSubjectText(text: String) {
         val notifyer: Notifyer = getNotifyer()
         notifyer.setSubjectEmail(text)
@@ -103,9 +119,17 @@ class EmailServiceImpl {
     @Transactional
     @Scheduled(cron = "*/20 * * * * *")//cada 20 segundos
     fun emailAbsent() {
-        var notifyer: Notifyer = getNotifyer()
-        println("todes" + notifyer.getabsent()!!.size)
-        notifyer.getabsent()!!
+        val notifyer: Notifyer = getNotifyer()
+        val absents = notifyer.getabsent()
+        println("todes" + absents.size)
+        for (absent in absents) {
+            sendSimpleMessage(absent.email!!, notifyer.getSubjectEmail(), notifyer.getTextEmail(absent.name!!))
+            println(
+                absent.email!! + "impresion" + notifyer.getSubjectEmail() + " " + notifyer.getTextEmail(
+                    absent.name!!
+                )
+            )
+        /*  notifyer.getabsent()!!
             .forEach {
                 this.sendSimpleMessage(
                     it.email!!,
@@ -122,8 +146,9 @@ class EmailServiceImpl {
                             )
                         )
                     }
-
-        notifyer.removeall()
-        saveNotifyer(notifyer)
+*/
+             notifyer.removeall()
+             saveNotifyer(notifyer)
+        }
     }
 }

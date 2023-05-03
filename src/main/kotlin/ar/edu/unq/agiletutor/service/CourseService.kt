@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CourseService {
 
-    @Autowired
-    private lateinit var tutorService: TutorService
 
     @Autowired
     private lateinit var studentService: StudentService
@@ -76,17 +74,13 @@ class CourseService {
         return course.students.toMutableList()
     }
 
-    fun studentsFromATutor(id: Int): List<Student> {
-        val students = mutableListOf<Student>()
-        val courses = tutorService.coursesFromATutor(id)
-        for (course in courses) {
-            students.addAll(studentsFromACourse(course.id!!))
-        }
-        return students
+
+
+
+    @Transactional
+    fun studentsAbsentAtaDay (day: Int): List<Student> {
+        return studentService.findAll().filter { ! it.attendedDay(day) }
     }
-
-
-
 
     @Transactional
     fun studentsAbsentAtaDayFromACourse (id:Int, day: Int): List<Student> {
@@ -106,8 +100,8 @@ class CourseService {
             studentAttendance.iterator().next()
         }
         repository.save(course)
-       val students =  studentsAbsentAtaDayFromACourse(id,studentAttendance.first().attendance.day!!)
-       senderService.notifyAllAbsent(students)
+        val students = studentService.studentsAbsentAtAParticularDay(studentAttendance.first().attendance.day!!).toMutableSet()
+       senderService.saveAllAbsent(students)
 
     }
 

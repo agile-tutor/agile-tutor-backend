@@ -123,11 +123,11 @@ class StudentService {
         return findAll().filter { it.attendedDay(day) }
     }
 
+
     @Transactional
     fun studentsAbsentAtAParticularDay(day: Int): List<Student> {
         return findAll().filter { ! it.attendedDay(day) }
     }
-
 
     @Transactional
     fun blockOrUnblockAStudent(id: Long, blocked: Boolean): Student {

@@ -1,5 +1,6 @@
 package ar.edu.unq.agiletutor.model
 
+import jakarta.annotation.PostConstruct
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -22,7 +23,12 @@ class Notifyer {
 
     var subjectmail: String = "ASISTENCIAS - TVU"
 
-    fun getabsent(): MutableSet<Student>? {
+
+   fun setAbsents(absents : MutableSet<Student>){
+       absent =  absents
+   }
+
+    fun getabsent(): MutableSet<Student> {
         println("getabsent"+this.absent)
         return this.absent
     }
@@ -44,7 +50,7 @@ class Notifyer {
     fun setSubjectEmail(text: String) {
         this.subjectmail = text
     }
-
+/*
     fun addabsent(student: Student) {
         this.absent.add(student)
     }
@@ -52,10 +58,11 @@ class Notifyer {
     fun delabsent(student: Student) {
         this.absent.remove(student)
     }
-
+*/
     fun removeall() {
-        val studentsToRemove: MutableSet<Student> = this.absent
-        this.absent.removeAll(studentsToRemove)
+       // val studentsToRemove: MutableSet<Student> = this.absent
+        //this.absent.removeAll(studentsToRemove)
+        absent.removeAll(absent)
         println("aquipaso"+this.absent+"aquipase")
     }
 }
