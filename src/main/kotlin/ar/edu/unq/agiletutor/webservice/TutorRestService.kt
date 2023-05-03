@@ -144,4 +144,11 @@ class TutorRestService {
 
         return ResponseEntity.ok().body(courses)
     }
+
+    /**Students From a Tutor*/
+    @GetMapping("/api/course/students/tutor/{id}")
+    fun studentsFromATutor(@PathVariable("id") id: Int): ResponseEntity<*> {
+        val students = tutorService.studentsFromATutor(id).map { StudentDTO.desdeModelo(it) }
+        return ResponseEntity.ok().body(students)
+    }
 }

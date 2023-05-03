@@ -86,12 +86,7 @@ class CourseRestService {
         return ResponseEntity.ok().body(courses)
     }
 
-    /**Students From a Tutor*/
-    @GetMapping("/api/course/students/tutor/{id}")
-    fun studentsFromATutor(@PathVariable("id") id: Int): ResponseEntity<*> {
-        val courses = courseService.studentsFromATutor(id).map { StudentDTO.desdeModelo(it) }
-        return ResponseEntity.ok().body(courses)
-    }
+
 
     /**update  students attendances from a course*/
 //    @PuMapping("/api/students/attendances/update/{id}/{day}")

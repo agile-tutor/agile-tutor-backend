@@ -89,7 +89,8 @@ class TutorService {
     @Transactional
     fun studentsFromATutor(id: Int): List<Student> {
         val students = mutableListOf<Student>()
-        for (course in coursesFromATutor(id)) {
+        val courses = coursesFromATutor(id)
+        for (course in courses) {
             students.addAll(course.students)
         }
         return students
