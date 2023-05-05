@@ -477,8 +477,47 @@ internal class StudentServiceTest {
   }
 
    /** block or unblock a students */
+   @Test
+   fun al_intentar_bloquear_O_daesbloquear_un_estudiante_con_id_no_existente_Lanza_excepcion() {
+       studentService.register(student1)
+       assertThrows<ItemNotFoundException> { studentService.blockOrUnblockAStudent(0, true) }
+   }
+
+    @Test
+    fun si_desbloqueo_todos_los_estudiantes_al_consultarlos_apareceran_desbloqueados(){
+        val student1 = studentService.register(student1)
+        val student2 =  studentService.register(student2)
+        studentService.blockOrUnblockAStudent(student1.id!!, false)
+        studentService.blockOrUnblockAStudent(student2.id!!, false)
+        Assertions.assertFalse(student1.blocked)
+        Assertions.assertFalse(student2.blocked)
+
+    }
 
 
+    @Test
+    fun si_bloqueo_todos_los_estudiantes_al_consultarlos_apareceran_bloqueados(){
+        val student1 = studentService.register(student1)
+        val student2 =  studentService.register(student2)
+        studentService.blockOrUnblockAStudent(student1.id!!, true)
+        studentService.blockOrUnblockAStudent(student2.id!!, true)
+        Assertions.assertTrue(student1.blocked)
+        Assertions.assertTrue(student2.blocked)
+
+    }
+
+
+    @Test
+    fun si_por_defecto_estan_todos_desbloqueados_y_bloqueo_a_uno_Solo_ese_aparecera_bloqueado(){
+        val student1 = studentService.register(student1)
+        val student2 =  studentService.register(student2)
+        val student5 =  studentService.register(student5)
+        studentService.blockOrUnblockAStudent(student1.id!!, true)
+        Assertions.assertTrue(student1.blocked)
+        Assertions.assertFalse(student2.blocked)
+        Assertions.assertFalse(student5.blocked)
+
+    }
 
     @AfterEach
     fun tearDown() {
