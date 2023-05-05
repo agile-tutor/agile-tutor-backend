@@ -41,6 +41,11 @@ internal class StudentServiceTest {
 
     lateinit var student1: Student
     lateinit var student2: Student
+    lateinit var student5: Student
+    lateinit var student6: Student
+    lateinit var student15: Student
+    lateinit var student16: Student
+    lateinit var student17: Student
     lateinit var studentData: StudentDTO
 
     lateinit var tutor1: Tutor
@@ -68,15 +73,15 @@ internal class StudentServiceTest {
 
         val firstattendaces = mutableSetOf<Attendance>()
         for (i in (1..6)) {
-            firstattendaces.add(Attendance(i, false))
+            firstattendaces.add(Attendance(i, true))
         }
 
         val atendances = mutableSetOf<Attendance>()
         atendances.add(Attendance(1, true))
-        atendances.add(Attendance(2, false))
+        atendances.add(Attendance(2, true))
         atendances.add(Attendance(3, true))
         atendances.add(Attendance(4, true))
-        atendances.add(Attendance(5, true))
+        atendances.add(Attendance(5, false))
         atendances.add(Attendance(6, true))
 
         //val attendancesSFalseinDay2= atendances.map { AttendanceDTO.desdeModelo(it) }
@@ -441,6 +446,37 @@ internal class StudentServiceTest {
 
         Assertions.assertTrue(tutors.isEmpty())
     }
+
+  /** Students absent at a particular day */
+
+
+  @Test
+  fun me_devuelve_todos_estudiantes_que_faltaron_en_ese_dia_en_particular() {
+      val day = 5
+      studentService.register(student5)
+      studentService.register(student6)
+      studentService.register(student15)
+      studentService.register(student16)
+      studentService.register(student17)
+      val absents = studentService.studentsAbsentAtAParticularDay(day)
+      Assertions.assertTrue(absents.isNotEmpty())
+      Assertions.assertEquals(absents.size, 3)
+  }
+
+  @Test
+  fun  Si_ninguno_falto_ese_dia_en_particular_no_devuelve_estudiantes() {
+      val day = 1
+      studentService.register(student5)
+      studentService.register(student6)
+      studentService.register(student15)
+      studentService.register(student16)
+      studentService.register(student17)
+      val absents = studentService.studentsAbsentAtAParticularDay(day)
+      Assertions.assertTrue(absents.isEmpty())
+
+  }
+
+   /** block or unblock a students */
 
 
 
