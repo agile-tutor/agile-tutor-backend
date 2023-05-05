@@ -80,3 +80,11 @@ data class AttendanceViewDTO(
         }
     }
 }
+
+
+
+data class StudentAttendanceDTO(
+    var studentId: Int,
+    var attendance: AttendanceDTO
+)
+

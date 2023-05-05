@@ -73,13 +73,13 @@ internal class StudentServiceTest {
 
         val atendances = mutableSetOf<Attendance>()
         atendances.add(Attendance(1, true))
-        atendances.add(Attendance(2, true))
+        atendances.add(Attendance(2, false))
         atendances.add(Attendance(3, true))
         atendances.add(Attendance(4, true))
         atendances.add(Attendance(5, true))
         atendances.add(Attendance(6, true))
 
-        val attendancesSecond = atendances.map { AttendanceDTO.desdeModelo(it) }
+        //val attendancesSFalseinDay2= atendances.map { AttendanceDTO.desdeModelo(it) }
 
         studentData =
             StudentDTO(
@@ -159,7 +159,7 @@ internal class StudentServiceTest {
                 "Sonico",
                 "456",
                 "super@gmail.com",
-                firstattendaces,
+                atendances,
                 0.0,
                 "",
                 course3Saved,
@@ -174,7 +174,7 @@ internal class StudentServiceTest {
                 "Jetson",
                 "456",
                 "jane@gmail.com",
-                firstattendaces,
+                atendances,
                 0.0,
                 "",
                 course3Saved,
@@ -305,7 +305,7 @@ internal class StudentServiceTest {
                 "Jetson",
                 "456",
                 "elroy@gmail.com",
-                firstattendaces,
+                atendances,
                 0.0,
                 "",
                 course3Saved,

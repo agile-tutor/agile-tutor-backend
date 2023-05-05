@@ -80,7 +80,3 @@ data class CourseDTO(
     }
 }
 
-data class StudentAttendanceDTO(
-    var studentId: Int,
-    var attendance: AttendanceDTO
-)

@@ -69,6 +69,7 @@ class CourseService {
         return course.tutor!!
     }
 
+    @Transactional
     fun studentsFromACourse(id: Int): List<Student> {
         val course = findByID(id)
         return course.students.toMutableList()
@@ -113,14 +114,17 @@ class CourseService {
 
     }
 
+   @Transactional
    fun  addAStudentToACourse(student:Student, id:Int){
        val course = findByID(id)
        student.course = course
-       course.students.add(student)
-       repository.save(course)
+       studentService.register(student)
+   //course.students.add(student)
+      // repository.save(course)
 
    }
 
+    @Transactional
     fun removeAStudentFromACourse(student:Student, id:Int){
         val course = findByID(id)
         course.students.remove(student)
