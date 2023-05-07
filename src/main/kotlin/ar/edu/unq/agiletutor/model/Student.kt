@@ -92,12 +92,17 @@ class Student : Serializable {
     }
 
     fun calcularPorcentajeDeAsistencias(): Double {
-        attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
+        attendancepercentage = kotlin.math.round(cantidadDePresentes() * (100.00 / 6))
+        println(attendancepercentage)
         return attendancepercentage
     }
 
     fun sinFaltas(): Boolean {
         // return ( attendances.size == cantidadDePresentes() )
         return attendances.all { it.attended }
+    }
+
+    fun setBlockedStudent(condicion: Boolean) {
+        this.blocked = condicion
     }
 }

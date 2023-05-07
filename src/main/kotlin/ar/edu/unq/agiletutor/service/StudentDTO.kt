@@ -26,7 +26,7 @@ data class StudentDTO(
                 student.identifier,
                 student.email,
                 asistenciasDTO,
-                student.attendancepercentage,
+                student.calcularPorcentajeDeAsistencias(),
                 student.observations,
                 student.blocked
             )

@@ -12,13 +12,21 @@ plugins {
     kotlin("plugin.jpa") version "1.7.22"
 }
 
+apply(plugin = "org.springframework.boot")
+
 group = "ar.edu.unq"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
+    google()
+    jcenter()
     mavenCentral()
     mavenLocal()
+    maven(url = "./maven-repo")
+    gradlePluginPortal()
+    ivy(url = "./ivy-repo")
 }
 
 dependencies {

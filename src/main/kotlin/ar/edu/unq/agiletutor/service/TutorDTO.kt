@@ -84,3 +84,7 @@ data class StudentAttendanceDTO(
     var studentId: Int,
     var attendance: AttendanceDTO
 )
+
+data class StudentBlockDTO(
+    var blocked: String,
+)

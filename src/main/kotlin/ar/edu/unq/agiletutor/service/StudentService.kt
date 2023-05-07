@@ -6,6 +6,7 @@ import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -121,9 +122,11 @@ class StudentService {
 
     @Transactional
     fun blockOrUnblockAStudent(id: Long, blocked: String): Student {
-        val student = findByID(id)
-        println(blocked)
-        student.blocked = blocked.toBoolean()
+        var student = findByID(id)
+        println(blocked+"blockeado?"+student.toString()+"print"+blocked.toBoolean().toString())
+       // student.blocked = blocked.toBoolean()
+        student.setBlockedStudent(blocked.toBoolean())
+        println(student.blocked.toString()+"resultadoB")
         return repository.save(student)
     }
 }

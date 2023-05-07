@@ -16,6 +16,10 @@ class StudentRestService {
     private lateinit var studentService: StudentService
     private val builder: ResponseEntity.BodyBuilder? = null
 
+    @Autowired
+    private lateinit var emailService: EmailServiceImpl
+
+
     /**register a student*/
     @PostMapping("/api/students/register")
     fun register(@RequestBody studentdata: StudentDTO): ResponseEntity<*> {
@@ -182,11 +186,19 @@ class StudentRestService {
     }
 
     /** Block or unblock a student */
-    @GetMapping("/api/students/block/{id}")
-    fun blockOrUnBlockAStudent(@PathVariable("id") id: Int, @RequestBody blocked: String): ResponseEntity<*> {
+    @PutMapping("/api/students/block/{id}")
+    fun blockOrUnBlockAStudent(@PathVariable("id") id: Int, @RequestBody blocked: StudentBlockDTO): ResponseEntity<*> {
 
-        val student = StudentDTO.desdeModelo(studentService.blockOrUnblockAStudent(id.toLong(), blocked))
+        println(blocked.blocked+"restblocked")
+        val student = StudentDTO.desdeModelo(studentService.blockOrUnblockAStudent(id.toLong(), blocked.blocked))
 
         return ResponseEntity.ok().body(student)
+    }
+
+    /**Students From a Course*/
+    @GetMapping("/api/students/toNotify")
+    fun studentsToNotify(): ResponseEntity<*> {
+        val students = emailService.studentsToNotify()
+        return ResponseEntity.ok().body(students)
     }
 }

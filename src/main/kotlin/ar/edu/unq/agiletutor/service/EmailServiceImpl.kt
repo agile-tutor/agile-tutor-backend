@@ -7,6 +7,7 @@ import ar.edu.unq.agiletutor.persistence.NotifyerRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.scheduling.annotation.Scheduled
@@ -48,7 +49,7 @@ class EmailServiceImpl {
 
     fun notifyAllAbsent(dayAttend: Int, courseId: Int) {
         val absentList = studentRepository.findAll().filter {
-            it.course!!.id == courseId
+            it.course!!.id == courseId && !it.blocked
         }.filter {
             it.attendances.filter {
                 it.day == dayAttend && !it.attended
@@ -84,14 +85,15 @@ class EmailServiceImpl {
         emailSender.send(message)
     }
 
-    @Scheduled(cron = "*/5 * * * * *")//cada cinco segundos
-    fun pruebaCronJob() {
-        println("adentro del cronJob de 5 segundos")
-    }
+    //    @Scheduled(cron = "*/5 * * * * *")//cada cinco segundos
+    /*   fun pruebaCronJob() {
+           println("adentro del cronJob de 5 segundos")
+       }
+   */
 
-    //@Scheduled(cron = "0 0 22 * * *")//a las 22 horas
     @Transactional
-    @Scheduled(cron = "*/20 * * * * *")//cada 20 segundos
+    @Scheduled(cron = "\${cron.expressionat22hs}")//a las 22 horas
+    //@Scheduled(cron = "\${cron.expression20seg}")//cada 20 segundos
     fun emailAbsent() {
         var notifyer: Notifyer = getNotifyer()
         println("todes" + notifyer.getabsent()!!.size)
@@ -105,15 +107,20 @@ class EmailServiceImpl {
             }
         notifyer.getabsent()!!
 
-                    .forEach {
-                        println(
-                            it.email!! + "impresion" + notifyer.getSubjectEmail() + " " + notifyer.getTextEmail(
-                                it.name!!
-                            )
-                        )
-                    }
+            .forEach {
+                println(
+                    it.email!! + "impresion" + notifyer.getSubjectEmail() + " " + notifyer.getTextEmail(
+                        it.name!!
+                    )
+                )
+            }
 
         notifyer.removeall()
         saveNotifyer(notifyer)
+    }
+
+    fun studentsToNotify(): List<StudentDTO> {
+        val notifyer: Notifyer = getNotifyer()
+        return notifyer.getabsent()!!.map { StudentDTO.desdeModelo(it) }
     }
 }
