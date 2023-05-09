@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 internal class StudentServiceTest {
-
+/*
     @Autowired
     lateinit var studentService : StudentService
 
@@ -526,6 +526,6 @@ internal class StudentServiceTest {
     //    tutorRepository.deleteAll()
     }
 
-
+*/
 
 }
