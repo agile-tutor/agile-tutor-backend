@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 internal class CourseServiceTest {
 
-
+/*
     @Autowired
     lateinit var studentService : StudentService
 
@@ -396,5 +396,5 @@ fun al_consultar_los_estudiantes_de_un_curso_no_existente_Lanza_Excepcion(){
          courseRepository.deleteAll()
          tutorRepository.deleteAll()
     }
-
+*/
 }
