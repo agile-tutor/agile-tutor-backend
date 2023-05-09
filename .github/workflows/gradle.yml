@@ -37,7 +37,7 @@ jobs:
     # Version of MySQL to use
            mysql version: latest
     # MYSQL_ROOT_PASSWORD - root superuser password
-           mysql root password: sa 
+           mysql root password: Ttip2023@ 
     # MYSQL_DATABASE - name for the default database that is created
            mysql database: agiletutorDB
     # MYSQL_USER - create the specified user with superuser power for created database
