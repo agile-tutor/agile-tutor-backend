@@ -96,8 +96,8 @@ class EmailServiceImpl {
     //@Scheduled(cron = "\${cron.expression20seg}")//cada 20 segundos
     fun emailAbsent() {
         var notifyer: Notifyer = getNotifyer()
-        println("todes" + notifyer.getabsent()!!.size)
-        notifyer.getabsent()!!
+        println("todes" + notifyer.getAbsentToNotify()!!.size)
+        notifyer.getAbsentToNotify()!!
             .forEach {
                 this.sendSimpleMessage(
                     it.email!!,
@@ -105,7 +105,7 @@ class EmailServiceImpl {
                     notifyer.getTextEmail(it.name!!)
                 )
             }
-        notifyer.getabsent()!!
+        notifyer.getAbsentToNotify()!!
 
             .forEach {
                 println(
@@ -121,6 +121,6 @@ class EmailServiceImpl {
 
     fun studentsToNotify(): List<StudentDTO> {
         val notifyer: Notifyer = getNotifyer()
-        return notifyer.getabsent()!!.map { StudentDTO.desdeModelo(it) }
+        return notifyer.getAbsentToNotify()!!.map { StudentDTO.desdeModelo(it) }
     }
 }

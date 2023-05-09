@@ -22,7 +22,7 @@ class Notifyer {
 
     var subjectmail: String = "ASISTENCIAS - TVU"
 
-    fun getabsent(): MutableSet<Student>? {
+    fun getAbsentToNotify(): MutableSet<Student> {
         println("getabsent"+this.absent)
         return this.absent
     }
