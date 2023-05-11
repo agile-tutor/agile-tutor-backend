@@ -111,27 +111,6 @@ class CourseRestService {
         return response!!
     }
 
-    /** Move a student to Another Course*/
-    @PutMapping("/api/course/students/change/{id}/{id_course}")
-        fun moveAStudentIntoAnotherCourse(
-            @PathVariable("id") id: Int,@PathVariable("id_course") id_course: Int
-        ): ResponseEntity<*> {
-            var response: ResponseEntity<*>?
 
-            try {
-                val student = courseService.moveAStudentIntoAnotherCourse(id.toLong(), id_course)
-                ResponseEntity.status(201)
-                response = ResponseEntity.ok().body(student)
-
-            } catch (e: Exception) {
-                ResponseEntity.status(404)
-
-                val resultado: MutableMap<String, String> = HashMap()
-                resultado["Course with Id not found"] = id.toString()
-                response = ResponseEntity.ok().body<Map<String, String>>(resultado)
-            }
-            return response!!
-
-        }
 
 }

@@ -5,6 +5,7 @@ import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Tutor
+import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.TutorRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -15,6 +16,15 @@ class TutorService {
 
     @Autowired
     private lateinit var repository: TutorRepository
+
+    @Autowired
+    private lateinit var courseRepository: CourseRepository
+
+    @Autowired
+    private lateinit var courseService: CourseService
+
+    @Autowired
+    private lateinit var studentService: StudentService
 
     @Transactional
     fun register(tutor: Tutor): Tutor {
@@ -95,4 +105,37 @@ class TutorService {
         }
         return students
     }
+
+
+    @Transactional
+    fun  addAStudentToACourse(student:Student, course :Course){
+        student.course = course
+        studentService.register(student)
+        course.students.add(student)
+        courseRepository.save(course)
+
+    }
+
+    @Transactional
+    fun removeAStudentFromACourse(student:Student, course:Course){
+        course.students.remove(student)
+        courseRepository.save(course)
+    }
+
+
+    @Transactional
+    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int){
+        val courseMoved = courseService.findByID(id_course)
+        val student = studentService.findByID(id)
+        val course = courseService.findByID(student.course!!.id!!)
+        if (courseMoved.id == course.id){
+            throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
+        }
+        addAStudentToACourse(student, courseMoved)
+        removeAStudentFromACourse(student,student.course!!)
+
+    }
+
+
+
 }

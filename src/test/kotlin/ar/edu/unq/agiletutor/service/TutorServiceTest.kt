@@ -31,19 +31,19 @@ internal class TutorServiceTest {
 
     @BeforeEach
     fun setUp() {
-        
-         tutor1 = Tutor(0,"Alejandro","Fariña","ale@gmail.com", "passtut1",mutableSetOf())
-         tutor2 = Tutor(0,"Cristian","Gonzalez","cris@gmail.com", "passtut2",mutableSetOf())
-         tutorData =  TutorRegisterDTO (0,"Alejandro","Fariña","otromaildeale@gmail.com","otropassdeale")
 
-           }
+        tutor1 = Tutor(0,"Alejandro","Fariña","ale@gmail.com", "passtut1",mutableSetOf())
+        tutor2 = Tutor(0,"Cristian","Gonzalez","cris@gmail.com", "passtut2",mutableSetOf())
+        tutorData =  TutorRegisterDTO (0,"Alejandro","Fariña","otromaildeale@gmail.com","otropassdeale")
+
+    }
 
     /**get  Tutors*/
     @Test
     fun al_solicitar_a_una_DB_sin_tutores_no_devuelve_ninguno() {
         tutors = tutorService.findAll()
 
-       assertTrue ( tutors.isEmpty())
+        assertTrue ( tutors.isEmpty())
     }
 
     @Test
@@ -159,7 +159,7 @@ internal class TutorServiceTest {
     @Test
     fun Si_el_id_es_existente_el_tutor_asociado_con_ese_id_es_eliminado_() {
         val tutorRegistered = tutorService.register(tutor1)
-       tutorService.deleteById(tutorRegistered .id!!)
+        tutorService.deleteById(tutorRegistered .id!!)
         val tutors = tutorService.findAll()
 
         assertTrue( tutors.isEmpty() )

@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 internal class StudentServiceTest {
-/*
+
     @Autowired
     lateinit var studentService : StudentService
 
@@ -100,7 +100,7 @@ internal class StudentServiceTest {
                 true
             )
 
-         student1 =
+        student1 =
             Student(
                 0,
                 "Ale",
@@ -113,7 +113,7 @@ internal class StudentServiceTest {
                 course1Saved,
                 false
             )
-       // val studentregistered1 = studentService!!.register(student1)
+        // val studentregistered1 = studentService!!.register(student1)
 
         student2 = Student(
             0,
@@ -127,7 +127,7 @@ internal class StudentServiceTest {
             course1Saved,
             false
         )
-       // val studentregistered2 = studentService.register(student2)
+        // val studentregistered2 = studentService.register(student2)
 
         val student3 =
             Student(
@@ -170,7 +170,7 @@ internal class StudentServiceTest {
                 course3Saved,
                 false
             )
-       // val studentregistered5  =studentService.register(student5)
+        // val studentregistered5  =studentService.register(student5)
 
         val student6 =
             Student(
@@ -447,41 +447,41 @@ internal class StudentServiceTest {
         Assertions.assertTrue(tutors.isEmpty())
     }
 
-  /** Students absent at a particular day */
+    /** Students absent at a particular day */
 
 
-  @Test
-  fun me_devuelve_todos_estudiantes_que_faltaron_en_ese_dia_en_particular() {
-      val day = 5
-      studentService.register(student5)
-      studentService.register(student6)
-      studentService.register(student15)
-      studentService.register(student16)
-      studentService.register(student17)
-      val absents = studentService.studentsAbsentAtAParticularDay(day)
-      Assertions.assertTrue(absents.isNotEmpty())
-      Assertions.assertEquals(absents.size, 3)
-  }
+    @Test
+    fun me_devuelve_todos_estudiantes_que_faltaron_en_ese_dia_en_particular() {
+        val day = 5
+        studentService.register(student5)
+        studentService.register(student6)
+        studentService.register(student15)
+        studentService.register(student16)
+        studentService.register(student17)
+        val absents = studentService.studentsAbsentAtAParticularDay(day)
+        Assertions.assertTrue(absents.isNotEmpty())
+        Assertions.assertEquals(absents.size, 3)
+    }
 
-  @Test
-  fun  Si_ninguno_falto_ese_dia_en_particular_no_devuelve_estudiantes() {
-      val day = 1
-      studentService.register(student5)
-      studentService.register(student6)
-      studentService.register(student15)
-      studentService.register(student16)
-      studentService.register(student17)
-      val absents = studentService.studentsAbsentAtAParticularDay(day)
-      Assertions.assertTrue(absents.isEmpty())
+    @Test
+    fun  Si_ninguno_falto_ese_dia_en_particular_no_devuelve_estudiantes() {
+        val day = 1
+        studentService.register(student5)
+        studentService.register(student6)
+        studentService.register(student15)
+        studentService.register(student16)
+        studentService.register(student17)
+        val absents = studentService.studentsAbsentAtAParticularDay(day)
+        Assertions.assertTrue(absents.isEmpty())
 
-  }
+    }
 
-   /** block or unblock a students */
-   @Test
-   fun al_intentar_bloquear_O_daesbloquear_un_estudiante_con_id_no_existente_Lanza_excepcion() {
-       studentService.register(student1)
-       assertThrows<ItemNotFoundException> { studentService.blockOrUnblockAStudent(0, true) }
-   }
+    /** block or unblock a students */
+    @Test
+    fun al_intentar_bloquear_O_daesbloquear_un_estudiante_con_id_no_existente_Lanza_excepcion() {
+        studentService.register(student1)
+        assertThrows<ItemNotFoundException> { studentService.blockOrUnblockAStudent(0, true) }
+    }
 
     @Test
     fun si_desbloqueo_todos_los_estudiantes_al_consultarlos_apareceran_desbloqueados(){
@@ -521,11 +521,9 @@ internal class StudentServiceTest {
 
     @AfterEach
     fun tearDown() {
-       // studentRepository.deleteAll()
-  //      courseRepository.deleteAll()
-    //    tutorRepository.deleteAll()
+        // studentRepository.deleteAll()
+        //      courseRepository.deleteAll()
+        //    tutorRepository.deleteAll()
     }
-
-*/
 
 }

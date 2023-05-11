@@ -61,7 +61,7 @@ class StudentRestService {
     }
 
     /**get tutor by email**/
-    @GetMapping("/api/students/{name}")
+    @GetMapping("/api/students/name/{name}")
     fun studentsByName(@PathVariable("name") name: String): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
@@ -177,6 +177,16 @@ class StudentRestService {
 
         val studentsAttendedAtAParticularDay =
             studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+
+        return ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+    }
+
+    /** students absent at a particular day  */
+    @GetMapping("/api/students/attendances/absent/{day}")
+    fun studentsAbsentAtAParticularDay(@PathVariable("day") day: Int): ResponseEntity<*> {
+
+        val studentsAttendedAtAParticularDay =
+            studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
 
         return ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
     }
