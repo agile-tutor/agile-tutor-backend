@@ -79,6 +79,26 @@ class CourseRestService {
         return response!!
     }
 
+
+    /** Update a course*/
+    @PutMapping("/api/tutor/{id}")
+    fun update(@PathVariable("id") id: Int, @RequestBody entity: CourseDTO): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val courseview = courseService.update(id, entity)
+
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(courseview)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["usuario con id no encontrado"] = id.toString()
+            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+        }
+        return response!!
+    }
+
     /**Students From a Course*/
     @GetMapping("/api/course/students/{id}")
     fun studentsFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {

@@ -155,7 +155,7 @@ class TutorRestService {
 
 
     /** Move a student to Another Course*/
-    @PutMapping("/api/tutor/students/move/id}/{id_course}")
+    @PutMapping("/api/tutor/students/move/{id}/{id_course}")
     fun moveAStudentIntoAnotherCourse(
         @PathVariable("id") id: Int,@PathVariable("id_course") id_course: Int
     ): ResponseEntity<*> {

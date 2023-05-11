@@ -1,7 +1,10 @@
 package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.model.Course
+import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Tutor
+import ar.edu.unq.agiletutor.persistence.StudentRepository
+import org.springframework.beans.factory.annotation.Autowired
 
 data class TutorLoginDTO(
     var email: String,
@@ -44,7 +47,7 @@ data class TutorDTO(
                 tutor.id,
                 tutor.name,
                 tutor.surname,
-                tutor.email,
+                tutor.email
                 //    coursesDTO
             )
         }
@@ -60,6 +63,36 @@ data class TutorDTO(
         return tutor
     }
 }
+
+data class CourseRegisterDTO(
+
+    var id: Int?,
+    var name: String?,
+    var tutorId: Int
+
+    )
+
+{
+    @Autowired
+    private lateinit var tutorService: TutorService
+
+    companion object {
+        fun desdeModelo(course: Course): CourseDTO {
+            return CourseDTO(course.id, course.name)
+        }
+    }
+
+    fun aModelo(): Course {
+        val course = Course()
+        course.id = id
+        course.name = name
+        course.students = mutableSetOf()
+        course.tutor = tutorService.findByID(tutorId)
+        return course
+    }
+}
+
+
 
 data class CourseDTO(
     var id: Int?,

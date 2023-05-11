@@ -31,12 +31,15 @@ class StudentService {
     }
 
     private fun existStudent(student: Student): Boolean {
-        var bool = false
+      /*  var bool = false
         val students = repository.findAll().toMutableList()
         if (students.isNotEmpty()) {
             bool = students.any { it.email == student.email }
         }
         return bool
+       */
+        val tutores = repository.findAll().toMutableList()
+        return tutores.any { it.email == student.email }
     }
 
     @Transactional
@@ -83,7 +86,7 @@ class StudentService {
         student.email = entity.email
         student.observations = entity.observations!!
         student.blocked = entity.blocked
-        return repository.save(student)
+        return register(student)
     }
 
     fun attendancesFromAStudent(id: Long): Set<Attendance> {

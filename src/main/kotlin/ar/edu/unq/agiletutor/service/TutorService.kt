@@ -86,7 +86,7 @@ class TutorService {
         tutor.name = entity.name
         tutor.surname = entity.surname
         tutor.password = entity.password
-        return repository.save(tutor)
+        return register(tutor)
     }
 
     @Transactional

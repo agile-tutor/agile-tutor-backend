@@ -114,6 +114,13 @@ class CourseService {
 
     }
 
+    @Transactional
+    fun update(id: Int, entity: CourseDTO): Course {
+       val course = findByID(id)
+        course.name= entity.name
+        return register(course)
+    }
+
    @Transactional
    fun  addAStudentToACourse(student:Student, id:Int){
        val course = findByID(id)
@@ -131,15 +138,7 @@ class CourseService {
         repository.save(course)
     }
 
-    @Transactional
-    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int){
-        val courseMoved = findByID(id_course)
-        val student = studentService.findByID(id)
-        val course = findByID(student.course!!.id!!)
-        addAStudentToACourse(student, id_course)
-        removeAStudentFromACourse(student,student.course!!.id!!)
 
-    }
 
 
 
