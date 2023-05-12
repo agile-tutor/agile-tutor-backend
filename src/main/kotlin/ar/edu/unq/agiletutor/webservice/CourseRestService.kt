@@ -81,7 +81,7 @@ class CourseRestService {
 
 
     /** Update a course*/
-    @PutMapping("/api/tutor/{id}")
+    @PutMapping("/api/course/{id}")
     fun update(@PathVariable("id") id: Int, @RequestBody entity: CourseDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
