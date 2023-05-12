@@ -2,6 +2,7 @@ package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Attendance
+import org.springframework.beans.factory.annotation.Autowired
 
 data class StudentDTO(
     var id: Long?,
@@ -12,8 +13,11 @@ data class StudentDTO(
     var attendances: List<AttendanceDTO>?,
     var attendancepercentage: Double?,
     var observations: String?,
-    var blocked: Boolean
+    var blocked: Boolean,
+    var courseId: Int
 ) {
+    @Autowired
+    private lateinit var courseService: CourseService
 
     companion object {
         fun desdeModelo(student: Student): StudentDTO {
@@ -28,7 +32,8 @@ data class StudentDTO(
                 asistenciasDTO,
                 student.attendancepercentage,
                 student.observations,
-                student.blocked
+                student.blocked,
+                student.course!!.id!!
             )
         }
     }
@@ -45,6 +50,7 @@ data class StudentDTO(
         student.attendancepercentage = 0.0
         student.observations = ""
         student.blocked = blocked
+        student.course =  courseService.findByID(courseId)
         return student
     }
 }

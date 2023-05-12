@@ -19,11 +19,11 @@ class CourseRestService {
 
     /**register a course*/
     @PostMapping("/api/course/register")
-    fun register(@RequestBody coursedata: Course): ResponseEntity<*> {
+    fun register(@RequestBody coursedata: CourseRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
-            val courseview = courseService.register(coursedata)
+            val courseview = courseService.register(coursedata.aModelo())
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(courseview)
         } catch (e: Exception) {
