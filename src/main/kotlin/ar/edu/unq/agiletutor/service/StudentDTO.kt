@@ -4,7 +4,7 @@ import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Attendance
 import org.springframework.beans.factory.annotation.Autowired
 
-data class StudentDTO(
+data class StudentRegisterDTO(
     var id: Long?,
     var name: String?,
     var surname: String?,
@@ -20,10 +20,10 @@ data class StudentDTO(
     private lateinit var courseService: CourseService
 
     companion object {
-        fun desdeModelo(student: Student): StudentDTO {
+        fun desdeModelo(student: Student): StudentRegisterDTO {
             val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
-            return StudentDTO(
+            return StudentRegisterDTO(
                 student.id,
                 student.name,
                 student.surname,
@@ -55,6 +55,58 @@ data class StudentDTO(
     }
 }
 
+
+
+
+
+data class StudentDTO(
+    var id: Long?,
+    var name: String?,
+    var surname: String?,
+    var identifier: String?,
+    var email: String?,
+    var attendances: List<AttendanceDTO>?,
+    var attendancepercentage: Double?,
+    var observations: String?,
+    var blocked: Boolean,
+
+) {
+
+    companion object {
+        fun desdeModelo(student: Student): StudentDTO {
+            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
+
+            return StudentDTO(
+                student.id,
+                student.name,
+                student.surname,
+                student.identifier,
+                student.email,
+                asistenciasDTO,
+                student.attendancepercentage,
+                student.observations,
+                student.blocked
+
+            )
+        }
+    }
+
+    fun aModelo(): Student {
+        val student = Student()
+        student.id = id
+        student.name = name
+        student.surname = surname
+        student.identifier = identifier
+        student.email = email
+        // student.attendances
+        attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
+        student.attendancepercentage = 0.0
+        student.observations = ""
+        student.blocked = blocked
+        return student
+    }
+
+}
 
 data class AttendanceDTO(
     var id: Int?,

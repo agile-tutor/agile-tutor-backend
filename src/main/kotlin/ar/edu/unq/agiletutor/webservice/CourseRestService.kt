@@ -30,7 +30,8 @@ class CourseRestService {
             ResponseEntity.status(404)
 
             val resultado: MutableMap<String, String> = HashMap()
-            resultado["name of course already exits"] = coursedata.name.toString()
+            //resultado["name of course already exist"] = coursedata.name.toString()
+            resultado["Exception"] = e.localizedMessage
             response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
         return response!!
@@ -102,9 +103,23 @@ class CourseRestService {
     /**Students From a Course*/
     @GetMapping("/api/course/students/{id}")
     fun studentsFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+
+        try {
         val courses = courseService.studentsFromACourse(id).map { StudentDTO.desdeModelo(it) }
-        return ResponseEntity.ok().body(courses)
+        ResponseEntity.status(200)
+        response = ResponseEntity.ok().body(courses)
+    } catch (e: Exception) {
+        ResponseEntity.status(404)
+
+        val resultado: MutableMap<String, String> = HashMap()
+        resultado["Not found Course with id"] = id.toString()
+
+        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
     }
+    return response!!
+
+}
 
 
 

@@ -50,7 +50,7 @@ class TutorService {
     fun login(email: String, password: String): Tutor {
         val tutors = repository.findAll()
         return tutors.find { (it.email == email) && (it.password == password) }
-            ?: throw ItemNotFoundException("Not found user")
+            ?: throw ItemNotFoundException("Not found tutor")
     }
 
     @Transactional
@@ -99,7 +99,9 @@ class TutorService {
     @Transactional
     fun studentsFromATutor(id: Int): List<Student> {
         val students = mutableListOf<Student>()
-        val courses = coursesFromATutor(id)
+        val  tutor =  findByID(id)
+        val courses = tutor.courses
+       // val courses = coursesFromATutor(id)
         for (course in courses) {
             students.addAll(course.students)
         }
@@ -108,11 +110,12 @@ class TutorService {
 
 
     @Transactional
-    fun  addAStudentToACourse(student:Student, course :Course){
+    fun  addAStudentToACourse(student:Student, course :Course):Student{
         student.course = course
-        studentService.register(student)
+        val studentRegistered= studentService.register(student)
         course.students.add(student)
         courseRepository.save(course)
+        return studentRegistered
 
     }
 
@@ -124,15 +127,16 @@ class TutorService {
 
 
     @Transactional
-    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int){
+    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int):Student{
         val courseMoved = courseService.findByID(id_course)
         val student = studentService.findByID(id)
         val course = courseService.findByID(student.course!!.id!!)
         if (courseMoved.id == course.id){
             throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
         }
-        addAStudentToACourse(student, courseMoved)
+       val studentRegistered = addAStudentToACourse(student, courseMoved)
         removeAStudentFromACourse(student,student.course!!)
+        return studentRegistered
 
     }
 

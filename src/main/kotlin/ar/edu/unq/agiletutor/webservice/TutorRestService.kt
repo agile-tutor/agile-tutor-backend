@@ -92,7 +92,7 @@ class TutorRestService {
         } catch (e: Exception) {
             ResponseEntity.status(404)
             val resultado: MutableMap<String, String> = HashMap()
-            resultado["tutor with id not found"] = email
+            resultado["tutor with email not found"] = email
             response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
         return response!!
@@ -111,7 +111,8 @@ class TutorRestService {
             ResponseEntity.status(404)
 
             val resultado: MutableMap<String, String> = HashMap()
-            resultado["usuario con id no encontrado"] = id.toString()
+            //resultado["Not found Tutor with id"] = id.toString()
+            resultado["Exception"] = e.message.toString()
             response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
         return response!!
@@ -140,18 +141,46 @@ class TutorRestService {
     /**Courses From a Tutor*/
     @GetMapping("/api/tutor/courses/{id}")
     fun coursesFromATutor(@PathVariable("id") id: Int): ResponseEntity<*> {
-
+        var response: ResponseEntity<*>?
+        try {
         val courses = tutorService.coursesFromATutor(id).map { CourseDTO.desdeModelo(it) }
+        ResponseEntity.status(200)
 
-        return ResponseEntity.ok().body(courses)
+        response = ResponseEntity.ok().body(courses)
+    } catch (e: Exception) {
+        ResponseEntity.status(404)
+
+        val resultado: MutableMap<String, String> = HashMap()
+       resultado["Not found Tutor with id"] = id.toString()
+
+        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+    }
+    return response!!
+
+
     }
 
     /**Students From a Tutor*/
     @GetMapping("/api/tutor/students/{id}")
     fun studentsFromATutor(@PathVariable("id") id: Int): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
         val students = tutorService.studentsFromATutor(id).map { StudentDTO.desdeModelo(it) }
-        return ResponseEntity.ok().body(students)
+        ResponseEntity.status(200)
+         response =  ResponseEntity.ok().body(students)
+
+    } catch (e: Exception) {
+        ResponseEntity.status(404)
+
+        val resultado: MutableMap<String, String> = HashMap()
+        resultado["Not found Tutor with id"] = id.toString()
+
+        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
     }
+    return response!!
+
+
+}
 
 
     /** Move a student to Another Course*/
@@ -170,7 +199,7 @@ class TutorRestService {
             ResponseEntity.status(404)
 
             val resultado: MutableMap<String, String> = HashMap()
-            resultado["Course with Id not found"] = id.toString()
+            resultado["Exception"] = e.message.toString()
             response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
         return response!!

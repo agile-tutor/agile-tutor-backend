@@ -41,12 +41,15 @@ class CourseService {
     }
 
     private fun existSCourse(course: Course): Boolean {
-        var bool = false
+       /* var bool = false
         val courses = repository.findAll().toMutableList()
         if (courses.isNotEmpty()) {
             bool = courses.any { it.name == course.name }
         }
         return bool
+   */
+        val courses = repository.findAll().toMutableList()
+        return courses.any { it.name == course.name }
     }
 
     @Transactional
