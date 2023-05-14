@@ -50,7 +50,7 @@ class EmailServiceImpl {
     fun notifyAllAbsent(dayAttend: Int, courseId: Int) {
         val absentList = studentRepository.findAll().filter {
             it.course!!.id == courseId && !it.blocked
-        }.filter {
+        }.filter {  
             it.attendances.filter {
                 it.day == dayAttend && !it.attended
             }.isNotEmpty()
