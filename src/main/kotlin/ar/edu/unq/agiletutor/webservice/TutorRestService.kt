@@ -31,7 +31,7 @@ class TutorRestService {
             ResponseEntity.status(404)
 
             val resultado: MutableMap<String, String> = HashMap()
-            resultado["email of tutor already exits"] = tutordata.email.toString()
+            resultado["email of tutor already exist"] = tutordata.email.toString()
             response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
         return response!!

@@ -91,7 +91,7 @@ class StudentRestService {
             ResponseEntity.status(404)
 
             val resultado: MutableMap<String, String> = HashMap()
-            resultado["usuario con id no encontrado"] = id.toString()
+            resultado["student with id not found"] = id.toString()
             response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
         return response!!
@@ -174,21 +174,38 @@ class StudentRestService {
     /** students attended at a particular day  */
     @GetMapping("/api/students/attendances/attended/{day}")
     fun studentsAttendedAtAParticularDay(@PathVariable("day") day: Int): ResponseEntity<*> {
-
+        var response: ResponseEntity<*>?
+        try {
         val studentsAttendedAtAParticularDay =
             studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+       response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+    } catch (e: Exception) {
+        ResponseEntity.status(404)
 
-        return ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+        val resultado: MutableMap<String, String> = HashMap()
+        resultado["Exception"] = e.message.toString()
+        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+    }
+    return response!!
     }
 
     /** students absent at a particular day  */
     @GetMapping("/api/students/attendances/absent/{day}")
     fun studentsAbsentAtAParticularDay(@PathVariable("day") day: Int): ResponseEntity<*> {
-
+        var response: ResponseEntity<*>?
+        try {
         val studentsAttendedAtAParticularDay =
-            studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+        studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
 
-        return ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+        response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+    } catch (e: Exception) {
+        ResponseEntity.status(404)
+
+        val resultado: MutableMap<String, String> = HashMap()
+        resultado["Exception"] = e.message.toString()
+        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+    }
+    return response!!
     }
 
     /** Block or unblock a student */
