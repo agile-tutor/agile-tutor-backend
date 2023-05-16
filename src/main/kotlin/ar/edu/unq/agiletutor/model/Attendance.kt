@@ -9,7 +9,7 @@ class Attendance : Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_asistencia")
+    @Column(name = "id_attendance")
     var id: Int? = null
 
     @Column(nullable = false)

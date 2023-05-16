@@ -28,20 +28,22 @@ class Course : Serializable {
     @ManyToOne(optional = true)
     var tutor: Tutor? = null
 
+    @OneToMany(mappedBy = "course", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var dateclasses: MutableSet<DateClass> = HashSet()
+
     constructor() : super() {}
     constructor(
         id: Int?,
         name: String?,
         students: MutableSet<Student>,
-        tutor: Tutor?
+        tutor: Tutor?,
+        dataclasses: MutableSet<DateClass>
 
     ) : super() {
         this.id = id
         this.name = name
         this.students = students
         this.tutor = tutor
-    }
-
-
+        this.dateclasses = dateclasses    }
 
 }

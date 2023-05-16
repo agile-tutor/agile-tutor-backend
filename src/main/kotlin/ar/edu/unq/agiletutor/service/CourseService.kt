@@ -91,12 +91,18 @@ class CourseService {
         return studentsFromACourse(id).filter { ! it.attendedDay(day) }
     }
 
-
+       @Transactional
+       fun markdownAttendance(course:Course, day:Int) {
+           val dateclass = course.dateclasses.toMutableList().get(day)
+           dateclass.passed = true
+           course.dateclasses.toMutableList().set(day, dateclass)
+        }
 
 
     @Transactional
     fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendance: List<StudentAttendanceDTO>) {
         val course = findByID(id)
+        markdownAttendance(course, studentAttendance.first().attendance.day!!)
         studentAttendance.sortedBy { it.studentId }
         for (student in course.students.sortedBy { it.id }) {
             updateAttendanceAtADay( studentAttendance.first(), student)
@@ -104,7 +110,7 @@ class CourseService {
             studentAttendance.iterator().next()
         }
         repository.save(course)
-        val students = studentService.studentsAbsentAtAParticularDay(studentAttendance.first().attendance.day!!).toMutableSet()
+        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(studentAttendance.first().attendance.day!!).toMutableSet()
        senderService.saveAllAbsent(students)
 
     }

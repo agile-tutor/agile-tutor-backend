@@ -137,7 +137,16 @@ class StudentService {
         if (! rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
-        return findAll().filter { ! it.attendedDay(day) }
+        return findAll().filter { ! it.attendedDay(day)  }
+    }
+
+    @Transactional
+    fun studentsNotBlockedAbsentAtAParticularDay(day: Int): List<Student> {
+        val rangedays = (1..6)
+        if (! rangedays.contains(day)) {
+            throw ItemNotFoundException(" Day:  $day invalid")
+        }
+        return findAll().filter { ! it.attendedDay(day)  && ( ! it.blocked ) }
     }
 
     @Transactional
@@ -147,10 +156,14 @@ class StudentService {
         return repository.save(student)
     }
 
+
+
+
     @Transactional
     fun deleteById(id: Long) {
         val student = repository.findById(id)
         if (!(student .isPresent)) {
+
             throw ItemNotFoundException("Student with Id:  $id not found")
         }
         repository.deleteById(id)
