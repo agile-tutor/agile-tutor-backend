@@ -80,7 +80,6 @@ class CourseService {
 
 
 
-
     @Transactional
     fun studentsAbsentAtaDay (day: Int): List<Student> {
         return studentService.findAll().filter { ! it.attendedDay(day) }
@@ -98,15 +97,14 @@ class CourseService {
            course.dateclasses.toMutableList().set(day, dateclass)
         }
 
-
+/*
     @Transactional
     fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendance: List<StudentAttendanceDTO>) {
         val course = findByID(id)
         markdownAttendance(course, studentAttendance.first().attendance.day!!)
         studentAttendance.sortedBy { it.studentId }
         for (student in course.students.sortedBy { it.id }) {
-            updateAttendanceAtADay( studentAttendance.first(), student)
-            student.calcularPorcentajeDeAsistencias()
+            student.updateAttendanceAtADay(studentAttendance.first().attendance.aModelo())
             studentAttendance.iterator().next()
         }
         repository.save(course)
@@ -114,20 +112,42 @@ class CourseService {
        senderService.saveAllAbsent(students)
 
     }
+*/
 
-    private fun updateAttendanceAtADay(studentUpdated:StudentAttendanceDTO,student:Student ){
-        val day = studentUpdated.attendance.day!!
-        val attendance = student.attendances.toMutableList().get(day)
-        attendance.attended = studentUpdated.attendance.attended.toBoolean()
-        student.attendances.toMutableList().set(day, attendance)
+    @Transactional
+    fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List<StudentAttendanceDTO>) {
+       val course = findByID(id)
+        markdownAttendance(course, studentAttendances.first().attendance.day!!)
+
+        for (studentAttendance in studentAttendances) {
+           val student =  studentService.findByID(studentAttendance.studentId.toLong())
+            student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
+
+        }
+        repository.save(course)
+        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(studentAttendances.first().attendance.day!!).toMutableSet()
+        senderService.saveAllAbsent(students)
 
     }
+
+
 
     @Transactional
     fun update(id: Int, entity: CourseDTO): Course {
        val course = findByID(id)
         course.name= entity.name
         return register(course)
+    }
+
+
+    @Transactional
+    fun averageAttendancesFromACourse(id:Int): Double {
+        val course = findByID(id)
+        if (course.students.isNotEmpty()) {
+            return course.students.sumOf { it.attendancePercentage() } / course.students.size
+        }
+        else
+        {return 0.0}
     }
 
    @Transactional

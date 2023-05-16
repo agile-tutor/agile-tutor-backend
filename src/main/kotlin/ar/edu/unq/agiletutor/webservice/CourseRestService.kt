@@ -147,5 +147,16 @@ class CourseRestService {
     }
 
 
+    /** Average of Attendances  from a Course*/
+    @GetMapping("/api/course/students/attendances/average/{id}")
+    fun averageAttendancesFromACouurse( @PathVariable("id") id: Int): ResponseEntity<*> {
+
+        val averageAttendances = courseService.averageAttendancesFromACourse(id)
+
+        return ResponseEntity.ok().body(averageAttendances)
+    }
+
+
+
 
 }

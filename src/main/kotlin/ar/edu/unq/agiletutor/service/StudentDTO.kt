@@ -111,12 +111,12 @@ data class StudentDTO(
 data class AttendanceDTO(
     var id: Int?,
     var day: Int?,
-    var attended: String
+    var attended: Boolean
 
 ) {
     companion object {
         fun desdeModelo(asistencia: Attendance): AttendanceDTO {
-            return AttendanceDTO(asistencia.id, asistencia.day, asistencia.attended.toString())
+            return AttendanceDTO(asistencia.id, asistencia.day, asistencia.attended)
         }
     }
 
@@ -124,7 +124,7 @@ data class AttendanceDTO(
         val attendance = Attendance()
         attendance.id = id
         attendance.day = day
-        attendance.attended = attended.toBoolean() // (attended=="true")
+        attendance.attended = attended
         return attendance
     }
 }

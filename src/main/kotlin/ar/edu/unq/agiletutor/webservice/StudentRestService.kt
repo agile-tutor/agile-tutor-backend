@@ -96,7 +96,7 @@ class StudentRestService {
         }
         return response!!
     }
-    /*
+
         /**update attendances for a student */
         @PostMapping("/api/students/attendances/update/{id}")
         fun updateAttendancesForAStudent (@PathVariable("id") id: Int, @RequestBody attendances : List <AttendanceDTO>): ResponseEntity<*> {
@@ -115,7 +115,7 @@ class StudentRestService {
             }
             return response!!
         }
-    */
+
 
     /**Attendances  From a Student*/
     @GetMapping("/api/students/attendances/{id}")
@@ -133,6 +133,16 @@ class StudentRestService {
         val percentageOfAttendances = studentService.attendancesPercentageFromAStudent(id.toLong())
 
         return ResponseEntity.ok().body(percentageOfAttendances)
+    }
+
+
+    /** Average of Attendances  From all Students*/
+    @GetMapping("/api/students/attendances/average")
+    fun averageAttendancesFromAllStudents(): ResponseEntity<*> {
+
+        val averageAttendances = studentService.averageAttendancesFromAllStudents()
+
+        return ResponseEntity.ok().body(averageAttendances)
     }
 
     /** students without absents */

@@ -61,10 +61,10 @@ internal class StudentServiceTest {
         val tutor1saved = tutorService!!.register(tutor1)
         val tutor2saved = tutorService.register(tutor2)
 
-        val course1 = Course(0, "c1", mutableSetOf(), tutor1saved)
-        val course2 = Course(0, "c2", mutableSetOf(), tutor1saved)
-        val course3 = Course(0, "c3", mutableSetOf(), tutor2saved)
-        val course4 = Course(0, "c4", mutableSetOf(), tutor2saved)
+        val course1 = Course(0, "c1", mutableSetOf(), tutor1saved,mutableSetOf())
+        val course2 = Course(0, "c2", mutableSetOf(), tutor1saved,mutableSetOf())
+        val course3 = Course(0, "c3", mutableSetOf(), tutor2saved,mutableSetOf())
+        val course4 = Course(0, "c4", mutableSetOf(), tutor2saved,mutableSetOf())
 
         val course1Saved = courseService!!.register(course1)
         val course2Saved = courseService.register(course2)

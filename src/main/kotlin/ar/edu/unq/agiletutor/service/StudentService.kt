@@ -61,20 +61,10 @@ class StudentService {
     fun updateattendances(studentId: Long, attendances: List<AttendanceDTO>): Student {
         val student = findByID(studentId)
         student.attendances = attendances.map { it.aModelo() }.toMutableSet()
-        student.calcularPorcentajeDeAsistencias()
+        student.updateAttendancePercentage()
         return repository.save(student)
     }
 
-    private fun calcularPorcentajeDeAsistencias(attendances: Set<Attendance>): Double {
-        var count = 0.0
-
-        for (attendance in attendances) {
-            if (attendance.attended) {
-                count++
-            }
-        }
-        return (count * (100 / 6).toDouble())
-    }
 
 
     @Transactional
@@ -96,8 +86,17 @@ class StudentService {
 
     fun attendancesPercentageFromAStudent(id: Long): Double {
         val student = findByID(id)
-        return student.calcularPorcentajeDeAsistencias()
+        return student.attendancePercentage()
     }
+
+    @Transactional
+    fun averageAttendancesFromAllStudents(): Double {
+        if (findAll().isNotEmpty()) {
+            return findAll().sumOf { it.attendancePercentage() } / findAll().size
+        }
+        else
+        {return 0.0}
+       }
 
     @Transactional
     fun studentsWirhoutAbsents(): List<Student> {

@@ -1,5 +1,6 @@
 package ar.edu.unq.agiletutor.model
 
+import ar.edu.unq.agiletutor.service.AttendanceDTO
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
@@ -90,9 +91,25 @@ class Student : Serializable {
     fun cantidadDeAusentes(): Int {
         return absent().size
     }
-
+/*
     fun calcularPorcentajeDeAsistencias(): Double {
         attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
+        return attendancepercentage
+    }
+  */
+
+    fun updateAttendanceAtADay (attendance: Attendance) {
+        attendances.toMutableList().set(attendance.day!!, attendance)
+        updateAttendancePercentage()
+    }
+
+
+
+    fun updateAttendancePercentage(){
+        attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
+    }
+
+    fun attendancePercentage(): Double{
         return attendancepercentage
     }
 
