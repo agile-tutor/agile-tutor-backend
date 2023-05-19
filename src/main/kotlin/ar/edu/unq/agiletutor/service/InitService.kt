@@ -35,7 +35,7 @@ class InitService {
         if (className == "com.mysql.cj.jdbc.Driver") {
             logger.info("Init Data Using Mysql DB")
            // if (studentService!!.findAll().isEmpty()) {
-               fireInitialData()
+              // fireInitialData()
           //  }
         }
     }

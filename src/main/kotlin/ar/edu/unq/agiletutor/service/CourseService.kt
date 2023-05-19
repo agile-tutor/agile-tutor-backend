@@ -136,7 +136,7 @@ class CourseService {
     fun update(id: Int, entity: CourseDTO): Course {
        val course = findByID(id)
         course.name= entity.name
-        return register(course)
+        return repository.save(course)
     }
 
 

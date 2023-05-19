@@ -521,9 +521,9 @@ internal class StudentServiceTest {
 
     @AfterEach
     fun tearDown() {
-        // studentRepository.deleteAll()
-        //      courseRepository.deleteAll()
-        //    tutorRepository.deleteAll()
+         studentRepository.deleteAll()
+         courseRepository.deleteAll()
+         tutorRepository.deleteAll()
     }
 
 }

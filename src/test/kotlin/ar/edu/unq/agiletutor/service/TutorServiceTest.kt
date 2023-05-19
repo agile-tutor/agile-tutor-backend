@@ -12,6 +12,8 @@ import org.junit.jupiter.api.assertThrows
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.DataIntegrityViolationException
+
 
 
 @SpringBootTest
@@ -27,6 +29,7 @@ internal class TutorServiceTest {
     lateinit var tutor1: Tutor
     lateinit var tutor2: Tutor
     lateinit var tutorData: TutorRegisterDTO
+    lateinit var tutor3: Tutor
 
 
     @BeforeEach
@@ -34,8 +37,8 @@ internal class TutorServiceTest {
 
         tutor1 = Tutor(0,"Alejandro","Fariña","ale@gmail.com", "passtut1",mutableSetOf())
         tutor2 = Tutor(0,"Cristian","Gonzalez","cris@gmail.com", "passtut2",mutableSetOf())
-        tutorData =  TutorRegisterDTO (0,"Alejandro","Fariña","otromaildeale@gmail.com","otropassdeale")
-
+        tutorData =  TutorRegisterDTO (0,"OtroAlejandro","OtroFariña","otromaildeale@gmail.com","otropassdeale")
+        tutor3 = Tutor(0,"Cristian","Gonzalez","otromaildeale@gmail.com", "passtut2",mutableSetOf())
     }
 
     /**get  Tutors*/
@@ -49,7 +52,7 @@ internal class TutorServiceTest {
     @Test
     fun al_solicitar_a_La_DB_todos_los_tutores_Devuelve_la_cantidad_de_tutores_registrados() {
         tutorService.register(tutor1)
-        tutorService.register(tutor2)
+        tutorService.register(tutor3)
         tutors = tutorService.findAll()
         assertTrue( tutors.isNotEmpty() )
         assertEquals(2, tutors.size)
@@ -132,11 +135,21 @@ internal class TutorServiceTest {
     }
 
     @Test
+    fun Al_Intentar_Actualizar_Si_el_mail_es_existente_lanza_excepcion() {
+        val tutorRegistered = tutorService.register(tutor1)
+        tutorService.register(tutor3)
+
+        assertThrows<DataIntegrityViolationException> {  tutorService.update(tutorRegistered.id!!, tutorData) }
+
+    }
+
+
+    @Test
     fun Si_el_id_es_existente_Actualiza_el_usuario_asociado_con_ese_id_() {
         val tutorRegistered = tutorService.register(tutor1)
         val updated = tutorService.update(tutorRegistered.id!!, tutorData)
         val restored= tutorService.findByID(tutorRegistered.id!!)
-        assertEquals( updated.id, restored.id)
+       assertEquals( updated.id, restored.id)
         assertEquals( updated.name, restored.name)
         assertEquals( updated.surname, restored.surname)
         assertEquals( updated.email, restored.email)
@@ -168,7 +181,7 @@ internal class TutorServiceTest {
 
     @AfterEach
     fun tearDown() {
-        tutorRepository.deleteAll()
+      tutorRepository.deleteAll()
     }
 
 }
