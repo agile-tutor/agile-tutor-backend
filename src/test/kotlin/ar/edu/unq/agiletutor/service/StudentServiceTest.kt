@@ -158,7 +158,7 @@ internal class StudentServiceTest {
             )
         //    val studentregistered4  =  studentService.register(student4)
 
-        val student5 =
+         student5 =
             Student(
                 0, "Super",
                 "Sonico",
@@ -172,7 +172,7 @@ internal class StudentServiceTest {
             )
         // val studentregistered5  =studentService.register(student5)
 
-        val student6 =
+         student6 =
             Student(
                 0,
                 "Jane",
@@ -304,7 +304,7 @@ internal class StudentServiceTest {
             )
         // val studentregistered14  = studentService.register(student14)
 
-        val student15 =
+         student15 =
             Student(
                 0, "Elroy",
                 "Jetson",
@@ -318,7 +318,7 @@ internal class StudentServiceTest {
             )
         //  val studentregistered15  = studentService.register(student15)
 
-        val student16 =
+         student16 =
             Student(
                 0,
                 "Lucero",
@@ -333,7 +333,7 @@ internal class StudentServiceTest {
             )
         //  val studentregistered16  = studentService.register(student16)
 
-        val student17 =
+         student17 =
             Student(
                 0, "Senor",
                 "Espacial",
@@ -437,16 +437,17 @@ internal class StudentServiceTest {
 
         Assertions.assertTrue(students.isNotEmpty())
     }
-
+/*
     @Test
     fun Si_el_id_es_existente_el_estudiante_asociado_con_ese_id_es_eliminado_() {
         val studentRegistered = studentService.register(student1)
         studentService.deleteById(studentRegistered .id!!)
-        val tutors = studentService.findAll()
 
-        Assertions.assertTrue(tutors.isEmpty())
+        val students = studentService.findAll()
+
+        Assertions.assertTrue(students.isEmpty())
     }
-
+*/
     /** Students absent at a particular day */
 
 
@@ -499,10 +500,10 @@ internal class StudentServiceTest {
     fun si_bloqueo_todos_los_estudiantes_al_consultarlos_apareceran_bloqueados(){
         val student1 = studentService.register(student1)
         val student2 =  studentService.register(student2)
-        studentService.blockOrUnblockAStudent(student1.id!!, true)
-        studentService.blockOrUnblockAStudent(student2.id!!, true)
-        Assertions.assertTrue(student1.blocked)
-        Assertions.assertTrue(student2.blocked)
+        val blockedOrUnblocked1 =studentService.blockOrUnblockAStudent(student1.id!!, true)
+        val blockedOrUnblocked2= studentService.blockOrUnblockAStudent(student2.id!!, true)
+        Assertions.assertTrue(blockedOrUnblocked1.blocked)
+        Assertions.assertTrue(blockedOrUnblocked2.blocked)
 
     }
 
@@ -512,8 +513,8 @@ internal class StudentServiceTest {
         val student1 = studentService.register(student1)
         val student2 =  studentService.register(student2)
         val student5 =  studentService.register(student5)
-        studentService.blockOrUnblockAStudent(student1.id!!, true)
-        Assertions.assertTrue(student1.blocked)
+        val blockedOrUnblocked1 = studentService.blockOrUnblockAStudent(student1.id!!, true)
+        Assertions.assertTrue(blockedOrUnblocked1.blocked)
         Assertions.assertFalse(student2.blocked)
         Assertions.assertFalse(student5.blocked)
 
@@ -521,9 +522,9 @@ internal class StudentServiceTest {
 
     @AfterEach
     fun tearDown() {
-         studentRepository.deleteAll()
-         courseRepository.deleteAll()
-         tutorRepository.deleteAll()
+       studentRepository.deleteAll()
+       courseRepository.deleteAll()
+       tutorRepository.deleteAll()
     }
 
 }

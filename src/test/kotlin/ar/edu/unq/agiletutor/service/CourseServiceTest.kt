@@ -368,7 +368,7 @@ internal class CourseServiceTest {
     /** Students from a course */
     @Test
     fun al_consultar_los_estudiantes_de_un_curso_no_existente_Lanza_Excepcion(){
-        assertThrows<ItemNotFoundException> {  courseService!!.studentsFromACourse(course1Saved.id!!)}
+        assertThrows<ItemNotFoundException> {  courseService!!.studentsFromACourse(0)}
     }
 
 
@@ -392,9 +392,9 @@ internal class CourseServiceTest {
 
     @AfterEach
     fun tearDown() {
-        studentRepository.deleteAll()
-        courseRepository.deleteAll()
-        tutorRepository.deleteAll()
+       studentRepository.deleteAll()
+       courseRepository.deleteAll()
+       tutorRepository.deleteAll()
     }
 
 }

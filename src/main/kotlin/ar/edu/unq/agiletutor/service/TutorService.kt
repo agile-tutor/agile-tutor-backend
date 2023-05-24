@@ -6,6 +6,7 @@ import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Tutor
 import ar.edu.unq.agiletutor.persistence.CourseRepository
+import ar.edu.unq.agiletutor.persistence.StudentRepository
 import ar.edu.unq.agiletutor.persistence.TutorRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -19,6 +20,9 @@ class TutorService {
 
     @Autowired
     private lateinit var courseRepository: CourseRepository
+
+    @Autowired
+    private lateinit var studentRepository: StudentRepository
 
     @Autowired
     private lateinit var courseService: CourseService
@@ -109,12 +113,12 @@ class TutorService {
 
 
     @Transactional
-    fun  addAStudentToACourse(student:Student, course :Course):Student{
+    fun  addAStudentToACourse(student:Student, course :Course)/*:Student*/{
         student.course = course
-        val studentRegistered= studentService.register(student)
-        course.students.add(student)
-        courseRepository.save(course)
-        return studentRegistered
+        /*val studentRegistered=*/ studentRepository.save(student)
+       // course.students.add(student)
+        //courseRepository.save(course)
+        //return studentRegistered
 
     }
 
@@ -126,16 +130,17 @@ class TutorService {
 
 
     @Transactional
-    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int):Student{
+    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int)/*:Student*/{
         val courseMoved = courseService.findByID(id_course)
         val student = studentService.findByID(id)
         val course = courseService.findByID(student.course!!.id!!)
         if (courseMoved.id == course.id){
             throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
         }
-       val studentRegistered = addAStudentToACourse(student, courseMoved)
+       /*val studentRegistered = */addAStudentToACourse(student, courseMoved)
         removeAStudentFromACourse(student,student.course!!)
-        return studentRegistered
+        /*return studentRegistered*/
+
 
     }
 

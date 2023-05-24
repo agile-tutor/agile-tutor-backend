@@ -141,6 +141,7 @@ class StudentService {
         return findAll().filter { ! it.attendedDay(day)  && ( ! it.blocked ) }
     }
 
+
     @Transactional
     fun blockOrUnblockAStudent(id: Long, blocked: Boolean): Student {
         val student = findByID(id)
