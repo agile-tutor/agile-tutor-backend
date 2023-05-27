@@ -5,16 +5,16 @@ import ar.edu.unq.agiletutor.model.Attendance
 import org.springframework.beans.factory.annotation.Autowired
 
 data class StudentRegisterDTO(
-    var id: Long?,
-    var name: String?,
-    var surname: String?,
-    var identifier: String?,
-    var email: String?,
-    var attendances: List<AttendanceDTO>?,
-    var attendancepercentage: Double?,
-    var observations: String?,
-    var blocked: Boolean,
-    var courseId: Int
+        var id: Long?,
+        var name: String?,
+        var surname: String?,
+        var identifier: String?,
+        var email: String?,
+        var attendances: List<AttendanceDTO>?,
+        var attendancepercentage: Double?,
+        var observations: String?,
+        var blocked: Boolean,
+        var courseId: Int
 ) {
     @Autowired
     private lateinit var courseService: CourseService
@@ -24,16 +24,16 @@ data class StudentRegisterDTO(
             val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
             return StudentRegisterDTO(
-                student.id,
-                student.name,
-                student.surname,
-                student.identifier,
-                student.email,
-                asistenciasDTO,
-                student.attendancepercentage,
-                student.observations,
-                student.blocked,
-                student.course!!.id!!
+                    student.id,
+                    student.name,
+                    student.surname,
+                    student.identifier,
+                    student.email,
+                    asistenciasDTO,
+                    student.attendancepercentage,
+                    student.observations,
+                    student.blocked,
+                    student.course!!.id!!
             )
         }
     }
@@ -50,42 +50,43 @@ data class StudentRegisterDTO(
         student.attendancepercentage = 0.0
         student.observations = ""
         student.blocked = blocked
-        student.course =  courseService.findByID(courseId)
+        student.course = courseService.findByID(courseId)
         return student
     }
 }
 
 
-
-
-
 data class StudentDTO(
-    var id: Long?,
-    var name: String?,
-    var surname: String?,
-    var identifier: String?,
-    var email: String?,
-    var attendances: List<AttendanceDTO>?,
-    var attendancepercentage: Double?,
-    var observations: String?,
-    var blocked: Boolean,
+        var id: Long?,
+        var name: String?,
+        var surname: String?,
+        var identifier: String?,
+        var email: String?,
+        var attendances: List<AttendanceDTO>?,
+        var attendancepercentage: Double?,
+        var observations: String?,
+        var blocked: Boolean,
+        var courseId: Int
 
 ) {
+    @Autowired
+    private lateinit var courseService: CourseService
 
     companion object {
         fun desdeModelo(student: Student): StudentDTO {
             val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
             return StudentDTO(
-                student.id,
-                student.name,
-                student.surname,
-                student.identifier,
-                student.email,
-                asistenciasDTO,
-                student.attendancepercentage,
-                student.observations,
-                student.blocked
+                    student.id,
+                    student.name,
+                    student.surname,
+                    student.identifier,
+                    student.email,
+                    asistenciasDTO,
+                    student.attendancepercentage,
+                    student.observations,
+                    student.blocked,
+                    student.course!!.id!!
 
             )
         }
@@ -103,15 +104,16 @@ data class StudentDTO(
         student.attendancepercentage = 0.0
         student.observations = ""
         student.blocked = blocked
+        student.course = courseService.findByID(courseId)
         return student
     }
 
 }
 
 data class AttendanceDTO(
-    var id: Int?,
-    var day: Int?,
-    var attended: Boolean
+        var id: Int?,
+        var day: Int?,
+        var attended: Boolean
 
 ) {
     companion object {
@@ -130,7 +132,7 @@ data class AttendanceDTO(
 }
 
 data class AttendanceViewDTO(
-    var day: Int?
+        var day: Int?
 ) {
     companion object {
         fun desdeModelo(asistencia: Attendance): AttendanceViewDTO {
@@ -140,9 +142,11 @@ data class AttendanceViewDTO(
 }
 
 
-
 data class StudentAttendanceDTO(
-    var studentId: Int,
-    var attendance: AttendanceDTO
+        var studentId: Int,
+        var attendance: AttendanceDTO
 )
 
+data class StudentBlockDTO(
+        var blocked: Boolean,
+)

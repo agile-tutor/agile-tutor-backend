@@ -16,6 +16,9 @@ class StudentRestService {
     private lateinit var studentService: StudentService
     private val builder: ResponseEntity.BodyBuilder? = null
 
+    @Autowired
+    private lateinit var emailService: EmailServiceImpl
+
     /**register a student*/
     @PostMapping("/api/students/register")
     fun register(@RequestBody studentdata: StudentDTO): ResponseEntity<*> {
@@ -97,24 +100,24 @@ class StudentRestService {
         return response!!
     }
 
-        /**update attendances for a student */
-        @PostMapping("/api/students/attendances/update/{id}")
-        fun updateAttendancesForAStudent (@PathVariable("id") id: Int, @RequestBody attendances : List <AttendanceDTO>): ResponseEntity<*> {
-            var response : ResponseEntity<*>?
+    /**update attendances for a student */
+    @PostMapping("/api/students/attendances/update/{id}")
+    fun updateAttendancesForAStudent(@PathVariable("id") id: Int, @RequestBody attendances: List<AttendanceDTO>): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
 
-            try {
-                val  studentview = StudentDTO.desdeModelo(studentService.updateattendances(id.toLong(),attendances))
-                ResponseEntity.status(201)
-                response =  ResponseEntity.ok().body(studentview)
-            } catch (e: Exception) {
-                ResponseEntity.status(404)
+        try {
+            val studentview = StudentDTO.desdeModelo(studentService.updateattendances(id.toLong(), attendances))
+            ResponseEntity.status(201)
+            response = ResponseEntity.ok().body(studentview)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
 
-                val resultado: MutableMap<String, String> = HashMap()
-                resultado["Student with Id:   not found"] = id.toString()
-                response = ResponseEntity.ok().body<Map<String, String>>(resultado)
-            }
-            return response!!
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Student with Id:   not found"] = id.toString()
+            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
         }
+        return response!!
+    }
 
 
     /**Attendances  From a Student*/
@@ -186,17 +189,17 @@ class StudentRestService {
     fun studentsAttendedAtAParticularDay(@PathVariable("day") day: Int): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-        val studentsAttendedAtAParticularDay =
-            studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
-       response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
-    } catch (e: Exception) {
-        ResponseEntity.status(404)
+            val studentsAttendedAtAParticularDay =
+                    studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+            response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
 
-        val resultado: MutableMap<String, String> = HashMap()
-        resultado["Exception"] = e.message.toString()
-        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
-    }
-    return response!!
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Exception"] = e.message.toString()
+            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+        }
+        return response!!
     }
 
     /** students absent at a particular day  */
@@ -204,28 +207,34 @@ class StudentRestService {
     fun studentsAbsentAtAParticularDay(@PathVariable("day") day: Int): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-        val studentsAttendedAtAParticularDay =
-        studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+            val studentsAttendedAtAParticularDay =
+                    studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
 
-        response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
-    } catch (e: Exception) {
-        ResponseEntity.status(404)
+            response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
 
-        val resultado: MutableMap<String, String> = HashMap()
-        resultado["Exception"] = e.message.toString()
-        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
-    }
-    return response!!
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Exception"] = e.message.toString()
+            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+        }
+        return response!!
     }
 
     /** Block or unblock a student */
-    @GetMapping("/api/students/block/{id}")
-    fun blockOrUnBlockAStudent(@PathVariable("id") id: Int, @RequestBody blocked: Boolean): ResponseEntity<*> {
+    @PutMapping("/api/students/block/{id}")
+    fun blockOrUnBlockAStudent(@PathVariable("id") id: Int, @RequestBody blocked: StudentBlockDTO): ResponseEntity<*> {
 
-        val student = StudentDTO.desdeModelo(studentService.blockOrUnblockAStudent(id.toLong(), blocked ))
+        val student = studentService.blockOrUnblockAStudent(id.toLong(), blocked.blocked)
 
         return ResponseEntity.ok().body(student)
     }
 
+    /**Students From a Course*/
+    @GetMapping("/api/students/toNotify")
+    fun studentsToNotify(): ResponseEntity<*> {
+        val students = emailService.studentsToNotify()
+        return ResponseEntity.ok().body(students)
+    }
 
 }

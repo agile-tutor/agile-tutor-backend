@@ -133,6 +133,7 @@ class CourseRestService {
         var response: ResponseEntity<*>?
 
         try {
+            println("id desde api: $id")
             courseService.updateStudentsAttendancesFromACourse(id, attendances)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body("students attendances Updated Ok")

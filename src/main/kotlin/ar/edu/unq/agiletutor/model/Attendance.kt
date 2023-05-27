@@ -47,12 +47,12 @@ class Attendance : Serializable {
     fun getcday(): Int? {
         return day
     }
-
+/*
     fun setattended(attended: String) {
         this.attended = attended.toBoolean()
-    }
-
+    }*/
+/*
     fun getattended(): Boolean? {
         return attended
-    }
+    }*/
 }

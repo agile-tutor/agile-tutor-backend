@@ -110,14 +110,15 @@ class EmailServiceImpl {
         emailSender.send(message)
     }
 
-    @Scheduled(cron = "*/5 * * * * *")//cada cinco segundos
-    fun pruebaCronJob() {
-        println("adentro del cronJob de 5 segundos")
-    }
-
+ //   @Scheduled(cron = "*/5 * * * * *")//cada cinco segundos
+ /*    fun pruebaCronJob() {
+         println("adentro del cronJob de 5 segundos")
+     }
+ */
     //@Scheduled(cron = "0 0 22 * * *")//a las 22 horas
     @Transactional
-    @Scheduled(cron = "*/20 * * * * *")//cada 20 segundos
+    @Scheduled(cron = "\${cron.expressionat22hs}")//a las 22 horas
+    //@Scheduled(cron = "\${cron.expression20seg}")//cada 20 segundos
     fun emailAbsent() {
         val notifyer: Notifyer = getNotifyer()
         val absents = notifyer.getabsent()
@@ -150,5 +151,9 @@ class EmailServiceImpl {
              notifyer.removeall()
              saveNotifyer(notifyer)
         }
+    }
+    fun studentsToNotify(): List<StudentDTO> {
+        val notifyer: Notifyer = getNotifyer()
+        return notifyer.getAbsentToNotify()!!.map { StudentDTO.desdeModelo(it) }
     }
 }

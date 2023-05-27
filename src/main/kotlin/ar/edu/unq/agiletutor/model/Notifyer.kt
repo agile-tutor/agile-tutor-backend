@@ -65,4 +65,9 @@ class Notifyer {
         absent.removeAll(absent)
         println("aquipaso"+this.absent+"aquipase")
     }
+
+    fun getAbsentToNotify(): MutableSet<Student> {
+        println("getabsent"+this.absent)
+        return this.absent
+    }
 }
