@@ -80,3 +80,25 @@ data class AttendanceViewDTO(
         }
     }
 }
+
+data class StudentUpdateDTO(
+        var name: String?,
+        var surname: String?,
+        var identifier: String?,
+        var email: String?,
+        var observations: String?,
+) {
+
+    companion object {
+        fun desdeModelo(student: Student): StudentUpdateDTO {
+
+            return StudentUpdateDTO(
+                    student.name,
+                    student.surname,
+                    student.identifier,
+                    student.email,
+                    student.observations
+            )
+        }
+    }
+}

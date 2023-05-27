@@ -76,11 +76,21 @@ class StudentService {
     }
 
     @Transactional
-    fun update(id: Long, entity: StudentDTO): Student {
+    fun update(id: Long, entity: StudentUpdateDTO): Student {
+        println("dentro del update" +repository.existsById(id)+entity.toString())
         if (!repository.existsById(id)) {
             throw ItemNotFoundException("Student with Id:  $id not found")
         }
-        return repository.save(entity.aModelo())
+        val student = findByID(id)
+        student.name =  entity.name
+        student.surname = entity.surname
+        student.identifier = entity.identifier
+        student.email = entity.email
+        student.observations = entity.observations!!
+        student.attendances = student.attendances
+        println("finalizado el update" +student.name+student.surname+student.identifier+
+        student.email+student.observations)
+        return repository.save(student)
     }
 
     fun attendancesFromAStudent(id: Long): Set<Attendance> {

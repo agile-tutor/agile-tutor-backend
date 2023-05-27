@@ -52,7 +52,7 @@ class Attendance : Serializable {
         this.attended = attended.toBoolean()
     }
 
-    fun getattended(): Boolean? {
+    fun getattended(): Boolean {
         return attended
     }
 }

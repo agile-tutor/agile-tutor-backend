@@ -84,7 +84,8 @@ class StudentRestService {
 
     /** Update*/
     @PutMapping("/api/students/{id}")
-    fun update(@PathVariable("id") id: Int, @RequestBody entity: StudentDTO): ResponseEntity<*> {
+    fun update(@PathVariable("id") id: Int, @RequestBody entity: StudentUpdateDTO): ResponseEntity<*> {
+        println("enputmapping"+entity)
         var response: ResponseEntity<*>?
         try {
             val student = studentService.update(id.toLong(), entity)
