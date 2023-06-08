@@ -32,7 +32,7 @@ class TutorRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["email of tutor already exist"] = tutordata.email.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -57,7 +57,7 @@ class TutorRestService {
             ResponseEntity.status(404)
             val resultado: MutableMap<String, String> = HashMap()
             resultado["tutor not found"] = tutor.email
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -175,7 +175,7 @@ class TutorRestService {
         val resultado: MutableMap<String, String> = HashMap()
         resultado["Not found Tutor with id"] = id.toString()
 
-        response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+        response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
     }
     return response!!
 

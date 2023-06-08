@@ -137,13 +137,13 @@ class CourseRestService {
             courseService.updateStudentsAttendancesFromACourse(id, attendances)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body("students attendances Updated Ok")
-        } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Course with Id not found"] = id.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
-        }
+            } catch (e: Exception) {
+                ResponseEntity.status(404)
+    
+                val resultado: MutableMap<String, String> = HashMap()
+                resultado["Course with Id not found"] = id.toString()
+                response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            }
         return response!!
     }
 
