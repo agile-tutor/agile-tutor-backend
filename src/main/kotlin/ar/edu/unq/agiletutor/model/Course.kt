@@ -1,5 +1,6 @@
 package ar.edu.unq.agiletutor.model
 
+import ar.edu.unq.agiletutor.ItemNotFoundException
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
@@ -45,5 +46,16 @@ class Course : Serializable {
         this.students = students
         this.tutor = tutor
         this.dateclasses = dateclasses    }
+
+    fun markAttendanceAtaDay(day :Int):Course {
+        val rangedays = (1..6)
+        if (! rangedays.contains(day)) {
+            throw ItemNotFoundException(" Day:  $day invalid")
+        }
+        val dateclass = dateclasses.toMutableList().get(day.dec())
+        dateclass.passed = true
+        dateclasses.toMutableList().set(day.dec(), dateclass)
+        return this
+    }
 
 }

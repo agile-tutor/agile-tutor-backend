@@ -29,12 +29,12 @@ class DateClass: Serializable {
 
     constructor() : super() {}
     constructor(
-         id: Int?,
+       //  id: Int?,
         day: Int?,
         passed: Boolean,
       //  course: Course?
         ) : super() {
-         this.id = id
+         //this.id = id
         this.day = day
         this.passed = passed
   //      this.course = course

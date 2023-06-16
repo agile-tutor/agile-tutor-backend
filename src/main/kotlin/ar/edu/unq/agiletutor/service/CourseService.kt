@@ -113,7 +113,7 @@ class CourseService {
 
     }
 */
-
+/*
     @Transactional
     fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List<StudentAttendanceDTO>) {
        val course = findByID(id)
@@ -121,6 +121,23 @@ class CourseService {
 
         for (studentAttendance in studentAttendances) {
            val student =  studentService.findByID(studentAttendance.studentId.toLong())
+            student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
+
+        }
+        repository.save(course)
+        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(studentAttendances.first().attendance.day!!).toMutableSet()
+        senderService.saveAllAbsent(students)
+
+    }
+*/
+
+    @Transactional
+    fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List<StudentAttendanceDTO>) {
+        val course = findByID(id)
+        // markdownAttendance(course, studentAttendances.first().attendance.day!!)
+        course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
+        for (studentAttendance in studentAttendances) {
+            val student =  studentService.findByID(studentAttendance.studentId.toLong())
             student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
 
         }
