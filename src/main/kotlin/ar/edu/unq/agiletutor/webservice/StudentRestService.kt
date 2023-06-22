@@ -237,4 +237,13 @@ class StudentRestService {
         return ResponseEntity.ok().body(students)
     }
 
+
+
+    /**check mail **/
+    @GetMapping("/api/students/checkmail/{email}")
+    fun checkMail(@PathVariable("email") email: String): ResponseEntity<*> {
+       val checked = studentService.checkMail(email)
+        return ResponseEntity.ok().body(checked)
+    }
+
 }

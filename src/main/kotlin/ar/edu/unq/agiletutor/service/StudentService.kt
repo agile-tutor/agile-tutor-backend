@@ -160,4 +160,10 @@ class StudentService {
         }
         repository.deleteById(id)
     }
+
+    @Transactional
+    fun checkMail(email:String): Boolean {
+        val studentsemails = repository.findAll().toMutableList().map{it.email}
+         return  studentsemails.contains(email)
+    }
 }
