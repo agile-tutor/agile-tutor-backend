@@ -10,10 +10,10 @@ data class StudentRegisterDTO(
         var surname: String?,
         var identifier: String?,
         var email: String?,
-        var attendances: List<AttendanceDTO>?,
-        var attendancepercentage: Double?,
+       // var attendances: List<AttendanceDTO>?,
+      //  var attendancepercentage: Double?,
         var observations: String?,
-        var blocked: Boolean,
+      //  var blocked: Boolean,
         var courseId: Int
 ) {
     @Autowired
@@ -29,10 +29,10 @@ data class StudentRegisterDTO(
                     student.surname,
                     student.identifier,
                     student.email,
-                    asistenciasDTO,
-                    student.attendancepercentage,
-                    student.observations,
-                    student.blocked,
+                  //  asistenciasDTO,
+                  //  student.attendancepercentage,
+                   student.observations,
+                   // student.blocked,
                     student.course!!.id!!
             )
         }
@@ -45,11 +45,11 @@ data class StudentRegisterDTO(
         student.surname = surname
         student.identifier = identifier
         student.email = email
-        // student.attendances
-        attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
+        student.attendances
+       // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
         student.observations = ""
-        student.blocked = blocked
+       student.blocked = false
         student.course = courseService.findByID(courseId)
         return student
     }
