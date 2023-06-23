@@ -33,7 +33,7 @@ class StudentRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["email of user already exits"] = studentdata.email.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -58,7 +58,7 @@ class StudentRestService {
             ResponseEntity.status(404)
             val resultado: MutableMap<String, String> = HashMap()
             resultado["student with id not found"] = id.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -76,7 +76,7 @@ class StudentRestService {
             ResponseEntity.status(404)
             val resultado: MutableMap<String, String> = HashMap()
             resultado["student with name not found"] = name
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -95,7 +95,7 @@ class StudentRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["student with id not found"] = id.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -114,7 +114,7 @@ class StudentRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["Student with Id:   not found"] = id.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -197,7 +197,7 @@ class StudentRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["Exception"] = e.message.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
@@ -216,7 +216,7 @@ class StudentRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["Exception"] = e.message.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }
