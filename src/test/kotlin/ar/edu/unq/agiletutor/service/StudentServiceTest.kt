@@ -510,6 +510,28 @@ internal class StudentServiceTest {
         Assertions.assertFalse(student5.blocked)
     }
 
+    /** check mail */
+    @Test
+    fun al_consultar_por_un_mail_existente_devuelve_True() {
+        val email = "algoritmosale@gmail.com"
+         studentService.register(student1)
+         studentService.register(student2)
+        val checked = studentService.checkMail(email)
+        Assertions.assertTrue(checked)
+
+    }
+
+
+    @Test
+    fun al_consultar_por_un_mail_inexistente_devuelve_False() {
+        val email = "noexiste@gmail.com"
+         studentService.register(student1)
+         studentService.register(student2)
+        val checked = studentService.checkMail(email)
+        Assertions.assertFalse(checked)
+    }
+
+
     @AfterEach
     fun tearDown() {
         studentRepository.deleteAll()
