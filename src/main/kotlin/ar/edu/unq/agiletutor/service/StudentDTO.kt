@@ -5,15 +5,11 @@ import ar.edu.unq.agiletutor.model.Attendance
 import org.springframework.beans.factory.annotation.Autowired
 
 data class StudentRegisterDTO(
-        var id: Long?,
         var name: String?,
         var surname: String?,
         var identifier: String?,
         var email: String?,
-        var attendances: List<AttendanceDTO>?,
-        var attendancepercentage: Double?,
         var observations: String?,
-        var blocked: Boolean,
         var courseId: Int
 ) {
     @Autowired
@@ -21,18 +17,14 @@ data class StudentRegisterDTO(
 
     companion object {
         fun desdeModelo(student: Student): StudentRegisterDTO {
-            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
+//            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
             return StudentRegisterDTO(
-                    student.id,
                     student.name,
                     student.surname,
                     student.identifier,
                     student.email,
-                    asistenciasDTO,
-                    student.attendancepercentage,
                     student.observations,
-                    student.blocked,
                     student.course!!.id!!
             )
         }
@@ -40,19 +32,24 @@ data class StudentRegisterDTO(
 
     fun aModelo(): Student {
         val student = Student()
-        student.id = id
+        val attendaces = mutableSetOf<Attendance>()
+        for (i in (1..6)) {
+            attendaces.add(Attendance(i, false))
+        }
+
         student.name = name
         student.surname = surname
         student.identifier = identifier
         student.email = email
-        // student.attendances
-        attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
+        student.attendances = attendaces
+ //       attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
-        student.observations = ""
-        student.blocked = blocked
+        student.observations = observations.toString()
+        student.blocked = false
         student.course = courseService.findByID(courseId)
         return student
     }
+
 }
 
 

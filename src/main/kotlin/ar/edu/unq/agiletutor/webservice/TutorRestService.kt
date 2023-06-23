@@ -200,11 +200,49 @@ class TutorRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["Exception"] = e.message.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
 
     }
 
+                /** Absent Message From a Tutor*/
+    @GetMapping("/api/tutor/absentmessage")
+    fun absentMessageFromTutor(): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val message = tutorService.absentMessageFromTutor()
+            ResponseEntity.status(200)
+            response =  ResponseEntity.ok().body(message)
 
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val result: MutableMap<String, String> = HashMap()
+            result["Not found Absent Message"] = "Error"
+
+            response = ResponseEntity.badRequest().body<Map<String, String>>(result)
+        }
+        return response!!
+    }
+
+    /** Modify Absent Message From a Tutor*/
+    @PutMapping("/api/tutor/absentmessage")
+    fun updateAbsentMessageFromTutor(@RequestBody absentMessageDataDTO: AbsentMessageDataDTO): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val message = tutorService.updateAbsentMessageFromTutor(absentMessageDataDTO)
+            ResponseEntity.status(200)
+            response =  ResponseEntity.ok().body(message)
+
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val result: MutableMap<String, String> = HashMap()
+            result["Not found Absent Message"] = "Error"
+
+            response = ResponseEntity.badRequest().body<Map<String, String>>(result)
+        }
+        return response!!
+    }
 }

@@ -113,3 +113,7 @@ data class CourseDTO(
     }
 }
 
+data class AbsentMessageDataDTO(
+        var subject: String,
+        var body: String
+)

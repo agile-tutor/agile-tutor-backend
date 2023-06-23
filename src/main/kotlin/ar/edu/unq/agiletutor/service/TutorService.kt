@@ -30,6 +30,9 @@ class TutorService {
     @Autowired
     private lateinit var studentService: StudentService
 
+    @Autowired
+    private lateinit var senderService: EmailServiceImpl
+
     @Transactional
     fun register(tutor: Tutor): Tutor {
 
@@ -130,20 +133,33 @@ class TutorService {
 
 
     @Transactional
-    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int)/*:Student*/{
+    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int)/*:Student*/ {
         val courseMoved = courseService.findByID(id_course)
         val student = studentService.findByID(id)
         val course = courseService.findByID(student.course!!.id!!)
-        if (courseMoved.id == course.id){
+        if (courseMoved.id == course.id) {
             throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
         }
-       /*val studentRegistered = */addAStudentToACourse(student, courseMoved)
-        removeAStudentFromACourse(student,student.course!!)
+        /*val studentRegistered = */addAStudentToACourse(student, courseMoved)
+        removeAStudentFromACourse(student, student.course!!)
         /*return studentRegistered*/
 
 
     }
 
+    @Transactional
+    fun absentMessageFromTutor(): AbsentMessageDataDTO {
+        val notifyer = senderService.getNotifyer()
+        var subjectEmail = notifyer.getSubjectEmail()
+        var bodyEmail = notifyer.getTextEmailForEdit()
 
+        return AbsentMessageDataDTO(subjectEmail, bodyEmail)
+    }
 
+    @Transactional
+    fun updateAbsentMessageFromTutor(updatedMessageDataDTO: AbsentMessageDataDTO): AbsentMessageDataDTO {
+        senderService.changeSubjectText(updatedMessageDataDTO.subject)
+        senderService.changeBodyText(updatedMessageDataDTO.body)
+        return this.absentMessageFromTutor()
+    }
 }

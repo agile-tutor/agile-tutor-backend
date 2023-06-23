@@ -21,11 +21,13 @@ class StudentRestService {
 
     /**register a student*/
     @PostMapping("/api/students/register")
-    fun register(@RequestBody studentdata: StudentDTO): ResponseEntity<*> {
+    fun register(@RequestBody studentdata: StudentRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
-            val userview = StudentDTO.desdeModelo(studentService.register(studentdata.aModelo()))
+            println("postReg"+studentdata)
+            val userview = StudentRegisterDTO.desdeModelo(studentService.register(studentdata.aModelo()))
+            println("postReg2"+studentdata)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(userview)
         } catch (e: Exception) {
@@ -33,7 +35,7 @@ class StudentRestService {
 
             val resultado: MutableMap<String, String> = HashMap()
             resultado["email of user already exits"] = studentdata.email.toString()
-            response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
     }

@@ -142,7 +142,7 @@ class CourseRestService {
     
                 val resultado: MutableMap<String, String> = HashMap()
                 resultado["Course with Id not found"] = id.toString()
-                response = ResponseEntity.ok().body<Map<String, String>>(resultado)
+                response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
             }
         return response!!
     }

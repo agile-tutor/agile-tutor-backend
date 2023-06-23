@@ -18,8 +18,7 @@ class Notifyer {
     var textemail: String =
         "¿Como estás? Observo que no viniste al encuentro del \"taller de vida universitaria\", y ¡quería saber si te pasó algo!\n" +
                 "\n" +
-                "Saludos\n" +
-                "Cristian"
+                "Saludos\n"
 
     var subjectmail: String = "ASISTENCIAS - TVU"
 
@@ -39,8 +38,12 @@ class Notifyer {
                 this.textemail
     }
 
+    fun getTextEmailForEdit(): String {
+        return this.textemail
+    }
+
     fun getSubjectEmail(): String {
-        return this.subjectmail + " " + LocalDate.now().year
+        return this.subjectmail
     }
 
     fun setTextEmail(text: String) {

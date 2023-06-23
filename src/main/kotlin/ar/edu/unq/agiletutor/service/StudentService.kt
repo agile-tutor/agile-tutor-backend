@@ -4,6 +4,7 @@ import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -15,13 +16,15 @@ class StudentService {
     @Autowired
     private lateinit var repository: StudentRepository
 
+    @Autowired
+    private lateinit var courseService: CourseService
+
     @Transactional
     fun register(student: Student): Student {
-
+    println("serviceregister: "+student.toString())
         if (existStudent(student)) {
             throw UsernameExistException("Student with email:  ${student.email} is used")
         }
-
         return repository.save(student)
     }
 
