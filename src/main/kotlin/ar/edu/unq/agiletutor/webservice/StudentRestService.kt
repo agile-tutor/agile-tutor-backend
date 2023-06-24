@@ -1,5 +1,6 @@
 package ar.edu.unq.agiletutor.webservice
 
+import ar.edu.unq.agiletutor.model.Survey
 import ar.edu.unq.agiletutor.service.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -244,6 +245,27 @@ class StudentRestService {
     fun checkMail(@PathVariable("email") email: String): ResponseEntity<*> {
        val checked = studentService.checkMail(email)
         return ResponseEntity.ok().body(checked)
+    }
+
+    /**post survey for a student */
+    @PostMapping("/api/students/survey/{email}/")
+    fun studentSurveyResponse(@PathVariable("email") email: String, @RequestBody survey: SurveyDataDTO): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+
+        try {
+            println("apiSurvey"+email+survey)
+            val student = studentService.findByEmail(email)[0]
+            val surveyResponse = studentService.saveStudentSurvey(student.id!!, survey)
+            ResponseEntity.status(201)
+            response = ResponseEntity.ok().body(surveyResponse)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Student with email: not found"] = email
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
     }
 
 }

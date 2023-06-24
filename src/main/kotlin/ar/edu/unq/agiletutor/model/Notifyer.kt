@@ -16,31 +16,34 @@ class Notifyer {
     var absent: MutableSet<Student> = HashSet()
 
     var textemail: String =
-        "¿Como estás? Observo que no viniste al encuentro del \"taller de vida universitaria\", y ¡quería saber si te pasó algo!\n" +
-                "\n" +
-                "Saludos\n" +
-                "Cristian"
+            "¿Como estás? Observo que no viniste al encuentro del \"taller de vida universitaria\", y ¡quería saber si te pasó algo!\n" +
+                    "\n" +
+                    "Saludos\n"
 
     var subjectmail: String = "ASISTENCIAS - TVU"
 
 
-   fun setAbsents(absents : MutableSet<Student>){
-       absent =  absents
-   }
+    fun setAbsents(absents: MutableSet<Student>) {
+        absent = absents
+    }
 
     fun getabsent(): MutableSet<Student> {
-        println("getabsent"+this.absent)
+        println("getabsent" + this.absent)
         return this.absent
     }
 
     fun getTextEmail(nombre: String): String {
-        return "Buenas noches "+nombre+",\n" +
+        return "Buenas noches " + nombre + ",\n" +
                 "\n" +
                 this.textemail
     }
 
+    fun getTextEmailForEdit(): String {
+        return this.textemail
+    }
+
     fun getSubjectEmail(): String {
-        return this.subjectmail + " " + LocalDate.now().year
+        return this.subjectmail
     }
 
     fun setTextEmail(text: String) {
@@ -50,24 +53,25 @@ class Notifyer {
     fun setSubjectEmail(text: String) {
         this.subjectmail = text
     }
-/*
-    fun addabsent(student: Student) {
-        this.absent.add(student)
-    }
 
-    fun delabsent(student: Student) {
-        this.absent.remove(student)
-    }
-*/
+    /*
+        fun addabsent(student: Student) {
+            this.absent.add(student)
+        }
+
+        fun delabsent(student: Student) {
+            this.absent.remove(student)
+        }
+    */
     fun removeall() {
-       // val studentsToRemove: MutableSet<Student> = this.absent
+        // val studentsToRemove: MutableSet<Student> = this.absent
         //this.absent.removeAll(studentsToRemove)
         absent.removeAll(absent)
-        println("aquipaso"+this.absent+"aquipase")
+        println("aquipaso" + this.absent + "aquipase")
     }
 
     fun getAbsentToNotify(): MutableSet<Student> {
-        println("getabsent"+this.absent)
+        println("getabsent" + this.absent)
         return this.absent
     }
 }

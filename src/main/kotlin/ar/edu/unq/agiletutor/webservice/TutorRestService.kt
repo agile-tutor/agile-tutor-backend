@@ -143,19 +143,19 @@ class TutorRestService {
     fun coursesFromATutor(@PathVariable("id") id: Int): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-        val courses = tutorService.coursesFromATutor(id).map { CourseDTO.desdeModelo(it) }
-        ResponseEntity.status(200)
+            val courses = tutorService.coursesFromATutor(id).map { CourseDTO.desdeModelo(it) }
+            ResponseEntity.status(200)
 
-        response = ResponseEntity.ok().body(courses)
-    } catch (e: Exception) {
-        ResponseEntity.status(404)
+            response = ResponseEntity.ok().body(courses)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
 
-        val resultado: MutableMap<String, String> = HashMap()
-       resultado["Not found Tutor with id"] = id.toString()
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Not found Tutor with id"] = id.toString()
 
-        response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
-    }
-    return response!!
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
 
 
     }
@@ -165,28 +165,28 @@ class TutorRestService {
     fun studentsFromATutor(@PathVariable("id") id: Int): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-        val students = tutorService.studentsFromATutor(id).map { StudentDTO.desdeModelo(it) }
-        ResponseEntity.status(200)
-         response =  ResponseEntity.ok().body(students)
+            val students = tutorService.studentsFromATutor(id).map { StudentDTO.desdeModelo(it) }
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(students)
 
-    } catch (e: Exception) {
-        ResponseEntity.status(404)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
 
-        val resultado: MutableMap<String, String> = HashMap()
-        resultado["Not found Tutor with id"] = id.toString()
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Not found Tutor with id"] = id.toString()
 
-        response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+
+
     }
-    return response!!
-
-
-}
 
 
     /** Move a student to Another Course*/
     @PutMapping("/api/tutor/students/move/{id}/{id_course}")
     fun moveAStudentIntoAnotherCourse(
-        @PathVariable("id") id: Int,@PathVariable("id_course") id_course: Int
+            @PathVariable("id") id: Int, @PathVariable("id_course") id_course: Int
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
@@ -203,8 +203,66 @@ class TutorRestService {
             response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
-
     }
 
 
+    /** Absent Message From a Tutor*/
+    @GetMapping("/api/tutor/absentmessage")
+    fun absentMessageFromTutor(): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val message = tutorService.absentMessageFromTutor()
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(message)
+
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val result: MutableMap<String, String> = HashMap()
+            result["Not found Absent Message"] = "Error"
+
+            response = ResponseEntity.badRequest().body<Map<String, String>>(result)
+        }
+        return response!!
+    }
+
+    /** Modify Absent Message From a Tutor*/
+    @PutMapping("/api/tutor/absentmessage")
+    fun updateAbsentMessageFromTutor(@RequestBody absentMessageDataDTO: AbsentMessageDataDTO): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val message = tutorService.updateAbsentMessageFromTutor(absentMessageDataDTO)
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(message)
+
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val result: MutableMap<String, String> = HashMap()
+            result["Not found Absent Message"] = "Error"
+
+            response = ResponseEntity.badRequest().body<Map<String, String>>(result)
+        }
+        return response!!
+    }
+
+    /**All Surveys*/
+    @GetMapping("/api/tutor/survey")
+    fun allSurveys(): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val surveys = tutorService.getAllSurveys()
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(surveys)
+
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Not found"] = "Check Error"
+
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+    }
 }

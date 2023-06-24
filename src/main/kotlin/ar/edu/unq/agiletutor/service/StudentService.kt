@@ -4,7 +4,9 @@ import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.model.Survey
 import ar.edu.unq.agiletutor.persistence.StudentRepository
+import ar.edu.unq.agiletutor.persistence.SurveyRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -14,6 +16,9 @@ class StudentService {
 
     @Autowired
     private lateinit var repository: StudentRepository
+
+    @Autowired
+    private lateinit var surveyRepository: SurveyRepository
 
     @Transactional
     fun register(student: Student): Student {
@@ -48,6 +53,12 @@ class StudentService {
     fun findByName(name: String): List<Student> {
         val students = repository.findAll()
         return students.filter { (it.name == name) } ?: throw ItemNotFoundException("Not found student")
+    }
+
+    @Transactional
+    fun findByEmail(email: String): List<Student> {
+        val students = repository.findAll()
+        return students.filter { (it.email == email) } ?: throw ItemNotFoundException("Not found student")
     }
 
     @Transactional
@@ -165,5 +176,22 @@ class StudentService {
     fun checkMail(email:String): Boolean {
         val studentsemails = repository.findAll().toMutableList().map{it.email}
          return  studentsemails.contains(email)
+    }
+
+    @Transactional
+    fun saveStudentSurvey(studentId: Long, surveyDTO: SurveyDataDTO): Survey {
+        val survey = Survey(studentId,
+                surveyDTO.ciudad,
+                surveyDTO.wifi,
+                surveyDTO.datos,
+                surveyDTO.pc,
+                surveyDTO.notebook,
+                surveyDTO.celular,
+                surveyDTO.tablet,
+                surveyDTO.entorno,
+                surveyDTO.exclusividad,
+                surveyDTO.estado)
+        println(survey.toString())
+        return surveyRepository.save(survey)
     }
 }

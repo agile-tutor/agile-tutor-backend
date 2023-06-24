@@ -4,9 +4,11 @@ import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.model.Survey
 import ar.edu.unq.agiletutor.model.Tutor
 import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
+import ar.edu.unq.agiletutor.persistence.SurveyRepository
 import ar.edu.unq.agiletutor.persistence.TutorRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -29,6 +31,12 @@ class TutorService {
 
     @Autowired
     private lateinit var studentService: StudentService
+
+    @Autowired
+    private lateinit var senderService: EmailServiceImpl
+
+    @Autowired
+    private lateinit var surveyRepository: SurveyRepository
 
     @Transactional
     fun register(tutor: Tutor): Tutor {
@@ -54,7 +62,7 @@ class TutorService {
     fun login(email: String, password: String): Tutor {
         val tutors = repository.findAll()
         return tutors.find { (it.email == email) && (it.password == password) }
-            ?: throw ItemNotFoundException("Not found tutor")
+                ?: throw ItemNotFoundException("Not found tutor")
     }
 
     @Transactional
@@ -83,13 +91,12 @@ class TutorService {
 
     @Transactional
     fun update(id: Int, entity: TutorRegisterDTO): Tutor {
-       val tutor = findByID(id)
+        val tutor = findByID(id)
         tutor.email = entity.email
         tutor.name = entity.name
         tutor.surname = entity.surname
         tutor.password = entity.password
         return repository.save(tutor)
-
     }
 
     @Transactional
@@ -98,52 +105,64 @@ class TutorService {
         return tutor.courses.toMutableList()
     }
 
-
     @Transactional
     fun studentsFromATutor(id: Int): List<Student> {
         val students = mutableListOf<Student>()
-        val  tutor =  findByID(id)
+        val tutor = findByID(id)
         val courses = tutor.courses
-       // val courses = coursesFromATutor(id)
+        // val courses = coursesFromATutor(id)
         for (course in courses) {
             students.addAll(course.students)
         }
         return students
     }
 
-
     @Transactional
-    fun  addAStudentToACourse(student:Student, course :Course)/*:Student*/{
+    fun addAStudentToACourse(student: Student, course: Course)/*:Student*/ {
         student.course = course
         /*val studentRegistered=*/ studentRepository.save(student)
-       // course.students.add(student)
+        // course.students.add(student)
         //courseRepository.save(course)
         //return studentRegistered
-
     }
 
     @Transactional
-    fun removeAStudentFromACourse(student:Student, course:Course){
+    fun removeAStudentFromACourse(student: Student, course: Course) {
         course.students.remove(student)
         courseRepository.save(course)
     }
 
-
     @Transactional
-    fun moveAStudentIntoAnotherCourse(id:Long,id_course:Int)/*:Student*/{
+    fun moveAStudentIntoAnotherCourse(id: Long, id_course: Int)/*:Student*/ {
         val courseMoved = courseService.findByID(id_course)
         val student = studentService.findByID(id)
         val course = courseService.findByID(student.course!!.id!!)
-        if (courseMoved.id == course.id){
+        if (courseMoved.id == course.id) {
             throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
         }
-       /*val studentRegistered = */addAStudentToACourse(student, courseMoved)
-        removeAStudentFromACourse(student,student.course!!)
+        /*val studentRegistered = */addAStudentToACourse(student, courseMoved)
+        removeAStudentFromACourse(student, student.course!!)
         /*return studentRegistered*/
-
-
     }
 
+    @Transactional
+    fun absentMessageFromTutor(): AbsentMessageDataDTO {
+        val notifyer = senderService.getNotifyer()
+        var subjectEmail = notifyer.getSubjectEmail()
+        var bodyEmail = notifyer.getTextEmailForEdit()
 
+        return AbsentMessageDataDTO(subjectEmail, bodyEmail)
+    }
 
+    @Transactional
+    fun updateAbsentMessageFromTutor(updatedMessageDataDTO: AbsentMessageDataDTO): AbsentMessageDataDTO {
+        senderService.changeSubjectText(updatedMessageDataDTO.subject)
+        senderService.changeBodyText(updatedMessageDataDTO.body)
+        return this.absentMessageFromTutor()
+    }
+
+    @Transactional
+    fun getAllSurveys(): List<Survey> {
+        return surveyRepository.findAll() as List<Survey>
+    }
 }

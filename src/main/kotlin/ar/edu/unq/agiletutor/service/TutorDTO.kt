@@ -113,3 +113,20 @@ data class CourseDTO(
     }
 }
 
+data class AbsentMessageDataDTO(
+        var subject: String,
+        var body: String
+)
+
+data class SurveyDataDTO(
+        var ciudad: String,
+        var wifi: Boolean,
+        var datos: Boolean,
+        var pc: Boolean,
+        var notebook: Boolean,
+        var celular: Boolean,
+        var tablet: Boolean,
+        var entorno: String,
+        var exclusividad: String,
+        var estado: String
+)
