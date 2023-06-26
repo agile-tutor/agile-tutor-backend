@@ -61,7 +61,7 @@ class TutorService {
     @Transactional
     fun login(email: String, password: String): Tutor {
         val tutors = repository.findAll()
-        return tutors.find { (it.email == email) && (it.password == password) }
+        return tutors.find { (it.email == email) && (it.comparePassword(password)) }
                 ?: throw ItemNotFoundException("Not found tutor")
     }
 

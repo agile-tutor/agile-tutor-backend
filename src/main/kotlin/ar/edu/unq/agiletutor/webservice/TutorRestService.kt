@@ -56,7 +56,7 @@ class TutorRestService {
         } catch (e: Exception) {
             ResponseEntity.status(404)
             val resultado: MutableMap<String, String> = HashMap()
-            resultado["tutor not found"] = tutor.email
+            resultado["tutor not found"] = tutor.email+" or incorrect password"
             response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!

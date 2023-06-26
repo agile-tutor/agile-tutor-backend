@@ -1,7 +1,10 @@
 package ar.edu.unq.agiletutor.model
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import java.io.Serializable
 
 @Entity
@@ -30,10 +33,20 @@ class Tutor : Serializable {
     @Column
     @NotNull("El password es obligatorio")
     var password: String? = ""
+//        @JsonIgnore
+        get
+        set(value) {
+            val passwordEncoder = BCryptPasswordEncoder()
+            field = passwordEncoder.encode(value)
+        }
 
     // @Column(nullable = false)
     @OneToMany(mappedBy = "tutor", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var courses: MutableSet<Course> = HashSet()
+
+    fun comparePassword(password: String): Boolean {
+        return BCryptPasswordEncoder().matches(password, this.password)
+    }
 
     constructor() : super() {}
     constructor(
