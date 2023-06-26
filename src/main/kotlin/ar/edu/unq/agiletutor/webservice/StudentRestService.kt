@@ -103,7 +103,10 @@ class StudentRestService {
 
     /**update attendances for a student */
     @PostMapping("/api/students/attendances/update/{id}")
-    fun updateAttendancesForAStudent(@PathVariable("id") id: Int, @RequestBody attendances: List<AttendanceDTO>): ResponseEntity<*> {
+    fun updateAttendancesForAStudent(
+        @PathVariable("id") id: Int,
+        @RequestBody attendances: List<AttendanceDTO>
+    ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -191,7 +194,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
         try {
             val studentsAttendedAtAParticularDay =
-                    studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+                studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
             response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
         } catch (e: Exception) {
             ResponseEntity.status(404)
@@ -209,7 +212,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
         try {
             val studentsAttendedAtAParticularDay =
-                    studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+                studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
 
             response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
         } catch (e: Exception) {
@@ -239,21 +242,23 @@ class StudentRestService {
     }
 
 
-
     /**check mail **/
     @GetMapping("/api/students/checkmail/{email}")
     fun checkMail(@PathVariable("email") email: String): ResponseEntity<*> {
-       val checked = studentService.checkMail(email)
+        val checked = studentService.checkMail(email)
         return ResponseEntity.ok().body(checked)
     }
 
     /**post survey for a student */
     @PostMapping("/api/students/survey/{email}/")
-    fun studentSurveyResponse(@PathVariable("email") email: String, @RequestBody survey: SurveyDataDTO): ResponseEntity<*> {
+    fun studentSurveyResponse(
+        @PathVariable("email") email: String,
+        @RequestBody survey: SurveyDataDTO
+    ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
-            println("apiSurvey"+email+survey)
+            println("apiSurvey" + email + survey)
             val student = studentService.findByEmail(email)[0]
             val surveyResponse = studentService.saveStudentSurvey(student.id!!, survey)
             ResponseEntity.status(201)
@@ -268,4 +273,36 @@ class StudentRestService {
         return response!!
     }
 
+    /** register Many students */
+    @PostMapping("/api/students/many/register/{id}")
+    fun registerMany(@PathVariable("id") id: Int,@RequestBody studentdata: MutableList<StudentFromACourseDTO>): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+
+        try {
+            val studentsview =
+                studentService.registerMany(studentdata.map
+            {
+                StudentFromACourseDTO(
+                    it.id,
+                    it.name,
+                    it.surname,
+                    it.identifier,
+                    it.email,
+                    id
+                ).aModelo()}.toMutableList()).map { StudentFromACourseDTO.desdeModelo(it)}
+           ResponseEntity.status(201)
+           response = ResponseEntity.ok().body(studentsview)
+
+
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["email of user already exits"] = e.message.toString()
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+
+    }
 }
+

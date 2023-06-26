@@ -30,14 +30,26 @@ class StudentService {
         return repository.save(student)
     }
 
+
+    @Transactional
+    fun registerMany(students: List<Student>): List <Student> {
+
+        if (students.any {existStudent(it)} ) {
+            throw UsernameExistException("There is a Student with an used email")
+        }
+
+        return repository.saveAll(students.asIterable()).toMutableList()
+    }
+
+
     @Transactional
     fun findAll(): List<Student> {
         return repository.findAll()
     }
 
     private fun existStudent(student: Student): Boolean {
-     val tutores = repository.findAll().toMutableList()
-        return tutores.any { it.email == student.email }
+     val students = repository.findAll().toMutableList()
+        return students.any { it.email == student.email }
     }
 
     @Transactional

@@ -188,7 +188,9 @@ class CourseService {
 
 
 
-  //  @Transactional
+
+
+    //  @Transactional
    // fun updateStudentsAttendancesFromACourse(courseId: Int, studentAttendance: List<StudentAttendanceDTO>) {
         //val course = findByID(id)
      //   studentAttendance.forEach {
