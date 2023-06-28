@@ -127,7 +127,7 @@ data class StudentRegisterDTO(
         student.attendances = attendances
        // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
-        student.observations = ""
+        student.observations = observations!!
        student.blocked = false
         student.course = course
         return student
@@ -180,7 +180,7 @@ data class StudentDTO(
         // student.attendances
         attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
-        student.observations = ""
+        student.observations = observations!!
         student.blocked = blocked
         student.course = course
         return student

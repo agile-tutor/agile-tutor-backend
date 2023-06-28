@@ -134,9 +134,12 @@ class CourseService {
     @Transactional
     fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List<StudentAttendanceDTO>) {
         val course = findByID(id)
+        println(course.toString()+"courseupdateget")
         // markdownAttendance(course, studentAttendances.first().attendance.day!!)
         course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
+        println(course.toString()+"courseupdatepostmark")
         for (studentAttendance in studentAttendances) {
+            println(studentAttendance.toString()+"courseupdateattendancesfor")
             val student =  studentService.findByID(studentAttendance.studentId.toLong())
             student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
 

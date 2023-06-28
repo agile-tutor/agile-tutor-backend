@@ -99,6 +99,7 @@ class Student : Serializable {
   */
 
     fun updateAttendanceAtADay (attendance: Attendance) {
+        println("updateatendance"+attendance.toString())
         attendances.toMutableList().set(attendance.day!!, attendance)
         updateAttendancePercentage()
     }
