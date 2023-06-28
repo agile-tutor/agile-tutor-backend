@@ -20,13 +20,17 @@ class StudentRestService {
     @Autowired
     private lateinit var emailService: EmailServiceImpl
 
+    @Autowired
+    private lateinit var courseService: CourseService
+
     /**register a student*/
     @PostMapping("/api/students/register")
     fun register(@RequestBody studentdata: StudentRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
-            val userview = StudentRegisterDTO.desdeModelo(studentService.register(studentdata.aModelo()))
+            val course = courseService.findByID(studentdata.courseId)
+            val userview = StudentRegisterDTO.desdeModelo(studentService.register(studentdata.aModelo(course)))
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(userview)
         } catch (e: Exception) {
@@ -279,6 +283,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
 
         try {
+            val course = courseService.findByID(id)
             val studentsview =
                 studentService.registerMany(studentdata.map
             {
@@ -289,7 +294,7 @@ class StudentRestService {
                     it.identifier,
                     it.email,
                     id
-                ).aModelo()}.toMutableList()).map { StudentFromACourseDTO.desdeModelo(it)}
+                ).aModelo(course)}.toMutableList()).map { StudentFromACourseDTO.desdeModelo(it)}
            ResponseEntity.status(201)
            response = ResponseEntity.ok().body(studentsview)
 

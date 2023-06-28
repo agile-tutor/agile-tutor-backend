@@ -14,6 +14,9 @@ import java.util.HashMap
 class CourseRestService {
 
     @Autowired
+    private lateinit var tutorService: TutorService
+
+    @Autowired
     private lateinit var courseService: CourseService
     private val builder: ResponseEntity.BodyBuilder? = null
 
@@ -23,7 +26,8 @@ class CourseRestService {
         var response: ResponseEntity<*>?
 
         try {
-            val courseview = courseService.register(coursedata.aModelo())
+            val tutor = tutorService.findByID(coursedata.tutorId)
+            val courseview = courseService.register(coursedata.aModelo(tutor))
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(courseview)
         } catch (e: Exception) {

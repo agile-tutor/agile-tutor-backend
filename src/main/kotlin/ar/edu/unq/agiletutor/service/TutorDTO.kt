@@ -73,21 +73,18 @@ data class CourseRegisterDTO(
     )
 
 {
-    @Autowired
-    private lateinit var tutorService: TutorService
-
     companion object {
         fun desdeModelo(course: Course): CourseDTO {
             return CourseDTO(course.id, course.name)
         }
     }
 
-    fun aModelo(): Course {
+    fun aModelo(tutor: Tutor): Course {
         val course = Course()
         course.id = id
         course.name = name
         course.students = mutableSetOf()
-        course.tutor = tutorService.findByID(tutorId)
+        course.tutor = tutor
         return course
     }
 }

@@ -2,6 +2,7 @@ package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Attendance
+import ar.edu.unq.agiletutor.model.Course
 import org.springframework.beans.factory.annotation.Autowired
 
 
@@ -18,8 +19,6 @@ data class StudentFromACourseDTO(
     )
 
 {
-    @Autowired
-    private lateinit var courseService: CourseService
 
     companion object {
         fun desdeModelo(student: Student): StudentFromACourseDTO {
@@ -35,19 +34,23 @@ data class StudentFromACourseDTO(
 
     }
 
-    fun aModelo(): Student {
+    fun aModelo(course: Course): Student {
         val student = Student()
+        val attendances = mutableSetOf<Attendance>()
+        for (i in (1..6)) {
+            attendances.add(Attendance(i, false))
+        }
         student.id = id
         student.name = name
         student.surname = surname
         student.identifier = identifier
         student.email = email
-        student.attendances
+        student.attendances = attendances
         // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
         student.observations = ""
         student.blocked = false
-        student.course = courseService.findByID(courseId)
+        student.course = course
         return student
     }
 }
@@ -56,7 +59,7 @@ data class ManyStudentsFromACourse(
       var studentsDTO : MutableSet<StudentFromACourseDTO> = HashSet()
 
 ) {
-    fun aModelo(courseId: Int): List<Student> {
+    fun aModelo(course: Course): List<Student> {
 
         return studentsDTO.map {
             StudentFromACourseDTO(
@@ -65,8 +68,8 @@ data class ManyStudentsFromACourse(
                 it.surname,
                 it.identifier,
                 it.email,
-                courseId
-            ).aModelo()
+                course.id!!
+            ).aModelo(course)
         }.toMutableList()
 
     }
@@ -90,8 +93,6 @@ data class StudentRegisterDTO(
       //  var blocked: Boolean,
         var courseId: Int
 ) {
-    @Autowired
-    private lateinit var courseService: CourseService
 
     companion object {
         fun desdeModelo(student: Student): StudentRegisterDTO {
@@ -112,19 +113,23 @@ data class StudentRegisterDTO(
         }
     }
 
-    fun aModelo(): Student {
+    fun aModelo(course: Course): Student {
         val student = Student()
+        val attendances = mutableSetOf<Attendance>()
+        for (i in (1..6)) {
+            attendances.add(Attendance(i, false))
+        }
         student.id = id
         student.name = name
         student.surname = surname
         student.identifier = identifier
         student.email = email
-        student.attendances
+        student.attendances = attendances
        // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.attendancepercentage = 0.0
         student.observations = ""
        student.blocked = false
-        student.course = courseService.findByID(courseId)
+        student.course = course
         return student
     }
 }
@@ -144,8 +149,6 @@ data class StudentDTO(
         var courseId: Int
 
 ) {
-    @Autowired
-    private lateinit var courseService: CourseService
 
     companion object {
         fun desdeModelo(student: Student): StudentDTO {
@@ -167,7 +170,7 @@ data class StudentDTO(
         }
     }
 
-    fun aModelo(): Student {
+    fun aModelo(course: Course): Student {
         val student = Student()
         student.id = id
         student.name = name
@@ -179,7 +182,7 @@ data class StudentDTO(
         student.attendancepercentage = 0.0
         student.observations = ""
         student.blocked = blocked
-        student.course = courseService.findByID(courseId)
+        student.course = course
         return student
     }
 
