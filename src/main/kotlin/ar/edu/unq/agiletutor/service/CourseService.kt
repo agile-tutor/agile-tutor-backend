@@ -67,6 +67,15 @@ class CourseService {
     }
 
     @Transactional
+    fun findByName(name: String): Course {
+        val course = repository.findByName(name)
+        if (!(course.isPresent)) {
+            throw ItemNotFoundException("Course with Name: $name not found")
+        }
+        return course.get()
+    }
+
+    @Transactional
     fun tutorFromACourse(id: Int): Tutor {
         val course = findByID(id)
         return course.tutor!!
@@ -136,11 +145,12 @@ class CourseService {
         val course = findByID(id)
         println(course.toString()+"courseupdateget")
         // markdownAttendance(course, studentAttendances.first().attendance.day!!)
-        course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
+ //       course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
         println(course.toString()+"courseupdatepostmark")
         for (studentAttendance in studentAttendances) {
             println(studentAttendance.toString()+"courseupdateattendancesfor")
             val student =  studentService.findByID(studentAttendance.studentId.toLong())
+            println(student.name+"courseupdateattendancesstudent")
             student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
 
         }

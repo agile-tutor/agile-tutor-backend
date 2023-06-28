@@ -13,4 +13,5 @@ interface CourseRepository : CrudRepository<Course?, Int?> {
     fun save(course: Course): Course
     override fun findAll(): List<Course>
     override fun findById(id: Int): Optional<Course?>
+    fun findByName(name: String): Optional<Course?>
 }
