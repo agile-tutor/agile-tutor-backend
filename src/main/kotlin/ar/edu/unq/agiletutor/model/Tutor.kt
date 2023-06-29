@@ -35,16 +35,19 @@ class Tutor : Serializable {
     @OneToMany(mappedBy = "tutor", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var courses: MutableSet<Course> = HashSet()
 
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var notifyer: Notifyer? = null
+
     constructor() : super() {}
     constructor(
-        id: Int?,
-        name: String?,
-        surname: String?,
-        email: String?,
-        password: String?,
-        courses: MutableSet<Course>,
+            id: Int?,
+            name: String?,
+            surname: String?,
+            email: String?,
+            password: String?,
+            courses: MutableSet<Course>,
 
-        ) : super() {
+            ) : super() {
         this.id = id
         this.name = name
         this.surname = surname

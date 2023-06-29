@@ -105,7 +105,7 @@ class Student : Serializable {
         updateAttendancePercentage()
     }
     fun updateAttendancePercentage(){
-        attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
+        attendancepercentage = kotlin.math.round(cantidadDePresentes() * (100.00 / 6))
     }
 
     fun attendancePercentage(): Double{

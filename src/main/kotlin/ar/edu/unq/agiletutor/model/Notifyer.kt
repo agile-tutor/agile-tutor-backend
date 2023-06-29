@@ -22,6 +22,8 @@ class Notifyer {
 
     var subjectmail: String = "ASISTENCIAS - TVU"
 
+/*    @OneToOne(mappedBy = "notifyer")
+    var tutor: Tutor? = null*/
 
     fun setAbsents(absents: MutableSet<Student>) {
         absent = absents
@@ -54,15 +56,18 @@ class Notifyer {
         this.subjectmail = text
     }
 
-    /*
-        fun addabsent(student: Student) {
-            this.absent.add(student)
-        }
+    fun addabsent(student: Student) {
+        this.absent.add(student)
+    }
 
-        fun delabsent(student: Student) {
-            this.absent.remove(student)
-        }
-    */
+    fun addAllbsent(students: MutableSet<Student>) {
+        this.absent.addAll(students)
+    }
+
+    fun delabsent(student: Student) {
+        this.absent.remove(student)
+    }
+
     fun removeall() {
         // val studentsToRemove: MutableSet<Student> = this.absent
         //this.absent.removeAll(studentsToRemove)

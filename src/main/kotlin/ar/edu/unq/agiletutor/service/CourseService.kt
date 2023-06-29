@@ -155,8 +155,8 @@ class CourseService {
 
         }
         repository.save(course)
-        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(studentAttendances.first().attendance.day!!).toMutableSet()
-        senderService.saveAllAbsent(students)
+        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(id, studentAttendances.first().attendance.day!!).toMutableSet()
+        senderService.saveAllAbsent(students, course.tutor!!.notifyer!!)
 
     }
 

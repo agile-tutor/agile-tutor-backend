@@ -57,5 +57,4 @@ class Course : Serializable {
         dateclasses.toMutableList().set(day.dec(), dateclass)
         return this
     }
-
 }

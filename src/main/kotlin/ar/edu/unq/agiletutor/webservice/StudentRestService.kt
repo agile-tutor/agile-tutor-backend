@@ -18,9 +18,6 @@ class StudentRestService {
     private val builder: ResponseEntity.BodyBuilder? = null
 
     @Autowired
-    private lateinit var emailService: EmailServiceImpl
-
-    @Autowired
     private lateinit var courseService: CourseService
 
     /**register a student*/
@@ -108,8 +105,8 @@ class StudentRestService {
     /**update attendances for a student */
     @PostMapping("/api/students/attendances/update/{id}")
     fun updateAttendancesForAStudent(
-        @PathVariable("id") id: Int,
-        @RequestBody attendances: List<AttendanceDTO>
+            @PathVariable("id") id: Int,
+            @RequestBody attendances: List<AttendanceDTO>
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
@@ -198,7 +195,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
         try {
             val studentsAttendedAtAParticularDay =
-                studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+                    studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
             response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
         } catch (e: Exception) {
             ResponseEntity.status(404)
@@ -216,7 +213,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
         try {
             val studentsAttendedAtAParticularDay =
-                studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+                    studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
 
             response = ResponseEntity.ok().body(studentsAttendedAtAParticularDay)
         } catch (e: Exception) {
@@ -238,14 +235,6 @@ class StudentRestService {
         return ResponseEntity.ok().body(student)
     }
 
-    /**Students From a Course*/
-    @GetMapping("/api/students/toNotify")
-    fun studentsToNotify(): ResponseEntity<*> {
-        val students = emailService.studentsToNotify()
-        return ResponseEntity.ok().body(students)
-    }
-
-
     /**check mail **/
     @GetMapping("/api/students/checkmail/{email}")
     fun checkMail(@PathVariable("email") email: String): ResponseEntity<*> {
@@ -256,8 +245,8 @@ class StudentRestService {
     /**post survey for a student */
     @PostMapping("/api/students/survey/{email}/")
     fun studentSurveyResponse(
-        @PathVariable("email") email: String,
-        @RequestBody survey: SurveyDataDTO
+            @PathVariable("email") email: String,
+            @RequestBody survey: SurveyDataDTO
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
@@ -279,24 +268,25 @@ class StudentRestService {
 
     /** register Many students */
     @PostMapping("/api/students/many/register/{id}")
-    fun registerMany(@PathVariable("id") id: Int,@RequestBody studentdata: MutableList<StudentFromACourseDTO>): ResponseEntity<*> {
+    fun registerMany(@PathVariable("id") id: Int, @RequestBody studentdata: MutableList<StudentFromACourseDTO>): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
             val course = courseService.findByID(id)
             val studentsview =
-                studentService.registerMany(studentdata.map
-            {
-                StudentFromACourseDTO(
-                    it.id,
-                    it.name,
-                    it.surname,
-                    it.identifier,
-                    it.email,
-                    id
-                ).aModelo(course)}.toMutableList()).map { StudentFromACourseDTO.desdeModelo(it)}
-           ResponseEntity.status(201)
-           response = ResponseEntity.ok().body(studentsview)
+                    studentService.registerMany(studentdata.map
+                    {
+                        StudentFromACourseDTO(
+                                it.id,
+                                it.name,
+                                it.surname,
+                                it.identifier,
+                                it.email,
+                                id
+                        ).aModelo(course)
+                    }.toMutableList()).map { StudentFromACourseDTO.desdeModelo(it) }
+            ResponseEntity.status(201)
+            response = ResponseEntity.ok().body(studentsview)
 
 
         } catch (e: Exception) {

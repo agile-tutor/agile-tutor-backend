@@ -155,12 +155,12 @@ class StudentService {
     }
 
     @Transactional
-    fun studentsNotBlockedAbsentAtAParticularDay(day: Int): List<Student> {
+    fun studentsNotBlockedAbsentAtAParticularDay(courseId: Int, day: Int): List<Student> {
         val rangedays = (1..6)
         if (! rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
-        return findAll().filter { ! it.attendedDay(day)  && ( ! it.blocked ) }
+        return findAll().filter { it.course!!.id == courseId && (! it.attendedDay(day))  && ( ! it.blocked ) }
     }
 
 
