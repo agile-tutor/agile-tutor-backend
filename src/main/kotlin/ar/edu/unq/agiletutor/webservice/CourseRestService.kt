@@ -27,7 +27,7 @@ class CourseRestService {
 
         try {
             val tutor = tutorService.findByID(coursedata.tutorId)
-            val courseview = courseService.register(coursedata.aModelo(tutor))
+            val courseview = CourseDTO.desdeModelo(courseService.register(coursedata.aModelo(tutor)))
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(courseview)
         } catch (e: Exception) {
@@ -61,6 +61,24 @@ class CourseRestService {
             ResponseEntity.status(404)
             val resultado: MutableMap<String, String> = HashMap()
             resultado["course with id not found"] = id.toString()
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+    }
+
+    /**get course by name**/
+    @GetMapping("/api/course/{name}")
+    fun courserById(@PathVariable("name") name: String): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+
+        try {
+            val courseView = CourseDTO.desdeModelo(courseService.findByName(name))
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(courseView)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["course with name not found"] = name
             response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!

@@ -2,10 +2,7 @@ package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
-import ar.edu.unq.agiletutor.model.Course
-import ar.edu.unq.agiletutor.model.Student
-import ar.edu.unq.agiletutor.model.Survey
-import ar.edu.unq.agiletutor.model.Tutor
+import ar.edu.unq.agiletutor.model.*
 import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import ar.edu.unq.agiletutor.persistence.SurveyRepository
@@ -44,7 +41,7 @@ class TutorService {
         if (existByEmail(tutor.email!!)) {
             throw UsernameExistException("Tutor with email:  ${tutor.email} is used")
         }
-
+        tutor.notifyer = Notifyer()
         return repository.save(tutor)
     }
 
@@ -146,8 +143,8 @@ class TutorService {
     }
 
     @Transactional
-    fun absentMessageFromTutor(): AbsentMessageDataDTO {
-        val notifyer = senderService.getNotifyer()
+    fun absentMessageFromTutor(notifyer: Notifyer): AbsentMessageDataDTO {
+//        val notifyer = senderService.getNotifyer()
         var subjectEmail = notifyer.getSubjectEmail()
         var bodyEmail = notifyer.getTextEmailForEdit()
 
@@ -155,14 +152,26 @@ class TutorService {
     }
 
     @Transactional
-    fun updateAbsentMessageFromTutor(updatedMessageDataDTO: AbsentMessageDataDTO): AbsentMessageDataDTO {
-        senderService.changeSubjectText(updatedMessageDataDTO.subject)
-        senderService.changeBodyText(updatedMessageDataDTO.body)
-        return this.absentMessageFromTutor()
+    fun updateAbsentMessageFromTutor(updatedMessageDataDTO: AbsentMessageDataDTO, notifyer: Notifyer): AbsentMessageDataDTO {
+        senderService.changeSubjectText(updatedMessageDataDTO.subject, notifyer)
+        senderService.changeBodyText(updatedMessageDataDTO.body, notifyer)
+        return this.absentMessageFromTutor(notifyer)
     }
 
     @Transactional
     fun getAllSurveys(): List<Survey> {
         return surveyRepository.findAll() as List<Survey>
+    }
+
+    @Transactional
+    fun removeAnStudentFromNotification(tutorId: Int, studentId: Int) {
+        val notifyer = this.findByID(tutorId).notifyer
+        senderService.removeStudentFromNotify(notifyer!!, studentId)
+    }
+
+    @Transactional
+    fun studentsToNotifyFromTutor(tutorId: Int): List<StudentDTO> {
+        val notifyer = this.findByID(tutorId).notifyer
+        return senderService.studentsToNotify(notifyer!!)
     }
 }

@@ -99,15 +99,13 @@ class Student : Serializable {
   */
 
     fun updateAttendanceAtADay (attendance: Attendance) {
-        println("updateatendance"+attendance.toString())
-        attendances.toMutableList().set(attendance.day!!, attendance)
+        println("updateatendance"+attendance.toString()+attendance.id+attendance.attended)
+        //attendances.toMutableList().set(attendance.day!!, attendance)
+        attendances.find { it.day == attendance.day }?.attended = attendance.attended
         updateAttendancePercentage()
     }
-
-
-
     fun updateAttendancePercentage(){
-        attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
+        attendancepercentage = kotlin.math.round(cantidadDePresentes() * (100.00 / 6))
     }
 
     fun attendancePercentage(): Double{
