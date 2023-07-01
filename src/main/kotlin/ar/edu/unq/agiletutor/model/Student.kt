@@ -116,4 +116,13 @@ class Student : Serializable {
         // return ( attendances.size == cantidadDePresentes() )
         return attendances.all { it.attended }
     }
+
+    fun approvedAccordingPercentageDefault(percentage:Double):Boolean{
+        return  ( attendancePercentage() >= kotlin.math.round(percentage) )
+    }
+
+    fun fillSurvey(studentsIds : List <Long>):Boolean{
+        return  (studentsIds.contains(id!!))
+    }
+
 }

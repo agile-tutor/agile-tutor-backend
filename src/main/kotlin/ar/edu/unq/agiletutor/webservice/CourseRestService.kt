@@ -68,7 +68,7 @@ class CourseRestService {
 
     /**get course by name**/
     @GetMapping("/api/course/{name}")
-    fun courserById(@PathVariable("name") name: String): ResponseEntity<*> {
+    fun courserByName(@PathVariable("name") name: String): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -128,9 +128,9 @@ class CourseRestService {
         var response: ResponseEntity<*>?
 
         try {
-        val courses = courseService.studentsFromACourse(id).map { StudentDTO.desdeModelo(it) }
+        val students = courseService.studentsFromACourse(id).map { StudentDTO.desdeModelo(it) }
         ResponseEntity.status(200)
-        response = ResponseEntity.ok().body(courses)
+        response = ResponseEntity.ok().body(students)
     } catch (e: Exception) {
         ResponseEntity.status(404)
 
@@ -177,6 +177,60 @@ class CourseRestService {
         val averageAttendances = courseService.averageAttendancesFromACourse(id)
 
         return ResponseEntity.ok().body(averageAttendances)
+    }
+
+
+    /**  Marked Down attendances at a particular day*/
+    @GetMapping("/api/course/attendances/{id}")
+    fun markedDownAttendanceAFromACourseATaParticularDay( @PathVariable("id") id: Int, @PathVariable("day") day: Int): ResponseEntity<*> {
+
+        val narkedDown = courseService.markedDownAttendanceAFromACourseATaParticularDay(id,day)
+
+        return ResponseEntity.ok().body(narkedDown)
+    }
+
+
+    /**Students approved From a Course*/
+    @GetMapping("/api/course/students/approved/{id}")
+    fun studentsApprovedFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+
+        try {
+            val students = courseService.studentsApprovedFromACourse(id).map { StudentDTO.desdeModelo(it) }
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(students)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Not found Course with id"] = id.toString()
+
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+
+    }
+
+
+    /**Students fill the survey From a Course*/
+    @GetMapping("/api/course/students/survey/{id}")
+    fun studentsFillSurveyFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+
+        try {
+            val students = courseService.studentsFillSurveydFromACourse(id).map { StudentDTO.desdeModelo(it) }
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(students)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Not found Course with id"] = id.toString()
+
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+
     }
 
 

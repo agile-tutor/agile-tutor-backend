@@ -27,6 +27,9 @@ class CourseService {
     @Autowired
     private lateinit var senderService: EmailServiceImpl
 
+    @Autowired
+    private lateinit var surveyService: SurveyService
+
    // @Autowired
    // private lateinit var attendanceRepository: AttendanceRepository
 
@@ -87,6 +90,19 @@ class CourseService {
         return course.students.toMutableList()
     }
 
+    @Transactional
+    fun studentsApprovedFromACourse(id: Int): List<Student> {
+        val course = findByID(id)
+        return course.students.toMutableList().filter{it.approvedAccordingPercentageDefault(course.percentageApprovedDefault)}
+    }
+
+    @Transactional
+    fun studentsFillSurveydFromACourse(id: Int): List<Student> {
+        val course = findByID(id)
+        val studentsIds= surveyService.findAll().toMutableList().map{it.studentId}
+        return course.students.toMutableList().filter{it.fillSurvey(studentsIds)}
+    }
+
 
 
     @Transactional
@@ -100,10 +116,15 @@ class CourseService {
     }
 
        @Transactional
-       fun markdownAttendance(course:Course, day:Int) {
-           val dateclass = course.dateclasses.toMutableList().get(day)
+       fun markdownAttendance(course:Course, day:Int): Course {
+           val rangedays = (1..6)
+           if (! rangedays.contains(day)) {
+               throw ItemNotFoundException(" Day:  $day invalid")
+           }
+           val dateclass = course.dateclasses.toMutableList().get(day.dec())
            dateclass.passed = true
-           course.dateclasses.toMutableList().set(day, dateclass)
+           course.dateclasses.toMutableList().set(day.dec(), dateclass)
+           return  repository.save(course)
         }
 
 /*
@@ -144,9 +165,9 @@ class CourseService {
     fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List<StudentAttendanceDTO>) {
         val course = findByID(id)
         println(course.toString()+"courseupdateget")
-        // markdownAttendance(course, studentAttendances.first().attendance.day!!)
- //       course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
-        println(course.toString()+"courseupdatepostmark")
+       val courseMarked =  markdownAttendance(course, studentAttendances.first().attendance.day!!)
+         //course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
+        println(courseMarked.toString()+"courseupdatepostmark")
         for (studentAttendance in studentAttendances) {
             println(studentAttendance.toString()+"courseupdateattendancesfor")
             val student =  studentService.findByID(studentAttendance.studentId.toLong())
@@ -154,7 +175,7 @@ class CourseService {
             student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
 
         }
-        repository.save(course)
+        repository.save(courseMarked)
         val students = studentService.studentsNotBlockedAbsentAtAParticularDay(id, studentAttendances.first().attendance.day!!).toMutableSet()
         senderService.saveAllAbsent(students, course.tutor!!.notifyer!!)
 
@@ -196,6 +217,13 @@ class CourseService {
         course.students.remove(student)
         repository.save(course)
     }
+
+    @Transactional
+   fun markedDownAttendanceAFromACourseATaParticularDay(id:Int,day:Int):Boolean {
+        val course = findByID(id)
+        return course.narkedDowndDay(day)
+
+   }
 
 
 

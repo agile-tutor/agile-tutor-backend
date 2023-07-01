@@ -33,7 +33,11 @@ class TutorService {
     private lateinit var senderService: EmailServiceImpl
 
     @Autowired
-    private lateinit var surveyRepository: SurveyRepository
+    private lateinit var surveyService: SurveyService
+
+   // @Autowired
+   // private lateinit var surveyRepository: SurveyRepository
+
 
     @Transactional
     fun register(tutor: Tutor): Tutor {
@@ -160,7 +164,7 @@ class TutorService {
 
     @Transactional
     fun getAllSurveys(): List<Survey> {
-        return surveyRepository.findAll() as List<Survey>
+        return surveyService.findAll()
     }
 
     @Transactional
