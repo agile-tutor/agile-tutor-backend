@@ -225,7 +225,10 @@ class CourseService {
 
    }
 
-
+    @Transactional
+       fun percentageByDefault():Double{
+           return findAll().toMutableList().first().percentageApprovedDefault
+       }
 
 
 

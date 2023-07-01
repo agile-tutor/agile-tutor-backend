@@ -178,4 +178,9 @@ class TutorService {
         val notifyer = this.findByID(tutorId).notifyer
         return senderService.studentsToNotify(notifyer!!)
     }
+
+
+    fun percentageByDefault():Double{
+        return  courseService.percentageByDefault()
+    }
 }

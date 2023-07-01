@@ -302,4 +302,13 @@ class TutorRestService {
         }
         return response!!
     }
+
+    /**Percentage by Default */
+    @GetMapping("/api/tutor/pecentagebydefault")
+    fun percentageByDefault(): ResponseEntity<*> {
+        val percentageByDefault= tutorService.percentageByDefault()
+
+        return ResponseEntity.ok().body(percentageByDefault)
+    }
+
 }
