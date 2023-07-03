@@ -30,8 +30,9 @@ class CourseService {
     @Autowired
     private lateinit var surveyService: SurveyService
 
-   // @Autowired
-   // private lateinit var attendanceRepository: AttendanceRepository
+    @Autowired
+    private lateinit var percentageService: PercentageService
+
 
     @Transactional
     fun register(course: Course): Course {
@@ -93,7 +94,8 @@ class CourseService {
     @Transactional
     fun studentsApprovedFromACourse(id: Int): List<Student> {
         val course = findByID(id)
-        return course.students.toMutableList().filter{it.approvedAccordingPercentageDefault(course.percentageApprovedDefault)}
+        val percentageByDefault = percentageService.percentageByDefault()
+        return course.students.toMutableList().filter{it.approvedAccordingPercentageDefault(percentageByDefault)}
     }
 
     @Transactional
@@ -165,9 +167,9 @@ class CourseService {
     fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List<StudentAttendanceDTO>) {
         val course = findByID(id)
         println(course.toString()+"courseupdateget")
-       val courseMarked =  markdownAttendance(course, studentAttendances.first().attendance.day!!)
-         //course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
-        println(courseMarked.toString()+"courseupdatepostmark")
+      // val courseMarked =  markdownAttendance(course, studentAttendances.first().attendance.day!!)
+        course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
+        println(course.toString()+"courseupdatepostmark")
         for (studentAttendance in studentAttendances) {
             println(studentAttendance.toString()+"courseupdateattendancesfor")
             val student =  studentService.findByID(studentAttendance.studentId.toLong())
@@ -175,7 +177,7 @@ class CourseService {
             student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
 
         }
-        repository.save(courseMarked)
+        repository.save(course)
         val students = studentService.studentsNotBlockedAbsentAtAParticularDay(id, studentAttendances.first().attendance.day!!).toMutableSet()
         senderService.saveAllAbsent(students, course.tutor!!.notifyer!!)
 
@@ -221,16 +223,9 @@ class CourseService {
     @Transactional
    fun markedDownAttendanceAFromACourseATaParticularDay(id:Int,day:Int):Boolean {
         val course = findByID(id)
-        return course.narkedDowndDay(day)
+        return course.markedDowndDay(day)
 
    }
-
-    @Transactional
-       fun percentageByDefault():Double{
-           return findAll().toMutableList().first().percentageApprovedDefault
-       }
-
-
 
 
 

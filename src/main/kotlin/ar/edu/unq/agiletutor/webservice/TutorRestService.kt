@@ -303,12 +303,20 @@ class TutorRestService {
         return response!!
     }
 
-    /**Percentage by Default */
+
+    /** Get the percentage by Default */
     @GetMapping("/api/tutor/pecentagebydefault")
     fun percentageByDefault(): ResponseEntity<*> {
         val percentageByDefault= tutorService.percentageByDefault()
 
         return ResponseEntity.ok().body(percentageByDefault)
+    }
+
+    /** Update Percentage by Default */
+    @PostMapping("/api/tutor/pecentagebydefault/{percentage}")
+    fun updatePercentageByDefault(@PathVariable("percentage") percentage: Int): ResponseEntity<*> {
+      val  percentage = tutorService.updatePercentageByDefault(percentage.toDouble())
+        return ResponseEntity.ok().body(percentage)
     }
 
 }

@@ -27,6 +27,9 @@ class TutorService {
     private lateinit var courseService: CourseService
 
     @Autowired
+    private lateinit var percentageService: PercentageService
+
+    @Autowired
     private lateinit var studentService: StudentService
 
     @Autowired
@@ -179,8 +182,14 @@ class TutorService {
         return senderService.studentsToNotify(notifyer!!)
     }
 
-
+    @Transactional
     fun percentageByDefault():Double{
-        return  courseService.percentageByDefault()
+        return  percentageService.percentageByDefault()
+    }
+
+
+    @Transactional
+    fun updatePercentageByDefault(percentage:Double):PercentageByDefault {
+        return  percentageService.updatePercentageByDefault(percentage)
     }
 }

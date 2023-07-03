@@ -27,13 +27,13 @@ internal class CourseTest{
 
         val tutor1 = Tutor(0, "tutor1", "ape1", "tutor1@gmail.com", "passtut1", mutableSetOf())
 
-        course = Course(0, "c0", mutableSetOf(), tutor1, mutableSetOf(),0.00)
+        course = Course(0, "c0", mutableSetOf(), tutor1, mutableSetOf())
         val dateclasses = mutableSetOf<DateClass>()
         for (i in (1..6)) {
             dateclasses.add(DateClass(0,i, false,course))
         }
 
-        course = Course(0, "c0", mutableSetOf(), tutor1, dateclasses, 0.00)
+        course = Course(0, "c0", mutableSetOf(), tutor1, dateclasses)
 
 
     }

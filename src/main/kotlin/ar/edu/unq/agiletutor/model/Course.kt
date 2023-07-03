@@ -32,8 +32,7 @@ class Course : Serializable {
     @OneToMany( mappedBy = "course",cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var dateclasses: MutableSet<DateClass> = HashSet()
 
-    @Column (nullable = false)
-    var percentageApprovedDefault: Double = 75.00
+
 
     constructor() : super() {}
     constructor(
@@ -41,8 +40,8 @@ class Course : Serializable {
         name: String?,
         students: MutableSet<Student>,
         tutor: Tutor?,
-        dateclasses: MutableSet<DateClass>,
-        percentageApprovedDefault:Double
+        dateclasses: MutableSet<DateClass>
+
 
     ) : super() {
         this.id = id
@@ -50,7 +49,8 @@ class Course : Serializable {
         this.students = students
         this.tutor = tutor
         this.dateclasses = dateclasses
-        this.percentageApprovedDefault= percentageApprovedDefault}
+
+    }
 
     fun markAttendanceAtaDay(day :Int):Course {
         val rangedays = (1..6)
@@ -63,9 +63,10 @@ class Course : Serializable {
         return this
     }
 
-    fun narkedDowndDay(day: Int): Boolean {
+    fun markedDowndDay(day: Int): Boolean {
         return dateclasses.any { it.day == day && it.passed }
     }
 
 
 }
+

@@ -1,9 +1,6 @@
 package ar.edu.unq.agiletutor.service
 
-import ar.edu.unq.agiletutor.model.Attendance
-import ar.edu.unq.agiletutor.model.Course
-import ar.edu.unq.agiletutor.model.Student
-import ar.edu.unq.agiletutor.model.Tutor
+import ar.edu.unq.agiletutor.model.*
 import jakarta.annotation.PostConstruct
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +16,9 @@ class InitService {
 
     @Value("\${spring.datasource.driverClassName:NONE}")
     private val className: String? = null
+
+    @Autowired
+    private val percentageService: PercentageService? = null
 
     @Autowired
     private val studentService: StudentService? = null
@@ -41,6 +41,9 @@ class InitService {
     }
 
     private fun fireInitialData() {
+        val percentageByDefault = PercentageByDefault(1,75.00)
+        percentageService!!.register(percentageByDefault)
+
 
         val tutor1 = Tutor(0, "tutor1", "ape1", "tutor1@gmail.com", "passtut1", mutableSetOf())
         val tutor2 = Tutor(0, "tutor2", "ape2", "tutor2@gmail.com", "passtut2", mutableSetOf())
