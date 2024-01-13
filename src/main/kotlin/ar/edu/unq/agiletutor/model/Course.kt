@@ -1,6 +1,7 @@
 package ar.edu.unq.agiletutor.model
 
 import ar.edu.unq.agiletutor.ItemNotFoundException
+import ar.edu.unq.agiletutor.service.DayBooleanDTO
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
@@ -11,9 +12,9 @@ import java.io.Serializable
 class Course : Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_course")
-    var id: Int? = null
+    var id: Int = 0
 
     @Column(nullable = false)
     @NotNull("El nonbre es obligatorio")
@@ -36,7 +37,7 @@ class Course : Serializable {
 
     constructor() : super() {}
     constructor(
-        id: Int?,
+        id: Int,
         name: String?,
         students: MutableSet<Student>,
         tutor: Tutor?,
@@ -67,6 +68,23 @@ class Course : Serializable {
         return dateclasses.any { it.day == day && it.passed }
     }
 
+    fun attendedAtDays(): MutableSet<DayBooleanDTO> {
+        val daysAttended: MutableSet<DayBooleanDTO> = HashSet()
+        val day1 = students.filter { it.attendedDay(1) }.size
+        val day2 = students.filter { it.attendedDay(2) }.size
+        val day3 = students.filter { it.attendedDay(3) }.size
+        val day4 = students.filter { it.attendedDay(4) }.size
+        val day5 = students.filter { it.attendedDay(5) }.size
+        val day6 = students.filter { it.attendedDay(6) }.size
 
+        daysAttended.add(DayBooleanDTO(1, day1 > 0))
+        daysAttended.add(DayBooleanDTO(2, day2 > 0))
+        daysAttended.add(DayBooleanDTO(3, day3 > 0))
+        daysAttended.add(DayBooleanDTO(4, day4 > 0))
+        daysAttended.add(DayBooleanDTO(5, day5 > 0))
+        daysAttended.add(DayBooleanDTO(6, day6 > 0))
+
+        return daysAttended
+    }
 }
 

@@ -1,12 +1,10 @@
 package ar.edu.unq.agiletutor.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.io.Serializable
 
-
+@Entity
+@Table(name = "percent")
 class PercentageByDefault: Serializable {
 
     @Id

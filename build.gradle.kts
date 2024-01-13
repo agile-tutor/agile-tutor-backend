@@ -6,6 +6,7 @@ plugins {
     id("java")
     id("idea")
     id("eclipse")
+    id("jacoco")
 
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"
@@ -45,6 +46,24 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
+}
+
+jacoco {
+    toolVersion = "0.8.9"
+    reportsDirectory.set(layout.buildDirectory.dir("customJacocoReportDir"))
+}
+
+tasks.withType<JacocoReport> {
+    reports {
+        xml.required.set(true)
+        csv.required.set(true)
+        html.required.set(true)
+    }
+}
+
 tasks.withType<Test> {
-    useJUnitPlatform()
+    useJUnitPlatform() // Note: automatically generated when creating project
+    finalizedBy(tasks.jacocoTestReport)
 }

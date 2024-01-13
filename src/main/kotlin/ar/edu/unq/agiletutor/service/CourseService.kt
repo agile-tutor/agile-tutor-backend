@@ -40,7 +40,7 @@ class CourseService {
         if (existSCourse(course)) {
             throw UsernameExistException("Course with name:  ${course.name} is used")
         }
-
+        println("iddelcurso111"+course.id)
         return repository.save(course)
     }
 
@@ -227,7 +227,11 @@ class CourseService {
 
    }
 
-
+    @Transactional
+    fun attendedAtDay(id: Int): MutableSet<DayBooleanDTO> {
+        val course = findByID(id)
+        return course.attendedAtDays()
+    }
 
     //  @Transactional
    // fun updateStudentsAttendancesFromACourse(courseId: Int, studentAttendance: List<StudentAttendanceDTO>) {

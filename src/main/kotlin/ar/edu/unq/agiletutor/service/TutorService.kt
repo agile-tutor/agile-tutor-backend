@@ -140,7 +140,7 @@ class TutorService {
     fun moveAStudentIntoAnotherCourse(id: Long, id_course: Int)/*:Student*/ {
         val courseMoved = courseService.findByID(id_course)
         val student = studentService.findByID(id)
-        val course = courseService.findByID(student.course!!.id!!)
+        val course = courseService.findByID(student.course!!.id)
         if (courseMoved.id == course.id) {
             throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
         }

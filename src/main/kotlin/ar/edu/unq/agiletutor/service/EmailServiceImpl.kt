@@ -122,7 +122,7 @@ class EmailServiceImpl {
         var notifyers = notifyerRepository.findAll()
         for (notifyer in notifyers) {
 
-            val absents = notifyer!!.getabsent()
+            val absents = notifyer.getabsent()
             println("todes" + absents.size)
             for (absent in absents) {
                 sendSimpleMessage(absent.email!!, notifyer.getSubjectEmail(), notifyer.getTextEmail(absent.name!!))
@@ -157,7 +157,7 @@ class EmailServiceImpl {
 
     fun studentsToNotify(notifyer: Notifyer): List<StudentDTO> {
 //        val notifyer: Notifyer = getNotifyer()
-        return notifyer.getAbsentToNotify()!!.map { StudentDTO.desdeModelo(it) }
+        return notifyer.getAbsentToNotify().map { StudentDTO.desdeModelo(it) }
     }
 
     fun removeStudentFromNotify(notifyer: Notifyer, studentId: Int) {

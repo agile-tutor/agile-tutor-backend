@@ -28,7 +28,7 @@ data class StudentFromACourseDTO(
                 student.surname,
                 student.identifier,
                 student.email,
-                student.course!!.id!!
+                student.course!!.id
             )
         }
 
@@ -68,7 +68,7 @@ data class ManyStudentsFromACourse(
                 it.surname,
                 it.identifier,
                 it.email,
-                course.id!!
+                course.id
             ).aModelo(course)
         }.toMutableList()
 
@@ -108,7 +108,7 @@ data class StudentRegisterDTO(
                   //  student.attendancepercentage,
                    student.observations,
                    // student.blocked,
-                    student.course!!.id!!
+                    student.course!!.id
             )
         }
     }
@@ -164,7 +164,7 @@ data class StudentDTO(
                     student.attendancepercentage,
                     student.observations,
                     student.blocked,
-                    student.course!!.id!!
+                    student.course!!.id
 
             )
         }

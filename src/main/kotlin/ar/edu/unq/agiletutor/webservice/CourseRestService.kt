@@ -28,6 +28,7 @@ class CourseRestService {
         try {
             val tutor = tutorService.findByID(coursedata.tutorId)
             val courseview = CourseDTO.desdeModelo(courseService.register(coursedata.aModelo(tutor)))
+            println("iddelcurso2"+courseview.id)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(courseview)
         } catch (e: Exception) {
@@ -233,7 +234,25 @@ class CourseRestService {
 
     }
 
+    /** Course attended at days*/
+    @GetMapping("/api/course/attended/{course}")
+    fun courseAttendedAtDay(@PathVariable("course") course_id: Int)
+            : ResponseEntity<*> {
+        var response: ResponseEntity<*>?
 
+        try {
+            val result = courseService.attendedAtDay(course_id)
+            ResponseEntity.status(200)
+            response = ResponseEntity.ok().body(result)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["Course with Id not found"] = course_id.toString()
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+    }
 
 
 

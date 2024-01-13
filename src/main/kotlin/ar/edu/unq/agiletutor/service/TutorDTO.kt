@@ -66,7 +66,7 @@ data class TutorDTO(
 
 data class CourseRegisterDTO(
 
-    var id: Int?,
+    var id: Int,
     var name: String?,
     var tutorId: Int
 
@@ -85,6 +85,7 @@ data class CourseRegisterDTO(
         course.name = name
         course.students = mutableSetOf()
         course.tutor = tutor
+        println("iddelcurso"+course.id)
         return course
     }
 }
@@ -92,12 +93,13 @@ data class CourseRegisterDTO(
 
 
 data class CourseDTO(
-    var id: Int?,
+    var id: Int,
     var name: String?,
 
     ) {
     companion object {
         fun desdeModelo(course: Course): CourseDTO {
+            println("iddelcurso11"+course.id)
             return CourseDTO(course.id, course.name)
         }
     }
