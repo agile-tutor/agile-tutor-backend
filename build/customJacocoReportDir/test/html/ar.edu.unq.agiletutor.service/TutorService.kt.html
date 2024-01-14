@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TutorService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.service</a> &gt; <span class="el_source">TutorService.kt</span></div><h1>TutorService.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.service
+
+import ar.edu.unq.agiletutor.ItemNotFoundException
+import ar.edu.unq.agiletutor.UsernameExistException
+import ar.edu.unq.agiletutor.model.*
+import ar.edu.unq.agiletutor.persistence.CourseRepository
+import ar.edu.unq.agiletutor.persistence.StudentRepository
+import ar.edu.unq.agiletutor.persistence.SurveyRepository
+import ar.edu.unq.agiletutor.persistence.TutorRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+<span class="fc" id="L14">@Service</span>
+<span class="fc" id="L15">class TutorService {</span>
+
+    @Autowired
+    private lateinit var repository: TutorRepository
+
+    @Autowired
+    private lateinit var courseRepository: CourseRepository
+
+    @Autowired
+    private lateinit var studentRepository: StudentRepository
+
+    @Autowired
+    private lateinit var courseService: CourseService
+
+    @Autowired
+    private lateinit var percentageService: PercentageService
+
+    @Autowired
+    private lateinit var studentService: StudentService
+
+    @Autowired
+    private lateinit var senderService: EmailServiceImpl
+
+    @Autowired
+    private lateinit var surveyService: SurveyService
+
+   // @Autowired
+   // private lateinit var surveyRepository: SurveyRepository
+
+
+    @Transactional
+    fun register(tutor: Tutor): Tutor {
+
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (existByEmail(tutor.email!!)) {</span>
+<span class="fc" id="L49">            throw UsernameExistException(&quot;Tutor with email:  ${tutor.email} is used&quot;)</span>
+        }
+<span class="fc" id="L51">        tutor.notifyer = Notifyer()</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        return repository.save(tutor)</span>
+    }
+
+    @Transactional
+    fun findAll(): List&lt;Tutor&gt; {
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        return repository.findAll()</span>
+    }
+
+    private fun existByEmail(email: String): Boolean {
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        val tutores = repository.findAll().toMutableList()</span>
+<span class="fc" id="L62">        return tutores.any { it.email == email }</span>
+    }
+
+    @Transactional
+    fun login(email: String, password: String): Tutor {
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        val tutors = repository.findAll()</span>
+<span class="pc bpc" id="L68" title="3 of 10 branches missed.">        return tutors.find { (it.email == email) &amp;&amp; (it.password == password) }</span>
+<span class="fc" id="L69">                ?: throw ItemNotFoundException(&quot;Not found tutor&quot;)</span>
+    }
+
+    @Transactional
+    fun findByID(id: Int): Tutor {
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        val tutor = repository.findById(id)</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (!(tutor.isPresent)) {</span>
+<span class="fc" id="L76">            throw ItemNotFoundException(&quot;Tutor with Id:  $id not found&quot;)</span>
+        }
+<span class="fc" id="L78">        return tutor.get()</span>
+    }
+
+    @Transactional
+    fun findByEmail(email: String): Tutor {
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        val tutors = repository.findAll()</span>
+<span class="nc bnc" id="L84" title="All 6 branches missed.">        return tutors.find { (it.email == email) } ?: throw ItemNotFoundException(&quot;Not found Tutor&quot;)</span>
+    }
+
+    @Transactional
+    fun deleteById(id: Int) {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        val tutor = repository.findById(id)</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (!(tutor.isPresent)) {</span>
+<span class="fc" id="L91">            throw ItemNotFoundException(&quot;Tutor with Id:  $id not found&quot;)</span>
+        }
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        repository.deleteById(id)</span>
+<span class="fc" id="L94">    }</span>
+
+    @Transactional
+    fun update(id: Int, entity: TutorRegisterDTO): Tutor {
+<span class="fc" id="L98">        val tutor = findByID(id)</span>
+<span class="fc" id="L99">        tutor.email = entity.email</span>
+<span class="fc" id="L100">        tutor.name = entity.name</span>
+<span class="fc" id="L101">        tutor.surname = entity.surname</span>
+<span class="fc" id="L102">        tutor.password = entity.password</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        return repository.save(tutor)</span>
+    }
+
+    @Transactional
+    fun coursesFromATutor(id: Int): MutableList&lt;Course&gt; {
+<span class="nc" id="L108">        val tutor = findByID(id)</span>
+<span class="nc" id="L109">        return tutor.courses.toMutableList()</span>
+    }
+
+    @Transactional
+    fun studentsFromATutor(id: Int): List&lt;Student&gt; {
+<span class="nc" id="L114">        val students = mutableListOf&lt;Student&gt;()</span>
+<span class="nc" id="L115">        val tutor = findByID(id)</span>
+<span class="nc" id="L116">        val courses = tutor.courses</span>
+        // val courses = coursesFromATutor(id)
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        for (course in courses) {</span>
+<span class="nc" id="L119">            students.addAll(course.students)</span>
+        }
+<span class="nc" id="L121">        return students</span>
+    }
+
+    @Transactional
+    fun addAStudentToACourse(student: Student, course: Course)/*:Student*/ {
+<span class="fc" id="L126">        student.course = course</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        /*val studentRegistered=*/ studentRepository.save(student)</span>
+        // course.students.add(student)
+        //courseRepository.save(course)
+        //return studentRegistered
+<span class="fc" id="L131">    }</span>
+
+    @Transactional
+    fun removeAStudentFromACourse(student: Student, course: Course) {
+<span class="nc" id="L135">        course.students.remove(student)</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        courseRepository.save(course)</span>
+<span class="nc" id="L137">    }</span>
+
+    @Transactional
+    fun moveAStudentIntoAnotherCourse(id: Long, id_course: Int)/*:Student*/ {
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        val courseMoved = courseService.findByID(id_course)</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        val student = studentService.findByID(id)</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        val course = courseService.findByID(student.course!!.id)</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (courseMoved.id == course.id) {</span>
+<span class="nc" id="L145">            throw UsernameExistException(&quot;Do not can moved a student to the same course:  ${course.id}&quot;)</span>
+        }
+<span class="nc" id="L147">        /*val studentRegistered = */addAStudentToACourse(student, courseMoved)</span>
+<span class="nc" id="L148">        removeAStudentFromACourse(student, student.course!!)</span>
+        /*return studentRegistered*/
+<span class="nc" id="L150">    }</span>
+
+    @Transactional
+    fun absentMessageFromTutor(notifyer: Notifyer): AbsentMessageDataDTO {
+//        val notifyer = senderService.getNotifyer()
+<span class="nc" id="L155">        var subjectEmail = notifyer.getSubjectEmail()</span>
+<span class="nc" id="L156">        var bodyEmail = notifyer.getTextEmailForEdit()</span>
+
+<span class="nc" id="L158">        return AbsentMessageDataDTO(subjectEmail, bodyEmail)</span>
+    }
+
+    @Transactional
+    fun updateAbsentMessageFromTutor(updatedMessageDataDTO: AbsentMessageDataDTO, notifyer: Notifyer): AbsentMessageDataDTO {
+<span class="nc bnc" id="L163" title="All 2 branches missed.">        senderService.changeSubjectText(updatedMessageDataDTO.subject, notifyer)</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        senderService.changeBodyText(updatedMessageDataDTO.body, notifyer)</span>
+<span class="nc" id="L165">        return this.absentMessageFromTutor(notifyer)</span>
+    }
+
+    @Transactional
+    fun getAllSurveys(): List&lt;Survey&gt; {
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        return surveyService.findAll()</span>
+    }
+
+    @Transactional
+    fun removeAnStudentFromNotification(tutorId: Int, studentId: Int) {
+<span class="nc" id="L175">        val notifyer = this.findByID(tutorId).notifyer</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        senderService.removeStudentFromNotify(notifyer!!, studentId)</span>
+<span class="nc" id="L177">    }</span>
+
+    @Transactional
+    fun studentsToNotifyFromTutor(tutorId: Int): List&lt;StudentDTO&gt; {
+<span class="nc" id="L181">        val notifyer = this.findByID(tutorId).notifyer</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        return senderService.studentsToNotify(notifyer!!)</span>
+    }
+
+    @Transactional
+    fun percentageByDefault():Double{
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        return  percentageService.percentageByDefault()</span>
+    }
+
+
+    @Transactional
+    fun updatePercentageByDefault(percentage:Double):PercentageByDefault {
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        return  percentageService.updatePercentageByDefault(percentage)</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

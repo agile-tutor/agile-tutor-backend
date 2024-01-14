@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InitService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.service</a> &gt; <span class="el_source">InitService.kt</span></div><h1>InitService.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.service
+
+import ar.edu.unq.agiletutor.model.*
+import jakarta.annotation.PostConstruct
+import org.apache.commons.logging.LogFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+<span class="fc" id="L11">@Service</span>
+@Transactional
+<span class="fc" id="L13">class InitService {</span>
+
+<span class="fc" id="L15">    protected val logger = LogFactory.getLog(javaClass)</span>
+
+    @Value(&quot;\${spring.datasource.driverClassName:NONE}&quot;)
+    private val className: String? = null
+
+    @Autowired
+    private val percentageService: PercentageService? = null
+
+    @Autowired
+    private val studentService: StudentService? = null
+
+    @Autowired
+    private val courseService: CourseService? = null
+
+    @Autowired
+    private val tutorService: TutorService? = null
+
+    @PostConstruct
+    fun initialize() {
+
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        if (className == &quot;com.mysql.cj.jdbc.Driver&quot;) {</span>
+<span class="fc" id="L36">            logger.info(&quot;Init Data Using Mysql DB&quot;)</span>
+           // if (studentService!!.findAll().isEmpty()) {
+             // fireInitialData()
+           // }
+        }
+<span class="fc" id="L41">    }</span>
+
+    private fun fireInitialData() {
+<span class="nc" id="L44">        val percentageByDefault = PercentageByDefault(1,75.00)</span>
+<span class="nc" id="L45">        percentageService!!.register(percentageByDefault)</span>
+
+
+<span class="nc" id="L48">        val tutor1 = Tutor(0, &quot;tutor1&quot;, &quot;ape1&quot;, &quot;tutor1@gmail.com&quot;, &quot;passtut1&quot;, mutableSetOf())</span>
+<span class="nc" id="L49">        val tutor2 = Tutor(0, &quot;tutor2&quot;, &quot;ape2&quot;, &quot;tutor2@gmail.com&quot;, &quot;passtut2&quot;, mutableSetOf())</span>
+<span class="nc" id="L50">        val tutor1saved = tutorService!!.register(tutor1)</span>
+<span class="nc" id="L51">        val tutor2saved = tutorService.register(tutor2)</span>
+
+<span class="nc" id="L53">        val course1 = Course(0, &quot;c1&quot;, mutableSetOf(), tutor1saved, mutableSetOf())</span>
+<span class="nc" id="L54">        val course2 = Course(0, &quot;c2&quot;, mutableSetOf(), tutor1saved,  mutableSetOf())</span>
+<span class="nc" id="L55">        val course3 = Course(0, &quot;c3&quot;, mutableSetOf(), tutor2saved, mutableSetOf())</span>
+<span class="nc" id="L56">        val course4 = Course(0, &quot;c4&quot;, mutableSetOf(), tutor2saved,  mutableSetOf())</span>
+
+<span class="nc" id="L58">        val course1Saved = courseService!!.register(course1)</span>
+<span class="nc" id="L59">        val course2Saved = courseService.register(course2)</span>
+<span class="nc" id="L60">        val course3Saved = courseService.register(course3)</span>
+<span class="nc" id="L61">        val course4Saved = courseService.register(course4)</span>
+
+
+<span class="nc" id="L64">        val firstattendaces = mutableSetOf&lt;Attendance&gt;()</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        for (i in (1..6)) {</span>
+<span class="nc" id="L66">            firstattendaces.add(Attendance(i, false))</span>
+        }
+
+<span class="nc" id="L69">        val atendances = mutableSetOf&lt;Attendance&gt;()</span>
+<span class="nc" id="L70">        atendances.add(Attendance(1, true))</span>
+<span class="nc" id="L71">        atendances.add(Attendance(2, true))</span>
+<span class="nc" id="L72">        atendances.add(Attendance(3, true))</span>
+<span class="nc" id="L73">        atendances.add(Attendance(4, true))</span>
+<span class="nc" id="L74">        atendances.add(Attendance(5, true))</span>
+<span class="nc" id="L75">        atendances.add(Attendance(6, true))</span>
+
+<span class="nc" id="L77">        val attendancesSecond = atendances.map { AttendanceDTO.desdeModelo(it) }</span>
+
+
+<span class="nc" id="L80">        val student1 =</span>
+<span class="nc" id="L81">            Student(</span>
+<span class="nc" id="L82">                0,</span>
+<span class="nc" id="L83">                &quot;Ale&quot;,</span>
+<span class="nc" id="L84">                &quot;Fariña&quot;,</span>
+<span class="nc" id="L85">                &quot;123&quot;,</span>
+<span class="nc" id="L86">                &quot;algoritmosale@gmail.com&quot;,</span>
+<span class="nc" id="L87">                firstattendaces,</span>
+<span class="nc" id="L88">                0.0,</span>
+<span class="nc" id="L89">                &quot;&quot;,</span>
+<span class="nc" id="L90">                course1Saved,</span>
+<span class="nc" id="L91">                false</span>
+            )
+<span class="nc" id="L93">        val studentregistered1 = studentService!!.register(student1)</span>
+
+<span class="nc" id="L95">        val student2 = Student(</span>
+<span class="nc" id="L96">            0,</span>
+<span class="nc" id="L97">            &quot;Cristian&quot;,</span>
+<span class="nc" id="L98">            &quot;Gonzalez&quot;,</span>
+<span class="nc" id="L99">            &quot;456&quot;,</span>
+<span class="nc" id="L100">            &quot;cristian.gonzalez.unq@gmail.com&quot;,</span>
+<span class="nc" id="L101">            firstattendaces,</span>
+<span class="nc" id="L102">            0.0,</span>
+<span class="nc" id="L103">            &quot;&quot;,</span>
+<span class="nc" id="L104">            course1Saved,</span>
+<span class="nc" id="L105">            false</span>
+        )
+<span class="nc" id="L107">        val studentregistered2 = studentService.register(student2)</span>
+
+<span class="nc" id="L109">        val student3 =</span>
+<span class="nc" id="L110">            Student(</span>
+<span class="nc" id="L111">                0, &quot;Pedro&quot;,</span>
+<span class="nc" id="L112">                &quot;Picapiedra&quot;,</span>
+<span class="nc" id="L113">                &quot;456&quot;,</span>
+<span class="nc" id="L114">                &quot;pica@gmail.com&quot;,</span>
+<span class="nc" id="L115">                firstattendaces,</span>
+<span class="nc" id="L116">                0.0,</span>
+<span class="nc" id="L117">                &quot;&quot;,</span>
+<span class="nc" id="L118">                course2Saved,</span>
+<span class="nc" id="L119">                false</span>
+            )
+<span class="nc" id="L121">        studentService.register(student3)</span>
+
+<span class="nc" id="L123">        val student4 =</span>
+<span class="nc" id="L124">            Student(</span>
+<span class="nc" id="L125">                0,</span>
+<span class="nc" id="L126">                &quot;Pablo&quot;,</span>
+<span class="nc" id="L127">                &quot;Marmol&quot;,</span>
+<span class="nc" id="L128">                &quot;456&quot;,</span>
+<span class="nc" id="L129">                &quot;marmol@gmail.com&quot;,</span>
+<span class="nc" id="L130">                firstattendaces,</span>
+<span class="nc" id="L131">                0.0,</span>
+<span class="nc" id="L132">                &quot;&quot;,</span>
+<span class="nc" id="L133">                course2Saved,</span>
+<span class="nc" id="L134">                false</span>
+            )
+<span class="nc" id="L136">        studentService.register(student4)</span>
+
+<span class="nc" id="L138">        val student5 =</span>
+<span class="nc" id="L139">            Student(</span>
+<span class="nc" id="L140">                0, &quot;Super&quot;,</span>
+<span class="nc" id="L141">                &quot;Sonico&quot;,</span>
+<span class="nc" id="L142">                &quot;456&quot;,</span>
+<span class="nc" id="L143">                &quot;super@gmail.com&quot;,</span>
+<span class="nc" id="L144">                firstattendaces,</span>
+<span class="nc" id="L145">                0.0,</span>
+<span class="nc" id="L146">                &quot;&quot;,</span>
+<span class="nc" id="L147">                course3Saved,</span>
+<span class="nc" id="L148">                false</span>
+            )
+<span class="nc" id="L150">        studentService.register(student5)</span>
+
+<span class="nc" id="L152">        val student6 =</span>
+<span class="nc" id="L153">            Student(</span>
+<span class="nc" id="L154">                0,</span>
+<span class="nc" id="L155">                &quot;Jane&quot;,</span>
+<span class="nc" id="L156">                &quot;Jetson&quot;,</span>
+<span class="nc" id="L157">                &quot;456&quot;,</span>
+<span class="nc" id="L158">                &quot;jane@gmail.com&quot;,</span>
+<span class="nc" id="L159">                firstattendaces,</span>
+<span class="nc" id="L160">                0.0,</span>
+<span class="nc" id="L161">                &quot;&quot;,</span>
+<span class="nc" id="L162">                course3Saved,</span>
+<span class="nc" id="L163">                false</span>
+            )
+<span class="nc" id="L165">        studentService.register(student6)</span>
+
+<span class="nc" id="L167">        val student7 =</span>
+<span class="nc" id="L168">            Student(</span>
+<span class="nc" id="L169">                0,</span>
+<span class="nc" id="L170">                &quot;Alu3&quot;,</span>
+<span class="nc" id="L171">                &quot;Marmol&quot;,</span>
+<span class="nc" id="L172">                &quot;456&quot;,</span>
+<span class="nc" id="L173">                &quot;alu3@gmail.com&quot;,</span>
+<span class="nc" id="L174">                firstattendaces,</span>
+<span class="nc" id="L175">                0.0,</span>
+<span class="nc" id="L176">                &quot;&quot;,</span>
+<span class="nc" id="L177">                course4Saved,</span>
+<span class="nc" id="L178">                false</span>
+            )
+<span class="nc" id="L180">        studentService.register(student7)</span>
+
+<span class="nc" id="L182">        val student8 =</span>
+<span class="nc" id="L183">            Student(</span>
+<span class="nc" id="L184">                0,</span>
+<span class="nc" id="L185">                &quot;Alu4&quot;,</span>
+<span class="nc" id="L186">                &quot;Marmol&quot;,</span>
+<span class="nc" id="L187">                &quot;456&quot;,</span>
+<span class="nc" id="L188">                &quot;alu4@gmail.com&quot;,</span>
+<span class="nc" id="L189">                firstattendaces,</span>
+<span class="nc" id="L190">                0.0,</span>
+<span class="nc" id="L191">                &quot;&quot;,</span>
+<span class="nc" id="L192">                course4Saved,</span>
+<span class="nc" id="L193">                false</span>
+            )
+<span class="nc" id="L195">        studentService.register(student8)</span>
+
+<span class="nc" id="L197">        val student9 =</span>
+<span class="nc" id="L198">            Student(</span>
+<span class="nc" id="L199">                0, &quot;Pebbles&quot;,</span>
+<span class="nc" id="L200">                &quot;Picapiedra&quot;,</span>
+<span class="nc" id="L201">                &quot;456&quot;,</span>
+<span class="nc" id="L202">                &quot;pebbles@gmail.com&quot;,</span>
+<span class="nc" id="L203">                firstattendaces,</span>
+<span class="nc" id="L204">                0.0,</span>
+<span class="nc" id="L205">                &quot;&quot;,</span>
+<span class="nc" id="L206">                course2Saved,</span>
+<span class="nc" id="L207">                false</span>
+            )
+<span class="nc" id="L209">        studentService.register(student9)</span>
+
+<span class="nc" id="L211">        val student10 =</span>
+<span class="nc" id="L212">            Student(</span>
+<span class="nc" id="L213">                0,</span>
+<span class="nc" id="L214">                &quot;Bam-Bam&quot;,</span>
+<span class="nc" id="L215">                &quot;Marmol&quot;,</span>
+<span class="nc" id="L216">                &quot;456&quot;,</span>
+<span class="nc" id="L217">                &quot;bambam@gmail.com&quot;,</span>
+<span class="nc" id="L218">                firstattendaces,</span>
+<span class="nc" id="L219">                0.0,</span>
+<span class="nc" id="L220">                &quot;&quot;,</span>
+<span class="nc" id="L221">                course2Saved,</span>
+<span class="nc" id="L222">                false</span>
+            )
+<span class="nc" id="L224">        studentService.register(student10)</span>
+
+<span class="nc" id="L226">        val student11 =</span>
+<span class="nc" id="L227">            Student(</span>
+<span class="nc" id="L228">                0, &quot;Vilma&quot;,</span>
+<span class="nc" id="L229">                &quot;Picapiedra&quot;,</span>
+<span class="nc" id="L230">                &quot;456&quot;,</span>
+<span class="nc" id="L231">                &quot;vilma@gmail.com&quot;,</span>
+<span class="nc" id="L232">                firstattendaces,</span>
+<span class="nc" id="L233">                0.0,</span>
+<span class="nc" id="L234">                &quot;&quot;,</span>
+<span class="nc" id="L235">                course2Saved,</span>
+<span class="nc" id="L236">                false</span>
+            )
+<span class="nc" id="L238">        studentService.register(student11)</span>
+
+<span class="nc" id="L240">        val student12 =</span>
+<span class="nc" id="L241">            Student(</span>
+<span class="nc" id="L242">                0,</span>
+<span class="nc" id="L243">                &quot;Betty&quot;,</span>
+<span class="nc" id="L244">                &quot;Marmol&quot;,</span>
+<span class="nc" id="L245">                &quot;456&quot;,</span>
+<span class="nc" id="L246">                &quot;betty@gmail.com&quot;,</span>
+<span class="nc" id="L247">                firstattendaces,</span>
+<span class="nc" id="L248">                0.0,</span>
+<span class="nc" id="L249">                &quot;&quot;,</span>
+<span class="nc" id="L250">                course2Saved,</span>
+<span class="nc" id="L251">                false</span>
+            )
+<span class="nc" id="L253">        studentService.register(student12)</span>
+
+<span class="nc" id="L255">        val student13 =</span>
+<span class="nc" id="L256">            Student(</span>
+<span class="nc" id="L257">                0, &quot;Mr&quot;,</span>
+<span class="nc" id="L258">                &quot;Slate&quot;,</span>
+<span class="nc" id="L259">                &quot;456&quot;,</span>
+<span class="nc" id="L260">                &quot;slate@gmail.com&quot;,</span>
+<span class="nc" id="L261">                firstattendaces,</span>
+<span class="nc" id="L262">                0.0,</span>
+<span class="nc" id="L263">                &quot;&quot;,</span>
+<span class="nc" id="L264">                course2Saved,</span>
+<span class="nc" id="L265">                false</span>
+            )
+<span class="nc" id="L267">        studentService.register(student13)</span>
+
+<span class="nc" id="L269">        val student14 =</span>
+<span class="nc" id="L270">            Student(</span>
+<span class="nc" id="L271">                0,</span>
+<span class="nc" id="L272">                &quot;Creepella&quot;,</span>
+<span class="nc" id="L273">                &quot;Gruesome&quot;,</span>
+<span class="nc" id="L274">                &quot;456&quot;,</span>
+<span class="nc" id="L275">                &quot;creepella@gmail.com&quot;,</span>
+<span class="nc" id="L276">                firstattendaces,</span>
+<span class="nc" id="L277">                0.0,</span>
+<span class="nc" id="L278">                &quot;&quot;,</span>
+<span class="nc" id="L279">                course2Saved,</span>
+<span class="nc" id="L280">                false</span>
+            )
+<span class="nc" id="L282">        studentService.register(student14)</span>
+
+<span class="nc" id="L284">        val student15 =</span>
+<span class="nc" id="L285">            Student(</span>
+<span class="nc" id="L286">                0, &quot;Elroy&quot;,</span>
+<span class="nc" id="L287">                &quot;Jetson&quot;,</span>
+<span class="nc" id="L288">                &quot;456&quot;,</span>
+<span class="nc" id="L289">                &quot;elroy@gmail.com&quot;,</span>
+<span class="nc" id="L290">                firstattendaces,</span>
+<span class="nc" id="L291">                0.0,</span>
+<span class="nc" id="L292">                &quot;&quot;,</span>
+<span class="nc" id="L293">                course3Saved,</span>
+<span class="nc" id="L294">                false</span>
+            )
+<span class="nc" id="L296">        studentService.register(student15)</span>
+
+<span class="nc" id="L298">        val student16 =</span>
+<span class="nc" id="L299">            Student(</span>
+<span class="nc" id="L300">                0,</span>
+<span class="nc" id="L301">                &quot;Lucero&quot;,</span>
+<span class="nc" id="L302">                &quot;Sonico&quot;,</span>
+<span class="nc" id="L303">                &quot;456&quot;,</span>
+<span class="nc" id="L304">                &quot;lucero@gmail.com&quot;,</span>
+<span class="nc" id="L305">                firstattendaces,</span>
+<span class="nc" id="L306">                0.0,</span>
+<span class="nc" id="L307">                &quot;&quot;,</span>
+<span class="nc" id="L308">                course3Saved,</span>
+<span class="nc" id="L309">                false</span>
+            )
+<span class="nc" id="L311">        studentService.register(student16)</span>
+
+<span class="nc" id="L313">        val student17 =</span>
+<span class="nc" id="L314">            Student(</span>
+<span class="nc" id="L315">                0, &quot;Senor&quot;,</span>
+<span class="nc" id="L316">                &quot;Espacial&quot;,</span>
+<span class="nc" id="L317">                &quot;456&quot;,</span>
+<span class="nc" id="L318">                &quot;espacial@gmail.com&quot;,</span>
+<span class="nc" id="L319">                firstattendaces,</span>
+<span class="nc" id="L320">                0.0,</span>
+<span class="nc" id="L321">                &quot;&quot;,</span>
+<span class="nc" id="L322">                course3Saved,</span>
+<span class="nc" id="L323">                false</span>
+            )
+<span class="nc" id="L325">        studentService.register(student17)</span>
+
+<span class="nc" id="L327">        val student18 =</span>
+<span class="nc" id="L328">            Student(</span>
+<span class="nc" id="L329">                0,</span>
+<span class="nc" id="L330">                &quot;Mrs&quot;,</span>
+<span class="nc" id="L331">                &quot;Spacely&quot;,</span>
+<span class="nc" id="L332">                &quot;456&quot;,</span>
+<span class="nc" id="L333">                &quot;spacely@gmail.com&quot;,</span>
+<span class="nc" id="L334">                firstattendaces,</span>
+<span class="nc" id="L335">                0.0,</span>
+<span class="nc" id="L336">                &quot;&quot;,</span>
+<span class="nc" id="L337">                course3Saved,</span>
+<span class="nc" id="L338">                false</span>
+            )
+<span class="nc" id="L340">        studentService.register(student18)</span>
+
+<span class="nc" id="L342">        studentService.updateattendances(studentregistered1.id!!, attendancesSecond)</span>
+<span class="nc" id="L343">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

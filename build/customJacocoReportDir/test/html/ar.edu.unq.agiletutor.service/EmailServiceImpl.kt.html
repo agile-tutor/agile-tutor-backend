@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmailServiceImpl.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.service</a> &gt; <span class="el_source">EmailServiceImpl.kt</span></div><h1>EmailServiceImpl.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.service
+
+import ar.edu.unq.agiletutor.model.Notifyer
+import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.persistence.NotifyerRepository
+import ar.edu.unq.agiletutor.persistence.StudentRepository
+import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
+import java.time.LocalDate
+
+
+<span class="fc" id="L16">@Component</span>
+<span class="fc" id="L17">class EmailServiceImpl {</span>
+
+    @Autowired
+    private lateinit var notifyerRepository: NotifyerRepository
+
+    //  @Autowired
+    // private lateinit var attendanceRepository: AttendanceRepository
+
+    @Autowired
+    private lateinit var studentService: StudentService
+
+
+    @Autowired
+    private lateinit var studentRepository: StudentRepository
+
+    @Autowired
+    private lateinit var emailSender: JavaMailSender
+
+    private var currentDay = 0
+
+    private lateinit var notifier: Notifyer
+
+
+    /*
+        fun existsAny(): Boolean {
+            return notifyerRepository.findAll().isNotEmpty()
+        }
+    */
+
+    @Transactional
+    fun saveNotifyer(notifyer: Notifyer) {
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        notifyerRepository.save(notifyer)</span>
+<span class="nc" id="L49">    }</span>
+    /*
+        @Transactional
+        fun getNotifyer(): Notifyer {
+            if (!this.existsAny()) {
+                val notifyer = Notifyer()
+                this.saveNotifyer(notifyer)
+            }
+            return notifyerRepository.findAll().first()!!
+        }
+    */
+    /*
+        fun notifyAllAbsent(dayAttend: Int, courseId: Int) {
+            val absentList = studentRepository.findAll().filter {
+                it.course!!.id == courseId
+            }.filter {
+                it.attendances.filter {
+                    it.day == dayAttend &amp;&amp; !it.attended
+                }.isNotEmpty()
+            }
+            this.addAbsent(absentList)
+        }
+
+    */
+
+
+    fun saveAllAbsent(absents: MutableSet&lt;Student&gt;, notifyer: Notifyer) {
+<span class="nc bnc" id="L76" title="All 4 branches missed.">        if (absents.isNotEmpty()) {</span>
+            //          val notifyer: Notifyer = getNotifyer()
+<span class="nc" id="L78">            notifyer.addAllbsent(absents)</span>
+<span class="nc" id="L79">            saveNotifyer(notifyer)</span>
+        }
+<span class="nc" id="L81">    }</span>
+
+    /*
+        fun addAbsent(absentList: List&lt;Student&gt;) {
+            val notifyer: Notifyer = getNotifyer()
+            absentList.forEach { notifyer.addabsent(it) }
+            this.saveNotifyer(notifyer)
+        }
+    */
+    fun changeSubjectText(text: String, notifyer: Notifyer) {
+        //       val notifyer: Notifyer = getNotifyer()
+<span class="nc" id="L92">        notifyer.setSubjectEmail(text)</span>
+<span class="nc" id="L93">        this.saveNotifyer(notifyer)</span>
+<span class="nc" id="L94">    }</span>
+
+    fun changeBodyText(text: String, notifyer: Notifyer) {
+//        val notifyer: Notifyer = getNotifyer()
+<span class="nc" id="L98">        notifyer.setTextEmail(text)</span>
+<span class="nc" id="L99">        this.saveNotifyer(notifyer)</span>
+<span class="nc" id="L100">    }</span>
+
+    fun sendSimpleMessage(to: String, subject: String, text: String) {
+<span class="nc" id="L103">        val message = SimpleMailMessage()</span>
+<span class="nc" id="L104">        message.setFrom(to)</span>
+<span class="nc" id="L105">        message.setTo(to)</span>
+<span class="nc" id="L106">        message.setSubject(subject)</span>
+<span class="nc" id="L107">        message.setText(text)</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        emailSender.send(message)</span>
+<span class="nc" id="L109">    }</span>
+
+    //   @Scheduled(cron = &quot;*/5 * * * * *&quot;)//cada cinco segundos
+    /*    fun pruebaCronJob() {
+            println(&quot;adentro del cronJob de 5 segundos&quot;)
+        }
+    */
+    //@Scheduled(cron = &quot;0 0 22 * * *&quot;)//a las 22 horas
+    @Transactional
+    @Scheduled(cron = &quot;\${cron.expressionat22hs}&quot;)//a las 22 horas
+    //@Scheduled(cron = &quot;\${cron.expression20seg}&quot;)//cada 20 segundos
+    fun emailAbsent() {
+//        val notifyer: Notifyer = getNotifyer()
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        var notifyers = notifyerRepository.findAll()</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for (notifyer in notifyers) {</span>
+
+<span class="nc" id="L125">            val absents = notifyer.getabsent()</span>
+<span class="nc" id="L126">            println(&quot;todes&quot; + absents.size)</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            for (absent in absents) {</span>
+<span class="nc" id="L128">                sendSimpleMessage(absent.email!!, notifyer.getSubjectEmail(), notifyer.getTextEmail(absent.name!!))</span>
+<span class="nc" id="L129">                println(</span>
+<span class="nc" id="L130">                        absent.email!! + &quot;impresion&quot; + notifyer.getSubjectEmail() + &quot; &quot; + notifyer.getTextEmail(</span>
+<span class="nc" id="L131">                                absent.name!!</span>
+                        )
+                )
+                /*  notifyer.getabsent()!!
+                    .forEach {
+                        this.sendSimpleMessage(
+                            it.email!!,
+                            notifyer.getSubjectEmail(),
+                            notifyer.getTextEmail(it.name!!)
+                        )
+                    }
+                notifyer.getabsent()!!
+
+                            .forEach {
+                                println(
+                                    it.email!! + &quot;impresion&quot; + notifyer.getSubjectEmail() + &quot; &quot; + notifyer.getTextEmail(
+                                        it.name!!
+                                    )
+                                )
+                            }
+        */
+<span class="nc" id="L152">                notifyer.removeall()</span>
+<span class="nc" id="L153">                saveNotifyer(notifyer)</span>
+            }
+        }
+<span class="nc" id="L156">    }</span>
+
+    fun studentsToNotify(notifyer: Notifyer): List&lt;StudentDTO&gt; {
+//        val notifyer: Notifyer = getNotifyer()
+<span class="nc" id="L160">        return notifyer.getAbsentToNotify().map { StudentDTO.desdeModelo(it) }</span>
+    }
+
+    fun removeStudentFromNotify(notifyer: Notifyer, studentId: Int) {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        val student = studentService.findByID(studentId.toLong())</span>
+<span class="nc" id="L165">        notifyer.delabsent(student)</span>
+<span class="nc" id="L166">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Student.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.model</a> &gt; <span class="el_source">Student.kt</span></div><h1>Student.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.model
+
+import ar.edu.unq.agiletutor.service.AttendanceDTO
+import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
+import java.io.Serializable
+
+@Entity
+@Table(name = &quot;student&quot;)
+class Student : Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;id_student&quot;)
+<span class="pc" id="L15">    var id: Long? = null</span>
+
+    @Column(nullable = false)
+    @NotNull(&quot;El nonbre es obligatorio&quot;)
+<span class="fc" id="L19">    var name: String? = null</span>
+
+    @Column(nullable = false)
+    @NotNull(&quot;el apellido es obligatorio&quot;)
+<span class="fc" id="L23">    var surname: String? = null</span>
+
+    @Column(nullable = false)
+    @NotNull(&quot;El número identificador es obligatorio&quot;)
+<span class="fc" id="L27">    var identifier: String? = null</span>
+
+    @Column(nullable = false, unique = true)
+    @NotNull(&quot;El mail es obligatorio&quot;)
+<span class="fc" id="L31">    var email: String? = null</span>
+
+    //@Column(nullable = false)
+    @OneToMany(/*mappedBy = &quot;student&quot;,*/ cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    //@JoinColumn(nullable = false)
+<span class="pc" id="L36">    var attendances: MutableSet&lt;Attendance&gt; = HashSet()</span>
+
+    @Column(nullable = false)
+<span class="pc" id="L39">    var attendancepercentage: Double = 0.0</span>
+
+    @Column
+<span class="fc" id="L42">    var observations: String = &quot;&quot;</span>
+
+    @ManyToOne(optional = true)
+<span class="fc" id="L45">    var course: Course? = null</span>
+
+    @Column
+<span class="fc" id="L48">    var blocked: Boolean = false</span>
+
+<span class="fc" id="L50">    constructor() : super() {}</span>
+    constructor(
+        id: Long?,
+        name: String?,
+        surname: String?,
+        identifier: String?,
+        email: String?,
+        attendances: MutableSet&lt;Attendance&gt;,
+        attendancepercentage: Double,
+        observations: String,
+        course: Course,
+        blocked: Boolean
+<span class="fc" id="L62">    ) : super() {</span>
+<span class="fc" id="L63">        this.id = id</span>
+<span class="fc" id="L64">        this.name = name</span>
+<span class="fc" id="L65">        this.surname = surname</span>
+<span class="fc" id="L66">        this.identifier = identifier</span>
+<span class="fc" id="L67">        this.email = email</span>
+<span class="fc" id="L68">        this.attendances = attendances</span>
+<span class="fc" id="L69">        this.attendancepercentage = attendancepercentage</span>
+<span class="fc" id="L70">        this.observations = observations</span>
+<span class="fc" id="L71">        this.course = course</span>
+<span class="fc" id="L72">        this.blocked = blocked</span>
+<span class="fc" id="L73">    }</span>
+
+    fun attended(): List&lt;Attendance&gt; {
+<span class="nc" id="L76">        return attendances.filter { it.attended }</span>
+    }
+
+    fun attendedDay(day: Int): Boolean {
+<span class="pc bpc" id="L80" title="1 of 6 branches missed.">        return attendances.any { it.day == day &amp;&amp; it.attended }</span>
+    }
+
+    fun absent(): List&lt;Attendance&gt; {
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        return attendances.filter { !(it.attended) }</span>
+    }
+
+    fun cantidadDePresentes(): Int {
+<span class="nc" id="L88">        return attended().size</span>
+    }
+
+    fun cantidadDeAusentes(): Int {
+<span class="nc" id="L92">        return absent().size</span>
+    }
+/*
+    fun calcularPorcentajeDeAsistencias(): Double {
+        attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
+        return attendancepercentage
+    }
+  */
+
+    fun updateAttendanceAtADay (attendance: Attendance) {
+<span class="nc" id="L102">        println(&quot;updateatendance&quot;+attendance.toString()+attendance.id+attendance.attended)</span>
+        //attendances.toMutableList().set(attendance.day!!, attendance)
+<span class="nc bnc" id="L104" title="All 6 branches missed.">        attendances.find { it.day == attendance.day }?.attended = attendance.attended</span>
+<span class="nc" id="L105">        updateAttendancePercentage()</span>
+<span class="nc" id="L106">    }</span>
+    fun updateAttendancePercentage(){
+<span class="nc" id="L108">        attendancepercentage = kotlin.math.round(cantidadDePresentes() * (100.00 / 6))</span>
+<span class="nc" id="L109">    }</span>
+
+    fun attendancePercentage(): Double{
+<span class="nc" id="L112">        return attendancepercentage</span>
+    }
+
+    fun sinFaltas(): Boolean {
+        // return ( attendances.size == cantidadDePresentes() )
+<span class="nc" id="L117">        return attendances.all { it.attended }</span>
+    }
+
+    fun approvedAccordingPercentageDefault(percentage:Double):Boolean{
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        return  ( attendancePercentage() &gt;= kotlin.math.round(percentage) )</span>
+    }
+
+    fun fillSurvey(studentsIds : List &lt;Long&gt;):Boolean{
+<span class="nc" id="L125">        return  (studentsIds.contains(id!!))</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

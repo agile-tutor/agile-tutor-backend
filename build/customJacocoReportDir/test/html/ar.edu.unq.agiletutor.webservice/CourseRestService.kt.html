@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CourseRestService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.webservice</a> &gt; <span class="el_source">CourseRestService.kt</span></div><h1>CourseRestService.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.webservice
+
+import ar.edu.unq.agiletutor.model.Course
+import ar.edu.unq.agiletutor.service.*
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import java.util.HashMap
+
+<span class="fc" id="L11">@RestController</span>
+@EnableAutoConfiguration
+@CrossOrigin(&quot;*&quot;)
+<span class="fc" id="L14">class CourseRestService {</span>
+
+    @Autowired
+    private lateinit var tutorService: TutorService
+
+    @Autowired
+    private lateinit var courseService: CourseService
+    private val builder: ResponseEntity.BodyBuilder? = null
+
+    /**register a course*/
+    @PostMapping(&quot;/api/course/register&quot;)
+    fun register(@RequestBody coursedata: CourseRegisterDTO): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L28">        try {</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">            val tutor = tutorService.findByID(coursedata.tutorId)</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">            val courseview = CourseDTO.desdeModelo(courseService.register(coursedata.aModelo(tutor)))</span>
+<span class="nc" id="L31">            println(&quot;iddelcurso2&quot;+courseview.id)</span>
+<span class="nc" id="L32">            ResponseEntity.status(201)</span>
+<span class="nc" id="L33">            response = ResponseEntity.ok().body(courseview)</span>
+<span class="nc" id="L34">        } catch (e: Exception) {</span>
+<span class="nc" id="L35">            ResponseEntity.status(404)</span>
+
+<span class="nc" id="L37">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+            //resultado[&quot;name of course already exist&quot;] = coursedata.name.toString()
+<span class="nc" id="L39">            resultado[&quot;Exception&quot;] = e.localizedMessage</span>
+<span class="nc" id="L40">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L42">        return response!!</span>
+    }
+
+    /**get all courses**/
+    @GetMapping(&quot;/api/course&quot;)
+    fun allCourses(): ResponseEntity&lt;*&gt; {
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        val courses = courseService.findAll().map { CourseDTO.desdeModelo(it) }</span>
+<span class="nc" id="L49">        return ResponseEntity.ok().body(courses)</span>
+    }
+
+    /**get course by id**/
+    @GetMapping(&quot;/api/course/{id}&quot;)
+    fun courserById(@PathVariable(&quot;id&quot;) id: Int): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L57">        try {</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            val courseView = CourseDTO.desdeModelo(courseService.findByID(id))</span>
+<span class="nc" id="L59">            ResponseEntity.status(200)</span>
+<span class="nc" id="L60">            response = ResponseEntity.ok().body(courseView)</span>
+<span class="nc" id="L61">        } catch (e: Exception) {</span>
+<span class="nc" id="L62">            ResponseEntity.status(404)</span>
+<span class="nc" id="L63">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L64">            resultado[&quot;course with id not found&quot;] = id.toString()</span>
+<span class="nc" id="L65">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L67">        return response!!</span>
+    }
+
+    /**get course by name**/
+    @GetMapping(&quot;/api/course/{name}&quot;)
+    fun courserByName(@PathVariable(&quot;name&quot;) name: String): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L75">        try {</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            val courseView = CourseDTO.desdeModelo(courseService.findByName(name))</span>
+<span class="nc" id="L77">            ResponseEntity.status(200)</span>
+<span class="nc" id="L78">            response = ResponseEntity.ok().body(courseView)</span>
+<span class="nc" id="L79">        } catch (e: Exception) {</span>
+<span class="nc" id="L80">            ResponseEntity.status(404)</span>
+<span class="nc" id="L81">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L82">            resultado[&quot;course with name not found&quot;] = name</span>
+<span class="nc" id="L83">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L85">        return response!!</span>
+    }
+
+    /**get the tutor from a course*/
+    @GetMapping(&quot;/api/course/tutor/{id}&quot;)
+    fun tutorFromACourse(@PathVariable(&quot;id&quot;) id: Int): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L93">        try {</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            val tutorView = TutorDTO.desdeModelo(courseService.tutorFromACourse(id))</span>
+<span class="nc" id="L95">            ResponseEntity.status(200)</span>
+<span class="nc" id="L96">            response = ResponseEntity.ok().body(tutorView)</span>
+<span class="nc" id="L97">        } catch (e: Exception) {</span>
+<span class="nc" id="L98">            ResponseEntity.status(404)</span>
+<span class="nc" id="L99">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L100">            resultado[&quot;course with id not found&quot;] = id.toString()</span>
+<span class="nc" id="L101">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L103">        return response!!</span>
+    }
+
+
+    /** Update a course*/
+    @PutMapping(&quot;/api/course/{id}&quot;)
+    fun update(@PathVariable(&quot;id&quot;) id: Int, @RequestBody entity: CourseDTO): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+<span class="nc" id="L111">        try {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            val courseview = courseService.update(id, entity)</span>
+
+<span class="nc" id="L114">            ResponseEntity.status(200)</span>
+<span class="nc" id="L115">            response = ResponseEntity.ok().body(courseview)</span>
+<span class="nc" id="L116">        } catch (e: Exception) {</span>
+<span class="nc" id="L117">            ResponseEntity.status(404)</span>
+
+<span class="nc" id="L119">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L120">            resultado[&quot;usuario con id no encontrado&quot;] = id.toString()</span>
+<span class="nc" id="L121">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L123">        return response!!</span>
+    }
+
+    /**Students From a Course*/
+    @GetMapping(&quot;/api/course/students/{id}&quot;)
+    fun studentsFromACourse(@PathVariable(&quot;id&quot;) id: Int): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L131">        try {</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        val students = courseService.studentsFromACourse(id).map { StudentDTO.desdeModelo(it) }</span>
+<span class="nc" id="L133">        ResponseEntity.status(200)</span>
+<span class="nc" id="L134">        response = ResponseEntity.ok().body(students)</span>
+<span class="nc" id="L135">    } catch (e: Exception) {</span>
+<span class="nc" id="L136">        ResponseEntity.status(404)</span>
+
+<span class="nc" id="L138">        val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L139">        resultado[&quot;Not found Course with id&quot;] = id.toString()</span>
+
+<span class="nc" id="L141">        response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+    }
+<span class="nc" id="L143">    return response!!</span>
+
+}
+
+
+
+    /**update  students attendances from a course*/
+//    @PuMapping(&quot;/api/students/attendances/update/{id}/{day}&quot;)
+    @PutMapping(&quot;/api/course/students/attendances/update/{id}&quot;)
+    fun updateStudentsAttendancesFromACourse(
+        @PathVariable(&quot;id&quot;) id: Int,
+        @RequestBody attendances: List&lt;StudentAttendanceDTO&gt;
+    ): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L158">        try {</span>
+<span class="nc" id="L159">            println(&quot;id desde api: $id&quot;)</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            courseService.updateStudentsAttendancesFromACourse(id, attendances)</span>
+<span class="nc" id="L161">            ResponseEntity.status(201)</span>
+<span class="nc" id="L162">            response = ResponseEntity.ok().body(&quot;students attendances Updated Ok&quot;)</span>
+<span class="nc" id="L163">            } catch (e: Exception) {</span>
+<span class="nc" id="L164">                ResponseEntity.status(404)</span>
+    
+<span class="nc" id="L166">                val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L167">                resultado[&quot;Course with Id not found&quot;] = id.toString()</span>
+<span class="nc" id="L168">                response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+            }
+<span class="nc" id="L170">        return response!!</span>
+    }
+
+
+    /** Average of Attendances  from a Course*/
+    @GetMapping(&quot;/api/course/students/attendances/average/{id}&quot;)
+    fun averageAttendancesFromACouurse( @PathVariable(&quot;id&quot;) id: Int): ResponseEntity&lt;*&gt; {
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        val averageAttendances = courseService.averageAttendancesFromACourse(id)</span>
+
+<span class="nc" id="L180">        return ResponseEntity.ok().body(averageAttendances)</span>
+    }
+
+
+    /**  Marked Down attendances at a particular day*/
+    @GetMapping(&quot;/api/course/attendances/{id}&quot;)
+    fun markedDownAttendanceAFromACourseATaParticularDay( @PathVariable(&quot;id&quot;) id: Int, @PathVariable(&quot;day&quot;) day: Int): ResponseEntity&lt;*&gt; {
+
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        val narkedDown = courseService.markedDownAttendanceAFromACourseATaParticularDay(id,day)</span>
+
+<span class="nc" id="L190">        return ResponseEntity.ok().body(narkedDown)</span>
+    }
+
+
+    /**Students approved From a Course*/
+    @GetMapping(&quot;/api/course/students/approved/{id}&quot;)
+    fun studentsApprovedFromACourse(@PathVariable(&quot;id&quot;) id: Int): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L199">        try {</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            val students = courseService.studentsApprovedFromACourse(id).map { StudentDTO.desdeModelo(it) }</span>
+<span class="nc" id="L201">            ResponseEntity.status(200)</span>
+<span class="nc" id="L202">            response = ResponseEntity.ok().body(students)</span>
+<span class="nc" id="L203">        } catch (e: Exception) {</span>
+<span class="nc" id="L204">            ResponseEntity.status(404)</span>
+
+<span class="nc" id="L206">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L207">            resultado[&quot;Not found Course with id&quot;] = id.toString()</span>
+
+<span class="nc" id="L209">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L211">        return response!!</span>
+
+    }
+
+
+    /**Students fill the survey From a Course*/
+    @GetMapping(&quot;/api/course/students/survey/{id}&quot;)
+    fun studentsFillSurveyFromACourse(@PathVariable(&quot;id&quot;) id: Int): ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L221">        try {</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">            val students = courseService.studentsFillSurveydFromACourse(id).map { StudentDTO.desdeModelo(it) }</span>
+<span class="nc" id="L223">            ResponseEntity.status(200)</span>
+<span class="nc" id="L224">            response = ResponseEntity.ok().body(students)</span>
+<span class="nc" id="L225">        } catch (e: Exception) {</span>
+<span class="nc" id="L226">            ResponseEntity.status(404)</span>
+
+<span class="nc" id="L228">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L229">            resultado[&quot;Not found Course with id&quot;] = id.toString()</span>
+
+<span class="nc" id="L231">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L233">        return response!!</span>
+
+    }
+
+    /** Course attended at days*/
+    @GetMapping(&quot;/api/course/attended/{course}&quot;)
+    fun courseAttendedAtDay(@PathVariable(&quot;course&quot;) course_id: Int)
+            : ResponseEntity&lt;*&gt; {
+        var response: ResponseEntity&lt;*&gt;?
+
+<span class="nc" id="L243">        try {</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">            val result = courseService.attendedAtDay(course_id)</span>
+<span class="nc" id="L245">            ResponseEntity.status(200)</span>
+<span class="nc" id="L246">            response = ResponseEntity.ok().body(result)</span>
+<span class="nc" id="L247">        } catch (e: Exception) {</span>
+<span class="nc" id="L248">            ResponseEntity.status(404)</span>
+
+<span class="nc" id="L250">            val resultado: MutableMap&lt;String, String&gt; = HashMap()</span>
+<span class="nc" id="L251">            resultado[&quot;Course with Id not found&quot;] = course_id.toString()</span>
+<span class="nc" id="L252">            response = ResponseEntity.badRequest().body&lt;Map&lt;String, String&gt;&gt;(resultado)</span>
+        }
+<span class="nc" id="L254">        return response!!</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

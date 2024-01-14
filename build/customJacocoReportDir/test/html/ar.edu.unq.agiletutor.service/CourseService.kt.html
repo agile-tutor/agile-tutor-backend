@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CourseService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.service</a> &gt; <span class="el_source">CourseService.kt</span></div><h1>CourseService.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.service
+
+import ar.edu.unq.agiletutor.ItemNotFoundException
+import ar.edu.unq.agiletutor.UsernameExistException
+import ar.edu.unq.agiletutor.model.Course
+import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.model.Tutor
+import ar.edu.unq.agiletutor.persistence.CourseRepository
+import ar.edu.unq.agiletutor.persistence.StudentRepository
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+<span class="fc" id="L14">@Service</span>
+<span class="fc" id="L15">class CourseService {</span>
+
+
+    @Autowired
+    private lateinit var studentService: StudentService
+
+    @Autowired
+    private lateinit var repository: CourseRepository
+
+    @Autowired
+    private lateinit var studenRepository: StudentRepository
+
+    @Autowired
+    private lateinit var senderService: EmailServiceImpl
+
+    @Autowired
+    private lateinit var surveyService: SurveyService
+
+    @Autowired
+    private lateinit var percentageService: PercentageService
+
+
+    @Transactional
+    fun register(course: Course): Course {
+
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (existSCourse(course)) {</span>
+<span class="nc" id="L41">            throw UsernameExistException(&quot;Course with name:  ${course.name} is used&quot;)</span>
+        }
+<span class="fc" id="L43">        println(&quot;iddelcurso111&quot;+course.id)</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        return repository.save(course)</span>
+    }
+
+    private fun existSCourse(course: Course): Boolean {
+       /* var bool = false
+        val courses = repository.findAll().toMutableList()
+        if (courses.isNotEmpty()) {
+            bool = courses.any { it.name == course.name }
+        }
+        return bool
+   */
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        val courses = repository.findAll().toMutableList()</span>
+<span class="fc" id="L56">        return courses.any { it.name == course.name }</span>
+    }
+
+    @Transactional
+    fun findAll(): List&lt;Course&gt; {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        return repository.findAll()</span>
+    }
+
+    @Transactional
+    fun findByID(id: Int): Course {
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        val course = repository.findById(id)</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (!(course.isPresent)) {</span>
+<span class="fc" id="L68">            throw ItemNotFoundException(&quot;Course with Id:  $id not found&quot;)</span>
+        }
+<span class="fc" id="L70">        return course.get()</span>
+    }
+
+    @Transactional
+    fun findByName(name: String): Course {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        val course = repository.findByName(name)</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (!(course.isPresent)) {</span>
+<span class="nc" id="L77">            throw ItemNotFoundException(&quot;Course with Name: $name not found&quot;)</span>
+        }
+<span class="nc" id="L79">        return course.get()</span>
+    }
+
+    @Transactional
+    fun tutorFromACourse(id: Int): Tutor {
+<span class="nc" id="L84">        val course = findByID(id)</span>
+<span class="nc" id="L85">        return course.tutor!!</span>
+    }
+
+    @Transactional
+    fun studentsFromACourse(id: Int): List&lt;Student&gt; {
+<span class="fc" id="L90">        val course = findByID(id)</span>
+<span class="fc" id="L91">        return course.students.toMutableList()</span>
+    }
+
+    @Transactional
+    fun studentsApprovedFromACourse(id: Int): List&lt;Student&gt; {
+<span class="nc" id="L96">        val course = findByID(id)</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        val percentageByDefault = percentageService.percentageByDefault()</span>
+<span class="nc" id="L98">        return course.students.toMutableList().filter{it.approvedAccordingPercentageDefault(percentageByDefault)}</span>
+    }
+
+    @Transactional
+    fun studentsFillSurveydFromACourse(id: Int): List&lt;Student&gt; {
+<span class="nc" id="L103">        val course = findByID(id)</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        val studentsIds= surveyService.findAll().toMutableList().map{it.studentId}</span>
+<span class="nc" id="L105">        return course.students.toMutableList().filter{it.fillSurvey(studentsIds)}</span>
+    }
+
+
+
+    @Transactional
+    fun studentsAbsentAtaDay (day: Int): List&lt;Student&gt; {
+<span class="nc bnc" id="L112" title="All 4 branches missed.">        return studentService.findAll().filter { ! it.attendedDay(day) }</span>
+    }
+
+    @Transactional
+    fun studentsAbsentAtaDayFromACourse (id:Int, day: Int): List&lt;Student&gt; {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        return studentsFromACourse(id).filter { ! it.attendedDay(day) }</span>
+    }
+
+       @Transactional
+       fun markdownAttendance(course:Course, day:Int): Course {
+<span class="nc" id="L122">           val rangedays = (1..6)</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">           if (! rangedays.contains(day)) {</span>
+<span class="nc" id="L124">               throw ItemNotFoundException(&quot; Day:  $day invalid&quot;)</span>
+           }
+<span class="nc" id="L126">           val dateclass = course.dateclasses.toMutableList().get(day.dec())</span>
+<span class="nc" id="L127">           dateclass.passed = true</span>
+<span class="nc" id="L128">           course.dateclasses.toMutableList().set(day.dec(), dateclass)</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">           return  repository.save(course)</span>
+        }
+
+/*
+    @Transactional
+    fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendance: List&lt;StudentAttendanceDTO&gt;) {
+        val course = findByID(id)
+        markdownAttendance(course, studentAttendance.first().attendance.day!!)
+        studentAttendance.sortedBy { it.studentId }
+        for (student in course.students.sortedBy { it.id }) {
+            student.updateAttendanceAtADay(studentAttendance.first().attendance.aModelo())
+            studentAttendance.iterator().next()
+        }
+        repository.save(course)
+        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(studentAttendance.first().attendance.day!!).toMutableSet()
+       senderService.saveAllAbsent(students)
+
+    }
+*/
+/*
+    @Transactional
+    fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List&lt;StudentAttendanceDTO&gt;) {
+       val course = findByID(id)
+        markdownAttendance(course, studentAttendances.first().attendance.day!!)
+
+        for (studentAttendance in studentAttendances) {
+           val student =  studentService.findByID(studentAttendance.studentId.toLong())
+            student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
+
+        }
+        repository.save(course)
+        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(studentAttendances.first().attendance.day!!).toMutableSet()
+        senderService.saveAllAbsent(students)
+
+    }
+*/
+
+    @Transactional
+    fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List&lt;StudentAttendanceDTO&gt;) {
+<span class="nc" id="L168">        val course = findByID(id)</span>
+<span class="nc" id="L169">        println(course.toString()+&quot;courseupdateget&quot;)</span>
+      // val courseMarked =  markdownAttendance(course, studentAttendances.first().attendance.day!!)
+<span class="nc" id="L171">        course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)</span>
+<span class="nc" id="L172">        println(course.toString()+&quot;courseupdatepostmark&quot;)</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        for (studentAttendance in studentAttendances) {</span>
+<span class="nc" id="L174">            println(studentAttendance.toString()+&quot;courseupdateattendancesfor&quot;)</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            val student =  studentService.findByID(studentAttendance.studentId.toLong())</span>
+<span class="nc" id="L176">            println(student.name+&quot;courseupdateattendancesstudent&quot;)</span>
+<span class="nc" id="L177">            student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())</span>
+
+        }
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        repository.save(course)</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        val students = studentService.studentsNotBlockedAbsentAtAParticularDay(id, studentAttendances.first().attendance.day!!).toMutableSet()</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">        senderService.saveAllAbsent(students, course.tutor!!.notifyer!!)</span>
+
+<span class="nc" id="L184">    }</span>
+
+
+
+    @Transactional
+    fun update(id: Int, entity: CourseDTO): Course {
+<span class="nc" id="L190">       val course = findByID(id)</span>
+<span class="nc" id="L191">        course.name= entity.name</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">        return repository.save(course)</span>
+    }
+
+
+    @Transactional
+    fun averageAttendancesFromACourse(id:Int): Double {
+<span class="nc" id="L198">        val course = findByID(id)</span>
+<span class="nc bnc" id="L199" title="All 4 branches missed.">        if (course.students.isNotEmpty()) {</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            return course.students.sumOf { it.attendancePercentage() } / course.students.size</span>
+        }
+        else
+<span class="nc" id="L203">        {return 0.0}</span>
+    }
+
+   @Transactional
+   fun  addAStudentToACourse(student:Student, id:Int){
+<span class="nc" id="L208">       val course = findByID(id)</span>
+<span class="nc" id="L209">       student.course = course</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">       studentService.register(student)</span>
+   //course.students.add(student)
+      // repository.save(course)
+
+<span class="nc" id="L214">   }</span>
+
+    @Transactional
+    fun removeAStudentFromACourse(student:Student, id:Int){
+<span class="nc" id="L218">        val course = findByID(id)</span>
+<span class="nc" id="L219">        course.students.remove(student)</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">        repository.save(course)</span>
+<span class="nc" id="L221">    }</span>
+
+    @Transactional
+   fun markedDownAttendanceAFromACourseATaParticularDay(id:Int,day:Int):Boolean {
+<span class="nc" id="L225">        val course = findByID(id)</span>
+<span class="nc" id="L226">        return course.markedDowndDay(day)</span>
+
+   }
+
+    @Transactional
+    fun attendedAtDay(id: Int): MutableSet&lt;DayBooleanDTO&gt; {
+<span class="nc" id="L232">        val course = findByID(id)</span>
+<span class="nc" id="L233">        return course.attendedAtDays()</span>
+    }
+
+    //  @Transactional
+   // fun updateStudentsAttendancesFromACourse(courseId: Int, studentAttendance: List&lt;StudentAttendanceDTO&gt;) {
+        //val course = findByID(id)
+     //   studentAttendance.forEach {
+       //     attendanceRepository.setAttendanceInfoById(it.attendance.attended.toBoolean(), it.attendance.id)
+       // }
+     //   senderService.notifyAllAbsent(studentAttendance[0].attendance.day!!, courseId)
+       /*     var studentToUpdate = studenRepository.findById(it.studentId.toLong()).get()
+            var atendancesUpdated = updateAttendance(
+                it.attendance.day!!,
+                it.attendance.attended.toBoolean(),
+                studentToUpdate.attendances.toMutableList()
+            )
+            println(studentToUpdate.email + &quot; dia:&quot; + studentAttendance[0].attendance.day + &quot; curso:&quot; + studentToUpdate.course!!.id + &quot;paraupdate&quot;)
+            studentToUpdate.attendances = atendancesUpdated.toMutableSet()
+            for (attendance in studentToUpdate.attendances) {
+                println(attendance.attended.toString()+&quot;booleano-dia&quot;+attendance.day)
+            }
+            studenRepository.save(studentToUpdate)
+        }
+        senderService.notifyAllAbsent(studentAttendance[0].attendance.day!!, courseId)
+        *//*      for (student in course.students) {
+                  val boolean = booleans.iterator().next()
+                  updateAttendance(day,boolean, student.attendances.toMutableList())
+        repository.save(course)*/
+  //  }
+/*
+    private fun updateAttendance(
+        day: Int,
+        boolean: Boolean,
+        attendances: MutableList&lt;Attendance&gt;
+    ): MutableList&lt;Attendance&gt; {
+        println(&quot;$day $boolean aquiestoy&quot;)
+        val attendance = attendances[day]
+        attendance.attended = boolean
+        attendances[day] = attendance
+        return attendances
+    }*/
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

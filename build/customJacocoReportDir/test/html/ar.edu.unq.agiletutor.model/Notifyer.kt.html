@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Notifyer.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.model</a> &gt; <span class="el_source">Notifyer.kt</span></div><h1>Notifyer.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.model
+
+import jakarta.annotation.PostConstruct
+import jakarta.persistence.*
+import java.time.LocalDate
+
+<span class="fc" id="L7">@Entity</span>
+@Table(name = &quot;notifyer&quot;)
+<span class="fc" id="L9">class Notifyer {</span>
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L13">    var id: Long = 0</span>
+
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+<span class="pc" id="L16">    var absent: MutableSet&lt;Student&gt; = HashSet()</span>
+
+<span class="nc" id="L18">    var textemail: String =</span>
+<span class="fc" id="L19">            &quot;¿Como estás? Observo que no viniste al encuentro del \&quot;taller de vida universitaria\&quot;, y ¡quería saber si te pasó algo!\n&quot; +</span>
+                    &quot;\n&quot; +
+<span class="nc" id="L21">                    &quot;Saludos\n&quot;</span>
+
+<span class="pc" id="L23">    var subjectmail: String = &quot;ASISTENCIAS - TVU&quot;</span>
+
+/*    @OneToOne(mappedBy = &quot;notifyer&quot;)
+    var tutor: Tutor? = null*/
+
+    fun setAbsents(absents: MutableSet&lt;Student&gt;) {
+<span class="nc" id="L29">        absent = absents</span>
+<span class="nc" id="L30">    }</span>
+
+    fun getabsent(): MutableSet&lt;Student&gt; {
+<span class="nc" id="L33">        println(&quot;getabsent&quot; + this.absent)</span>
+<span class="nc" id="L34">        return this.absent</span>
+    }
+
+    fun getTextEmail(nombre: String): String {
+<span class="nc" id="L38">        return &quot;Buenas noches &quot; + nombre + &quot;,\n&quot; +</span>
+                &quot;\n&quot; +
+<span class="nc" id="L40">                this.textemail</span>
+    }
+
+    fun getTextEmailForEdit(): String {
+<span class="nc" id="L44">        return this.textemail</span>
+    }
+
+    fun getSubjectEmail(): String {
+<span class="nc" id="L48">        return this.subjectmail</span>
+    }
+
+    fun setTextEmail(text: String) {
+<span class="nc" id="L52">        this.textemail = text</span>
+<span class="nc" id="L53">    }</span>
+
+    fun setSubjectEmail(text: String) {
+<span class="nc" id="L56">        this.subjectmail = text</span>
+<span class="nc" id="L57">    }</span>
+
+    fun addabsent(student: Student) {
+<span class="nc" id="L60">        this.absent.add(student)</span>
+<span class="nc" id="L61">    }</span>
+
+    fun addAllbsent(students: MutableSet&lt;Student&gt;) {
+<span class="nc" id="L64">        this.absent.addAll(students)</span>
+<span class="nc" id="L65">    }</span>
+
+    fun delabsent(student: Student) {
+<span class="nc" id="L68">        this.absent.remove(student)</span>
+<span class="nc" id="L69">    }</span>
+
+    fun removeall() {
+        // val studentsToRemove: MutableSet&lt;Student&gt; = this.absent
+        //this.absent.removeAll(studentsToRemove)
+<span class="nc" id="L74">        absent.removeAll(absent)</span>
+<span class="nc" id="L75">        println(&quot;aquipaso&quot; + this.absent + &quot;aquipase&quot;)</span>
+<span class="nc" id="L76">    }</span>
+
+    fun getAbsentToNotify(): MutableSet&lt;Student&gt; {
+<span class="nc" id="L79">        println(&quot;getabsent&quot; + this.absent)</span>
+<span class="nc" id="L80">        return this.absent</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -7,6 +7,7 @@ plugins {
     id("idea")
     id("eclipse")
     id("jacoco")
+    id("org.sonarqube") version "4.4.1.3373"
 
     kotlin("jvm") version "1.7.22"
     kotlin("plugin.spring") version "1.7.22"

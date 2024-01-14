@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Attendance.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.model</a> &gt; <span class="el_source">Attendance.kt</span></div><h1>Attendance.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.model
+
+import jakarta.persistence.*
+import org.jetbrains.annotations.NotNull
+import java.io.Serializable
+
+@Entity
+class Attendance : Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;id_attendance&quot;)
+<span class="pc" id="L13">    var id: Int? = null</span>
+
+    @Column(nullable = false)
+    @NotNull(&quot;el day es obligatorio&quot;)
+    // @Size(min = 1, max = 1, message = &quot;el campo day debe tener un solo caracter&quot;)
+<span class="pc" id="L18">    var day: Int? = null</span>
+
+    @Column(nullable = false)
+    @NotNull(&quot;el attended es obligatorio&quot;)
+    // @Size(min = 1, max = 1, message = &quot;el campo check debe tener un solo caracter&quot;)
+<span class="pc" id="L23">    var attended: Boolean = false</span>
+
+    /*
+    @JoinColumn(nullable = false)
+    @ManyToOne(optional = true)
+    var student: Student? = null
+*/
+
+<span class="fc" id="L31">    constructor() : super() {}</span>
+    constructor(
+        // id: Int?,
+        day: Int?,
+        attended: Boolean,
+        //student: Student?
+<span class="fc" id="L37">    ) : super() {</span>
+        // this.id = id
+<span class="fc" id="L39">        this.day = day</span>
+<span class="fc" id="L40">        this.attended = attended</span>
+<span class="fc" id="L41">    }</span>
+
+    fun setday(day: Int) {
+<span class="nc" id="L44">        this.day = day</span>
+<span class="nc" id="L45">    }</span>
+
+    fun getcday(): Int? {
+<span class="nc" id="L48">        return day</span>
+    }
+/*
+    fun setattended(attended: String) {
+        this.attended = attended.toBoolean()
+    }*/
+/*
+    fun getattended(): Boolean? {
+        return attended
+    }*/
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

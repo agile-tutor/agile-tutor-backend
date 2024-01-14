@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StudentDTO.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">agiletutor</a> &gt; <a href="index.source.html" class="el_package">ar.edu.unq.agiletutor.service</a> &gt; <span class="el_source">StudentDTO.kt</span></div><h1>StudentDTO.kt</h1><pre class="source lang-java linenums">package ar.edu.unq.agiletutor.service
+
+import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.model.Attendance
+import ar.edu.unq.agiletutor.model.Course
+import org.springframework.beans.factory.annotation.Autowired
+
+
+
+
+<span class="nc" id="L11">data class StudentFromACourseDTO(</span>
+<span class="nc" id="L12">    var id: Long?,</span>
+<span class="nc" id="L13">    var name: String?,</span>
+<span class="nc" id="L14">    var surname: String?,</span>
+<span class="nc" id="L15">    var identifier: String?,</span>
+<span class="nc" id="L16">    var email: String?,</span>
+<span class="nc" id="L17">    var courseId: Int,</span>
+
+    )
+
+{
+
+    companion object {
+        fun desdeModelo(student: Student): StudentFromACourseDTO {
+<span class="nc" id="L25">           return StudentFromACourseDTO(</span>
+<span class="nc" id="L26">                student.id,</span>
+<span class="nc" id="L27">                student.name,</span>
+<span class="nc" id="L28">                student.surname,</span>
+<span class="nc" id="L29">                student.identifier,</span>
+<span class="nc" id="L30">                student.email,</span>
+<span class="nc" id="L31">                student.course!!.id</span>
+            )
+        }
+
+    }
+
+    fun aModelo(course: Course): Student {
+<span class="nc" id="L38">        val student = Student()</span>
+<span class="nc" id="L39">        val attendances = mutableSetOf&lt;Attendance&gt;()</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (i in (1..6)) {</span>
+<span class="nc" id="L41">            attendances.add(Attendance(i, false))</span>
+        }
+<span class="nc" id="L43">        student.id = id</span>
+<span class="nc" id="L44">        student.name = name</span>
+<span class="nc" id="L45">        student.surname = surname</span>
+<span class="nc" id="L46">        student.identifier = identifier</span>
+<span class="nc" id="L47">        student.email = email</span>
+<span class="nc" id="L48">        student.attendances = attendances</span>
+        // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
+<span class="nc" id="L50">        student.attendancepercentage = 0.0</span>
+<span class="nc" id="L51">        student.observations = &quot;&quot;</span>
+<span class="nc" id="L52">        student.blocked = false</span>
+<span class="nc" id="L53">        student.course = course</span>
+<span class="nc" id="L54">        return student</span>
+    }
+}
+
+<span class="nc" id="L58">data class ManyStudentsFromACourse(</span>
+<span class="nc" id="L59">      var studentsDTO : MutableSet&lt;StudentFromACourseDTO&gt; = HashSet()</span>
+
+) {
+    fun aModelo(course: Course): List&lt;Student&gt; {
+
+<span class="nc" id="L64">        return studentsDTO.map {</span>
+<span class="nc" id="L65">            StudentFromACourseDTO(</span>
+<span class="nc" id="L66">                it.id,</span>
+<span class="nc" id="L67">                it.name,</span>
+<span class="nc" id="L68">                it.surname,</span>
+<span class="nc" id="L69">                it.identifier,</span>
+<span class="nc" id="L70">                it.email,</span>
+<span class="nc" id="L71">                course.id</span>
+<span class="nc" id="L72">            ).aModelo(course)</span>
+<span class="nc" id="L73">        }.toMutableList()</span>
+
+    }
+
+    companion object {
+        fun desdeModelo(students: List &lt;Student&gt;): List &lt;StudentFromACourseDTO&gt; {
+<span class="nc" id="L79">           return students.map { StudentFromACourseDTO.desdeModelo(it)}</span>
+        }
+    }
+
+<span class="nc" id="L83">}</span>
+<span class="nc" id="L84">data class StudentRegisterDTO(</span>
+<span class="nc" id="L85">        var id: Long?,</span>
+<span class="nc" id="L86">        var name: String?,</span>
+<span class="nc" id="L87">        var surname: String?,</span>
+<span class="nc" id="L88">        var identifier: String?,</span>
+<span class="nc" id="L89">        var email: String?,</span>
+       // var attendances: List&lt;AttendanceDTO&gt;?,
+      //  var attendancepercentage: Double?,
+<span class="nc" id="L92">        var observations: String?,</span>
+      //  var blocked: Boolean,
+<span class="nc" id="L94">        var courseId: Int</span>
+) {
+
+    companion object {
+        fun desdeModelo(student: Student): StudentRegisterDTO {
+<span class="nc" id="L99">            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }</span>
+
+<span class="nc" id="L101">            return StudentRegisterDTO(</span>
+<span class="nc" id="L102">                    student.id,</span>
+<span class="nc" id="L103">                    student.name,</span>
+<span class="nc" id="L104">                    student.surname,</span>
+<span class="nc" id="L105">                    student.identifier,</span>
+<span class="nc" id="L106">                    student.email,</span>
+                  //  asistenciasDTO,
+                  //  student.attendancepercentage,
+<span class="nc" id="L109">                   student.observations,</span>
+                   // student.blocked,
+<span class="nc" id="L111">                    student.course!!.id</span>
+            )
+        }
+    }
+
+    fun aModelo(course: Course): Student {
+<span class="nc" id="L117">        val student = Student()</span>
+<span class="nc" id="L118">        val attendances = mutableSetOf&lt;Attendance&gt;()</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        for (i in (1..6)) {</span>
+<span class="nc" id="L120">            attendances.add(Attendance(i, false))</span>
+        }
+<span class="nc" id="L122">        student.id = id</span>
+<span class="nc" id="L123">        student.name = name</span>
+<span class="nc" id="L124">        student.surname = surname</span>
+<span class="nc" id="L125">        student.identifier = identifier</span>
+<span class="nc" id="L126">        student.email = email</span>
+<span class="nc" id="L127">        student.attendances = attendances</span>
+       // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
+<span class="nc" id="L129">        student.attendancepercentage = 0.0</span>
+<span class="nc" id="L130">        student.observations = observations!!</span>
+<span class="nc" id="L131">       student.blocked = false</span>
+<span class="nc" id="L132">        student.course = course</span>
+<span class="nc" id="L133">        return student</span>
+    }
+}
+
+
+
+<span class="fc" id="L139">data class StudentDTO(</span>
+<span class="pc" id="L140">        var id: Long?,</span>
+<span class="pc" id="L141">        var name: String?,</span>
+<span class="pc" id="L142">        var surname: String?,</span>
+<span class="pc" id="L143">        var identifier: String?,</span>
+<span class="pc" id="L144">        var email: String?,</span>
+<span class="pc" id="L145">        var attendances: List&lt;AttendanceDTO&gt;?,</span>
+<span class="pc" id="L146">        var attendancepercentage: Double?,</span>
+<span class="pc" id="L147">        var observations: String?,</span>
+<span class="pc" id="L148">        var blocked: Boolean,</span>
+<span class="pc" id="L149">        var courseId: Int</span>
+
+) {
+
+    companion object {
+        fun desdeModelo(student: Student): StudentDTO {
+<span class="fc" id="L155">            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }</span>
+
+<span class="fc" id="L157">            return StudentDTO(</span>
+<span class="fc" id="L158">                    student.id,</span>
+<span class="fc" id="L159">                    student.name,</span>
+<span class="fc" id="L160">                    student.surname,</span>
+<span class="fc" id="L161">                    student.identifier,</span>
+<span class="fc" id="L162">                    student.email,</span>
+<span class="fc" id="L163">                    asistenciasDTO,</span>
+<span class="fc" id="L164">                    student.attendancepercentage,</span>
+<span class="fc" id="L165">                    student.observations,</span>
+<span class="fc" id="L166">                    student.blocked,</span>
+<span class="fc" id="L167">                    student.course!!.id</span>
+
+            )
+        }
+    }
+
+    fun aModelo(course: Course): Student {
+<span class="nc" id="L174">        val student = Student()</span>
+<span class="nc" id="L175">        student.id = id</span>
+<span class="nc" id="L176">        student.name = name</span>
+<span class="nc" id="L177">        student.surname = surname</span>
+<span class="nc" id="L178">        student.identifier = identifier</span>
+<span class="nc" id="L179">        student.email = email</span>
+        // student.attendances
+<span class="nc" id="L181">        attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()</span>
+<span class="nc" id="L182">        student.attendancepercentage = 0.0</span>
+<span class="nc" id="L183">        student.observations = observations!!</span>
+<span class="nc" id="L184">        student.blocked = blocked</span>
+<span class="nc" id="L185">        student.course = course</span>
+<span class="nc" id="L186">        return student</span>
+    }
+
+}
+
+<span class="fc" id="L191">data class AttendanceDTO(</span>
+<span class="pc" id="L192">        var id: Int?,</span>
+<span class="pc" id="L193">        var day: Int?,</span>
+<span class="pc" id="L194">        var attended: Boolean</span>
+
+) {
+    companion object {
+        fun desdeModelo(asistencia: Attendance): AttendanceDTO {
+<span class="fc" id="L199">            return AttendanceDTO(asistencia.id, asistencia.day, asistencia.attended)</span>
+        }
+    }
+
+    fun aModelo(): Attendance {
+<span class="nc" id="L204">        val attendance = Attendance()</span>
+<span class="nc" id="L205">        attendance.id = id</span>
+<span class="nc" id="L206">        attendance.day = day</span>
+<span class="nc" id="L207">        attendance.attended = attended</span>
+<span class="nc" id="L208">        return attendance</span>
+    }
+}
+
+<span class="nc" id="L212">data class AttendanceViewDTO(</span>
+<span class="nc" id="L213">        var day: Int?</span>
+) {
+    companion object {
+        fun desdeModelo(asistencia: Attendance): AttendanceViewDTO {
+<span class="nc" id="L217">            return AttendanceViewDTO(asistencia.day)</span>
+        }
+    }
+}
+
+
+<span class="nc" id="L223">data class StudentAttendanceDTO(</span>
+<span class="nc" id="L224">        var studentId: Int,</span>
+<span class="nc" id="L225">        var attendance: AttendanceDTO</span>
+)
+
+<span class="nc" id="L228">data class StudentBlockDTO(</span>
+<span class="nc" id="L229">        var blocked: Boolean</span>
+)
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
