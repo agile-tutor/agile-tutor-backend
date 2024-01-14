@@ -1,6 +1,10 @@
 name: Java CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - master        # The default branch
+      - branch-*    # The other branches to be analyzed
 
 jobs:
   build:
