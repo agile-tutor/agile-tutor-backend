@@ -113,7 +113,7 @@ class EmailServiceImpl {
             println("adentro del cronJob de 5 segundos")
         }
     */
-    //@Scheduled(cron = "0 0 22 * * *")//a las 22 horas
+
     @Transactional
     @Scheduled(cron = "\${cron.expressionat22hs}")//a las 22 horas
     //@Scheduled(cron = "\${cron.expression20seg}")//cada 20 segundos
