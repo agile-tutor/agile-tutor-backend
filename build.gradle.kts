@@ -47,6 +47,14 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+sonar {
+    properties {
+        property("sonar.projectKey", "agile-tutor_agile-tutor-backend")
+        property("sonar.organization", "agile-tutor-1")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
 }
