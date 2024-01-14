@@ -31,7 +31,6 @@ class Tutor : Serializable {
     @NotNull("El password es obligatorio")
     var password: String? = ""
 
-    // @Column(nullable = false)
     @OneToMany(mappedBy = "tutor", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var courses: MutableSet<Course> = HashSet()
 
