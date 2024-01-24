@@ -1,5 +1,7 @@
 package ar.edu.unq.agiletutor.service
 
+import ar.edu.unq.agilemeeting.service.AbsentMessageDataDTO
+import ar.edu.unq.agilemeeting.service.TutorRegisterDTO
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.*

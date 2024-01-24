@@ -1,14 +1,6 @@
 HELP.md
 .gradle
-build/classes
-build/jacoco
-build/kotlin
-build/libs
-build/reports
-build/resources
-build/snapshot
-build/test-results
-build/tmp
+build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

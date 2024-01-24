@@ -1,5 +1,6 @@
 package ar.edu.unq.agiletutor.service
 
+import ar.edu.unq.agilemeeting.service.CourseDTO
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Course
@@ -123,9 +124,9 @@ class CourseService {
            if (! rangedays.contains(day)) {
                throw ItemNotFoundException(" Day:  $day invalid")
            }
-           val dateclass = course.dateclasses.toMutableList().get(day.dec())
-           dateclass.passed = true
-           course.dateclasses.toMutableList().set(day.dec(), dateclass)
+           val meeting = course.meetings.toMutableList().get(day.dec())
+           meeting.passed = true
+           course.meetings.toMutableList().set(day.dec(), meeting)
            return  repository.save(course)
         }
 
@@ -166,7 +167,7 @@ class CourseService {
     @Transactional
     fun updateStudentsAttendancesFromACourse(id:Int,  studentAttendances: List<StudentAttendanceDTO>) {
         val course = findByID(id)
-        println(course.toString()+"courseupdateget")
+        println(course.toString()+"courseupdateget "+course.id+"day "+studentAttendances.first().attendance.day)
       // val courseMarked =  markdownAttendance(course, studentAttendances.first().attendance.day!!)
         course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
         println(course.toString()+"courseupdatepostmark")

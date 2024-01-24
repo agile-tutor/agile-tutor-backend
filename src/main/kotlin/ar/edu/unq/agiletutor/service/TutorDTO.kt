@@ -1,22 +1,19 @@
-package ar.edu.unq.agiletutor.service
-
+package ar.edu.unq.agilemeeting.service
 import ar.edu.unq.agiletutor.model.Course
-import ar.edu.unq.agiletutor.model.Student
+import ar.edu.unq.agiletutor.model.Meeting
 import ar.edu.unq.agiletutor.model.Tutor
-import ar.edu.unq.agiletutor.persistence.StudentRepository
-import org.springframework.beans.factory.annotation.Autowired
 
 data class TutorLoginDTO(
-    var email: String,
-    var password: String
+        var email: String,
+        var password: String
 )
 
 data class TutorRegisterDTO(
-    var id: Int?,
-    var name: String?,
-    var surname: String?,
-    var email: String?,
-    var password: String?
+        var id: Int?,
+        var name: String?,
+        var surname: String?,
+        var email: String?,
+        var password: String?
 ) {
     fun aModelo(): Tutor {
         val tutor = Tutor()
@@ -31,24 +28,23 @@ data class TutorRegisterDTO(
 }
 
 data class TutorDTO(
-    var id: Int?,
-    var name: String?,
-    var surname: String?,
-    var email: String?
-    //var courses: List<CourseDTO>?,
-
+        var id: Int?,
+        var name: String?,
+        var surname: String?,
+        var email: String?
+        //var courses: List<CourseDTO>?,
 ) {
 
     companion object {
         fun desdeModelo(tutor: Tutor): TutorDTO {
-            //  val coursesDTO = tutor.courses.map { CourseDTO.desdeModelo(it) }
+            //  val coursesDTO = meeting.courses.map { CourseDTO.desdeModelo(it) }
 
             return TutorDTO(
-                tutor.id,
-                tutor.name,
-                tutor.surname,
-                tutor.email
-                //    coursesDTO
+                    tutor.id,
+                    tutor.name,
+                    tutor.surname,
+                    tutor.email
+                    //    coursesDTO
             )
         }
     }
@@ -59,20 +55,16 @@ data class TutorDTO(
         tutor.name = name
         tutor.surname = surname
         tutor.email = email
-        // tutor.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
+        // meeting.courses = courses!!.map {  CourseDTO (it.id,it.name).aModelo() }.toMutableSet()
         return tutor
     }
 }
 
 data class CourseRegisterDTO(
-
-    var id: Int,
-    var name: String?,
-    var tutorId: Int
-
-    )
-
-{
+        var id: Int,
+        var name: String?,
+        var tutorId: Int
+) {
     companion object {
         fun desdeModelo(course: Course): CourseDTO {
             return CourseDTO(course.id, course.name)
@@ -85,21 +77,19 @@ data class CourseRegisterDTO(
         course.name = name
         course.students = mutableSetOf()
         course.tutor = tutor
-        println("iddelcurso"+course.id)
+        println("iddelcurso" + course.id)
         return course
     }
 }
 
-
-
 data class CourseDTO(
-    var id: Int,
-    var name: String?,
+        var id: Int,
+        var name: String?,
 
-    ) {
+        ) {
     companion object {
         fun desdeModelo(course: Course): CourseDTO {
-            println("iddelcurso11"+course.id)
+            println("iddelcurso11" + course.id)
             return CourseDTO(course.id, course.name)
         }
     }
@@ -129,3 +119,43 @@ data class SurveyDataDTO(
         var exclusividad: String,
         var estado: String
 )
+
+//MEETING DTO//
+data class MeetingRegisterDTO(
+        var id: Int,
+        var title: String?,
+        var date: String?,
+        var day: Int
+) {
+    fun aModelo(): Meeting {
+        val meeting = Meeting()
+        meeting.id = id
+        meeting.title = title
+        meeting.date = date
+        meeting.day = day
+        return meeting
+    }
+}
+
+data class MeetingView(
+        var id: Int?,
+        var title: String?,
+        var date: String?,
+        var day: Int?
+        //var courses: List<CourseDTO>?,
+) {
+
+    companion object {
+        fun desdeModelo(meeting: Meeting): MeetingView {
+            //  val coursesDTO = meeting.courses.map { CourseDTO.desdeModelo(it) }
+
+            return MeetingView(
+                    meeting.id,
+                    meeting.title,
+                    meeting.date,
+                    meeting.day
+                    //    coursesDTO
+            )
+        }
+    }
+}

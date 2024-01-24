@@ -1,5 +1,6 @@
 package ar.edu.unq.agiletutor.service
 
+import ar.edu.unq.agilemeeting.service.TutorRegisterDTO
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.model.*
 import org.junit.jupiter.api.*
@@ -28,12 +29,12 @@ internal class CourseTest{
         val tutor1 = Tutor(0, "tutor1", "ape1", "tutor1@gmail.com", "passtut1", mutableSetOf())
 
         course = Course(0, "c0", mutableSetOf(), tutor1, mutableSetOf())
-        val dateclasses = mutableSetOf<DateClass>()
+        val meetings = mutableSetOf<Meeting>()
         for (i in (1..6)) {
-            dateclasses.add(DateClass(0,i, false,course))
+            meetings.add(Meeting(0,i, "2024-02-1$i", "a definir",false,course))
         }
 
-        course = Course(0, "c0", mutableSetOf(), tutor1, dateclasses)
+        course = Course(0, "c0", mutableSetOf(), tutor1, meetings)
 
 
     }
@@ -48,8 +49,8 @@ internal class CourseTest{
     fun Al_consultar_por_un_dia_que_se_paso_asistencia_devuelve_True(){
         val day = 6
         course.markAttendanceAtaDay(day)
-        val dateClass = course.dateclasses.toMutableList().get(day.dec())
-        Assertions.assertTrue(dateClass.passed)
+        val meeting = course.meetings.toMutableList().get(day.dec())
+        Assertions.assertTrue(meeting.passed)
     }
 
 
@@ -58,8 +59,8 @@ internal class CourseTest{
         val day = 1
         val dayNotPassed = 6
         course.markAttendanceAtaDay(day)
-        val dateClass = course.dateclasses.toMutableList().get(dayNotPassed.dec())
-        Assertions.assertFalse(dateClass.passed)
+        val meeting = course.meetings.toMutableList().get(dayNotPassed.dec())
+        Assertions.assertFalse(meeting.passed)
     }
 
     @AfterEach

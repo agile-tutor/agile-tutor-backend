@@ -30,18 +30,17 @@ class Course : Serializable {
     @ManyToOne(optional = true)
     var tutor: Tutor? = null
 
-    @OneToMany( mappedBy = "course",cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    var dateclasses: MutableSet<DateClass> = HashSet()
-
+    @OneToMany(mappedBy = "course", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    var meetings: MutableSet<Meeting> = HashSet()
 
 
     constructor() : super() {}
     constructor(
-        id: Int,
-        name: String?,
-        students: MutableSet<Student>,
-        tutor: Tutor?,
-        dateclasses: MutableSet<DateClass>
+            id: Int,
+            name: String?,
+            students: MutableSet<Student>,
+            tutor: Tutor?,
+            meetings: MutableSet<Meeting>
 
 
     ) : super() {
@@ -49,23 +48,26 @@ class Course : Serializable {
         this.name = name
         this.students = students
         this.tutor = tutor
-        this.dateclasses = dateclasses
+        this.meetings = meetings
 
     }
 
-    fun markAttendanceAtaDay(day :Int):Course {
+    fun markAttendanceAtaDay(day: Int): Course {
         val rangedays = (1..6)
-        if (! rangedays.contains(day)) {
+        if (!rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
-        val dateclass = dateclasses.toMutableList().get(day.dec())
-        dateclass.passed = true
-        dateclasses.toMutableList().set(day.dec(), dateclass)
+        println("aca llegue")
+        val meeting = meetings.toMutableList()[day.dec()]
+        meeting.passed = true
+        println("a ver" + meeting.day.toString() + meeting.passed.toString())
+        meetings.toMutableList()[day.dec()] = meeting
+        meetings.forEach { println(it.day.toString() + it.passed.toString()) }
         return this
     }
 
     fun markedDowndDay(day: Int): Boolean {
-        return dateclasses.any { it.day == day && it.passed }
+        return meetings.any { it.day == day && it.passed }
     }
 
     fun attendedAtDays(): MutableSet<DayBooleanDTO> {

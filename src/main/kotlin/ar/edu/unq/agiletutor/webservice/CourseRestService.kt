@@ -1,5 +1,8 @@
 package ar.edu.unq.agiletutor.webservice
 
+import ar.edu.unq.agilemeeting.service.CourseDTO
+import ar.edu.unq.agilemeeting.service.CourseRegisterDTO
+import ar.edu.unq.agilemeeting.service.TutorDTO
 import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.service.*
 import org.springframework.beans.factory.annotation.Autowired
