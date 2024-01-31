@@ -24,7 +24,6 @@ class PercentageByDefault: Serializable {
         this.percentageApprovedDefault = percentageApprovedDefault
      }
 
-
     fun getPercentageDefault():Double{
         return percentageApprovedDefault
     }
@@ -32,10 +31,4 @@ class PercentageByDefault: Serializable {
     fun setPercentageDefault(percentage:Double){
         percentageApprovedDefault = percentage
     }
-
-
-
-
-
-
 }

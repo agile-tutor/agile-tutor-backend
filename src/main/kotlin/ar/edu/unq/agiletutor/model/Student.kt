@@ -35,9 +35,6 @@ class Student : Serializable {
     //@JoinColumn(nullable = false)
     var attendances: MutableSet<Attendance> = HashSet()
 
-    @Column(nullable = false)
-    var attendancepercentage: Double = 0.0
-
     @Column
     var observations: String = ""
 
@@ -49,16 +46,15 @@ class Student : Serializable {
 
     constructor() : super() {}
     constructor(
-        id: Long?,
-        name: String?,
-        surname: String?,
-        identifier: String?,
-        email: String?,
-        attendances: MutableSet<Attendance>,
-        attendancepercentage: Double,
-        observations: String,
-        course: Course,
-        blocked: Boolean
+            id: Long?,
+            name: String?,
+            surname: String?,
+            identifier: String?,
+            email: String?,
+            attendances: MutableSet<Attendance>,
+            observations: String,
+            course: Course,
+            blocked: Boolean
     ) : super() {
         this.id = id
         this.name = name
@@ -66,7 +62,6 @@ class Student : Serializable {
         this.identifier = identifier
         this.email = email
         this.attendances = attendances
-        this.attendancepercentage = attendancepercentage
         this.observations = observations
         this.course = course
         this.blocked = blocked
@@ -91,25 +86,15 @@ class Student : Serializable {
     fun cantidadDeAusentes(): Int {
         return absent().size
     }
-/*
-    fun calcularPorcentajeDeAsistencias(): Double {
-        attendancepercentage = (cantidadDePresentes() * (100 / 6)).toDouble()
-        return attendancepercentage
-    }
-  */
 
-    fun updateAttendanceAtADay (attendance: Attendance) {
-        println("updateatendance"+attendance.toString()+attendance.id+attendance.attended)
+    fun updateAttendanceAtADay(attendance: Attendance) {
+        println("updateatendance" + attendance.toString() + attendance.id + attendance.attended)
         //attendances.toMutableList().set(attendance.day!!, attendance)
         attendances.find { it.day == attendance.day }?.attended = attendance.attended
-        updateAttendancePercentage()
-    }
-    fun updateAttendancePercentage(){
-        attendancepercentage = kotlin.math.round(cantidadDePresentes() * (100.00 / 6))
     }
 
-    fun attendancePercentage(): Double{
-        return attendancepercentage
+    fun attendancePercentage(): Double {
+        return kotlin.math.round(cantidadDePresentes() * (100.00 / 6))
     }
 
     fun sinFaltas(): Boolean {
@@ -117,12 +102,11 @@ class Student : Serializable {
         return attendances.all { it.attended }
     }
 
-    fun approvedAccordingPercentageDefault(percentage:Double):Boolean{
-        return  ( attendancePercentage() >= kotlin.math.round(percentage) )
+    fun approvedAccordingPercentageDefault(percentage: Double): Boolean {
+        return (attendancePercentage() >= kotlin.math.round(percentage))
     }
 
-    fun fillSurvey(studentsIds : List <Long>):Boolean{
-        return  (studentsIds.contains(id!!))
+    fun fillSurvey(studentsIds: List<Long>): Boolean {
+        return (studentsIds.contains(id!!))
     }
-
 }

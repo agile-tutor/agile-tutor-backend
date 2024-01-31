@@ -33,9 +33,9 @@ class StudentService {
 
 
     @Transactional
-    fun registerMany(students: List<Student>): List <Student> {
+    fun registerMany(students: List<Student>): List<Student> {
 
-        if (students.any {existStudent(it)} ) {
+        if (students.any { existStudent(it) }) {
             throw UsernameExistException("There is a Student with an used email")
         }
 
@@ -49,7 +49,7 @@ class StudentService {
     }
 
     private fun existStudent(student: Student): Boolean {
-     val students = repository.findAll().toMutableList()
+        val students = repository.findAll().toMutableList()
         return students.any { it.email == student.email }
     }
 
@@ -78,16 +78,13 @@ class StudentService {
     fun updateattendances(studentId: Long, attendances: List<AttendanceDTO>): Student {
         val student = findByID(studentId)
         student.attendances = attendances.map { it.aModelo() }.toMutableSet()
-        student.updateAttendancePercentage()
         return repository.save(student)
     }
 
-
-
     @Transactional
     fun update(id: Long, entity: StudentDTO): StudentDTO {
-       val student = findByID(id)
-        student.name =  entity.name
+        val student = findByID(id)
+        student.name = entity.name
         student.surname = entity.surname
         student.identifier = entity.identifier
         student.email = entity.email
@@ -109,10 +106,10 @@ class StudentService {
     fun averageAttendancesFromAllStudents(): Double {
         if (findAll().isNotEmpty()) {
             return findAll().sumOf { it.attendancePercentage() } / findAll().size
+        } else {
+            return 0.0
         }
-        else
-        {return 0.0}
-       }
+    }
 
     @Transactional
     fun studentsWirhoutAbsents(): List<Student> {
@@ -139,7 +136,7 @@ class StudentService {
     @Transactional
     fun studentsAttendedAtAParticularDay(day: Int): List<Student> {
         val rangedays = (1..6)
-        if (! rangedays.contains(day)) {
+        if (!rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
         return findAll().filter { it.attendedDay(day) }
@@ -149,19 +146,19 @@ class StudentService {
     @Transactional
     fun studentsAbsentAtAParticularDay(day: Int): List<Student> {
         val rangedays = (1..6)
-        if (! rangedays.contains(day)) {
+        if (!rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
-        return findAll().filter { ! it.attendedDay(day)  }
+        return findAll().filter { !it.attendedDay(day) }
     }
 
     @Transactional
     fun studentsNotBlockedAbsentAtAParticularDay(courseId: Int, day: Int): List<Student> {
         val rangedays = (1..6)
-        if (! rangedays.contains(day)) {
+        if (!rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
-        return findAll().filter { it.course!!.id == courseId && (! it.attendedDay(day))  && ( ! it.blocked ) }
+        return findAll().filter { it.course!!.id == courseId && (!it.attendedDay(day)) && (!it.blocked) }
     }
 
 
@@ -173,12 +170,10 @@ class StudentService {
     }
 
 
-
-
     @Transactional
     fun deleteById(id: Long) {
         val student = repository.findById(id)
-        if (!(student .isPresent)) {
+        if (!(student.isPresent)) {
 
             throw ItemNotFoundException("Student with Id:  $id not found")
         }
@@ -186,9 +181,9 @@ class StudentService {
     }
 
     @Transactional
-    fun checkMail(email:String): Boolean {
-        val studentsemails = repository.findAll().toMutableList().map{it.email}
-         return  studentsemails.contains(email)
+    fun checkMail(email: String): Boolean {
+        val studentsemails = repository.findAll().toMutableList().map { it.email }
+        return studentsemails.contains(email)
     }
 
     @Transactional

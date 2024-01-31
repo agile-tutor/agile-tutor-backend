@@ -42,17 +42,30 @@ class MeetingService {
 
     @Transactional
     fun update(id: Int, meetingDto: MeetingRegisterDTO): MeetingView {
+        println(meetingDto.date )
+        if (meetingDto.date == null) {
+            throw ItemNotFoundException("Meeting date is null")
+        }
         val meeting = findByID(id)
-        println("modifiedmeeting"+meeting.title)
+        println("modifiedmeeting" + meeting.title)
         meeting.title = meetingDto.title
-        meeting.day = meetingDto.day
+        meeting.day = meetingDto.day        
         meeting.date = meetingDto.date
-        println("modifiedmeeting"+meeting.title)
+        println("modifiedmeeting" + meeting.title)
         return MeetingView.desdeModelo(repository.save(meeting))
     }
 
     private fun existSMeeting(meeting: MeetingRegisterDTO): Boolean {
         val meetings = repository.findAll().toMutableList()
         return meetings.any { it.title == meeting.title }
+    }
+
+    @Transactional
+    fun deleteById(id: Int) {
+        val meeting = repository.findById(id)
+        if (!(meeting.isPresent)) {
+            throw ItemNotFoundException("Meeting with Id: $id not found")
+        }
+        repository.deleteById(id)
     }
 }

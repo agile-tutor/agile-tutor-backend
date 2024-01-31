@@ -6,29 +6,25 @@ import ar.edu.unq.agiletutor.model.Course
 import org.springframework.beans.factory.annotation.Autowired
 
 
-
-
 data class StudentFromACourseDTO(
-    var id: Long?,
-    var name: String?,
-    var surname: String?,
-    var identifier: String?,
-    var email: String?,
-    var courseId: Int,
+        var id: Long?,
+        var name: String?,
+        var surname: String?,
+        var identifier: String?,
+        var email: String?,
+        var courseId: Int,
 
-    )
-
-{
+        ) {
 
     companion object {
         fun desdeModelo(student: Student): StudentFromACourseDTO {
-           return StudentFromACourseDTO(
-                student.id,
-                student.name,
-                student.surname,
-                student.identifier,
-                student.email,
-                student.course!!.id
+            return StudentFromACourseDTO(
+                    student.id,
+                    student.name,
+                    student.surname,
+                    student.identifier,
+                    student.email,
+                    student.course!!.id
             )
         }
 
@@ -47,7 +43,6 @@ data class StudentFromACourseDTO(
         student.email = email
         student.attendances = attendances
         // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
-        student.attendancepercentage = 0.0
         student.observations = ""
         student.blocked = false
         student.course = course
@@ -56,41 +51,41 @@ data class StudentFromACourseDTO(
 }
 
 data class ManyStudentsFromACourse(
-      var studentsDTO : MutableSet<StudentFromACourseDTO> = HashSet()
+        var studentsDTO: MutableSet<StudentFromACourseDTO> = HashSet()
 
 ) {
     fun aModelo(course: Course): List<Student> {
 
         return studentsDTO.map {
             StudentFromACourseDTO(
-                it.id,
-                it.name,
-                it.surname,
-                it.identifier,
-                it.email,
-                course.id
+                    it.id,
+                    it.name,
+                    it.surname,
+                    it.identifier,
+                    it.email,
+                    course.id
             ).aModelo(course)
         }.toMutableList()
 
     }
 
     companion object {
-        fun desdeModelo(students: List <Student>): List <StudentFromACourseDTO> {
-           return students.map { StudentFromACourseDTO.desdeModelo(it)}
+        fun desdeModelo(students: List<Student>): List<StudentFromACourseDTO> {
+            return students.map { StudentFromACourseDTO.desdeModelo(it) }
         }
     }
 
 }
+
 data class StudentRegisterDTO(
         var id: Long?,
         var name: String?,
         var surname: String?,
         var identifier: String?,
         var email: String?,
-       // var attendances: List<AttendanceDTO>?,
-      //  var attendancepercentage: Double?,
+        // var attendances: List<AttendanceDTO>?,
         var observations: String?,
-      //  var blocked: Boolean,
+        //  var blocked: Boolean,
         var courseId: Int
 ) {
 
@@ -104,10 +99,9 @@ data class StudentRegisterDTO(
                     student.surname,
                     student.identifier,
                     student.email,
-                  //  asistenciasDTO,
-                  //  student.attendancepercentage,
-                   student.observations,
-                   // student.blocked,
+                    //  asistenciasDTO,
+                    student.observations,
+                    // student.blocked,
                     student.course!!.id
             )
         }
@@ -125,15 +119,13 @@ data class StudentRegisterDTO(
         student.identifier = identifier
         student.email = email
         student.attendances = attendances
-       // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
-        student.attendancepercentage = 0.0
+        // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.observations = observations!!
-       student.blocked = false
+        student.blocked = false
         student.course = course
         return student
     }
 }
-
 
 
 data class StudentDTO(
@@ -161,7 +153,7 @@ data class StudentDTO(
                     student.identifier,
                     student.email,
                     asistenciasDTO,
-                    student.attendancepercentage,
+                    student.attendancePercentage(),
                     student.observations,
                     student.blocked,
                     student.course!!.id
@@ -179,7 +171,6 @@ data class StudentDTO(
         student.email = email
         // student.attendances
         attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
-        student.attendancepercentage = 0.0
         student.observations = observations!!
         student.blocked = blocked
         student.course = course

@@ -13,5 +13,7 @@ interface MeetingRepository : CrudRepository<Meeting?, Int?> {
     fun save(meeting: Meeting): Meeting
     override fun findAll(): List<Meeting>
     override fun findById(id: Int): Optional<Meeting?>
-//    fun findByName(name: String): Optional<Meeting?>
+
+    //    fun findByName(name: String): Optional<Meeting?>
+    override fun deleteById(id: Int)
 }

@@ -80,4 +80,24 @@ class MeetingRestService {
         }
         return response!!
     }
+
+    /**Delete meeting by id*/
+    @DeleteMapping("/api/meeting/{id}")
+    fun deleteMeetingById(@PathVariable("id") id: Int): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            meetingService.deleteById(id.toInt())
+            val resultado: MutableMap<String, Int> = HashMap()
+            resultado["meeting with ID $id deleted"] = id
+            response = ResponseEntity.ok().body<Map<String, Int>>(resultado)
+
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+
+            val resultado: MutableMap<String, String> = HashMap()
+            resultado["something goes wrong"] = id.toString()
+            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+        }
+        return response!!
+    }
 }

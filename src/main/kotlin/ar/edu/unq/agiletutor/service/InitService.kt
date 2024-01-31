@@ -41,9 +41,6 @@ class InitService {
     }
 
     private fun fireInitialData() {
-        val percentageByDefault = PercentageByDefault(1,75.00)
-        percentageService!!.register(percentageByDefault)
-
 
         val tutor1 = Tutor(0, "tutor1", "ape1", "tutor1@gmail.com", "passtut1", mutableSetOf())
         val tutor2 = Tutor(0, "tutor2", "ape2", "tutor2@gmail.com", "passtut2", mutableSetOf())
@@ -85,7 +82,6 @@ class InitService {
                 "123",
                 "algoritmosale@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course1Saved,
                 false
@@ -99,7 +95,6 @@ class InitService {
             "456",
             "cristian.gonzalez.unq@gmail.com",
             firstattendaces,
-            0.0,
             "",
             course1Saved,
             false
@@ -113,8 +108,7 @@ class InitService {
                 "456",
                 "pica@gmail.com",
                 firstattendaces,
-                0.0,
-                "",
+                    "",
                 course2Saved,
                 false
             )
@@ -128,7 +122,6 @@ class InitService {
                 "456",
                 "marmol@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course2Saved,
                 false
@@ -142,7 +135,6 @@ class InitService {
                 "456",
                 "super@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course3Saved,
                 false
@@ -157,7 +149,6 @@ class InitService {
                 "456",
                 "jane@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course3Saved,
                 false
@@ -172,7 +163,6 @@ class InitService {
                 "456",
                 "alu3@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course4Saved,
                 false
@@ -187,7 +177,6 @@ class InitService {
                 "456",
                 "alu4@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course4Saved,
                 false
@@ -201,7 +190,6 @@ class InitService {
                 "456",
                 "pebbles@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course2Saved,
                 false
@@ -216,7 +204,6 @@ class InitService {
                 "456",
                 "bambam@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course2Saved,
                 false
@@ -230,7 +217,6 @@ class InitService {
                 "456",
                 "vilma@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course2Saved,
                 false
@@ -245,7 +231,6 @@ class InitService {
                 "456",
                 "betty@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course2Saved,
                 false
@@ -259,7 +244,6 @@ class InitService {
                 "456",
                 "slate@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course2Saved,
                 false
@@ -274,7 +258,6 @@ class InitService {
                 "456",
                 "creepella@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course2Saved,
                 false
@@ -288,7 +271,6 @@ class InitService {
                 "456",
                 "elroy@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course3Saved,
                 false
@@ -303,7 +285,6 @@ class InitService {
                 "456",
                 "lucero@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course3Saved,
                 false
@@ -317,7 +298,6 @@ class InitService {
                 "456",
                 "espacial@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course3Saved,
                 false
@@ -332,7 +312,6 @@ class InitService {
                 "456",
                 "spacely@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course3Saved,
                 false

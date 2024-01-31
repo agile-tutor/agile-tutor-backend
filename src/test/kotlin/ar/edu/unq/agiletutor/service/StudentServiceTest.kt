@@ -109,7 +109,6 @@ internal class StudentServiceTest {
                         "123",
                         "algoritmosale@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course1Saved,
                         false
@@ -123,7 +122,6 @@ internal class StudentServiceTest {
                 "456",
                 "cristian.gonzalez.unq@gmail.com",
                 firstattendaces,
-                0.0,
                 "",
                 course1Saved,
                 false
@@ -137,7 +135,6 @@ internal class StudentServiceTest {
                         "456",
                         "pica@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -152,7 +149,6 @@ internal class StudentServiceTest {
                         "456",
                         "marmol@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -166,7 +162,6 @@ internal class StudentServiceTest {
                         "456",
                         "super@gmail.com",
                         atendances,
-                        0.0,
                         "",
                         course3Saved,
                         false
@@ -181,7 +176,6 @@ internal class StudentServiceTest {
                         "456",
                         "jane@gmail.com",
                         atendances,
-                        0.0,
                         "",
                         course3Saved,
                         false
@@ -196,7 +190,6 @@ internal class StudentServiceTest {
                         "456",
                         "alu3@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course4Saved,
                         false
@@ -211,7 +204,6 @@ internal class StudentServiceTest {
                         "456",
                         "alu4@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course4Saved,
                         false
@@ -225,7 +217,6 @@ internal class StudentServiceTest {
                         "456",
                         "pebbles@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -240,7 +231,6 @@ internal class StudentServiceTest {
                         "456",
                         "bambam@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -254,7 +244,6 @@ internal class StudentServiceTest {
                         "456",
                         "vilma@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -269,7 +258,6 @@ internal class StudentServiceTest {
                         "456",
                         "betty@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -283,7 +271,6 @@ internal class StudentServiceTest {
                         "456",
                         "slate@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -298,7 +285,6 @@ internal class StudentServiceTest {
                         "456",
                         "creepella@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course2Saved,
                         false
@@ -312,7 +298,6 @@ internal class StudentServiceTest {
                         "456",
                         "elroy@gmail.com",
                         atendances,
-                        0.0,
                         "",
                         course3Saved,
                         false
@@ -327,7 +312,6 @@ internal class StudentServiceTest {
                         "456",
                         "lucero@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course3Saved,
                         false
@@ -341,7 +325,6 @@ internal class StudentServiceTest {
                         "456",
                         "espacial@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course3Saved,
                         false
@@ -356,7 +339,6 @@ internal class StudentServiceTest {
                         "456",
                         "spacely@gmail.com",
                         firstattendaces,
-                        0.0,
                         "",
                         course3Saved,
                         false
@@ -417,7 +399,7 @@ internal class StudentServiceTest {
         Assertions.assertEquals(updated.name, restored.name)
         Assertions.assertEquals(updated.surname, restored.surname)
         Assertions.assertEquals(updated.email, restored.email)
-        Assertions.assertEquals(updated.attendancepercentage, restored.attendancepercentage)
+        Assertions.assertEquals(updated.attendancepercentage, restored.attendancePercentage())
         Assertions.assertEquals(updated.blocked, restored.blocked)
     }
 
