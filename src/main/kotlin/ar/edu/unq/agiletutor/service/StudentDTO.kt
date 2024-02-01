@@ -12,7 +12,7 @@ data class StudentFromACourseDTO(
         var surname: String?,
         var identifier: String?,
         var email: String?,
-        var courseId: Int,
+        var courseId: Long,
 
         ) {
 
@@ -24,10 +24,9 @@ data class StudentFromACourseDTO(
                     student.surname,
                     student.identifier,
                     student.email,
-                    student.course!!.id
+                    student.course!!.id!!
             )
         }
-
     }
 
     fun aModelo(course: Course): Student {
@@ -63,7 +62,7 @@ data class ManyStudentsFromACourse(
                     it.surname,
                     it.identifier,
                     it.email,
-                    course.id
+                    course.id!!
             ).aModelo(course)
         }.toMutableList()
 
@@ -86,7 +85,7 @@ data class StudentRegisterDTO(
         // var attendances: List<AttendanceDTO>?,
         var observations: String?,
         //  var blocked: Boolean,
-        var courseId: Int
+        var courseId: Long
 ) {
 
     companion object {
@@ -102,7 +101,7 @@ data class StudentRegisterDTO(
                     //  asistenciasDTO,
                     student.observations,
                     // student.blocked,
-                    student.course!!.id
+                    student.course!!.id!!
             )
         }
     }
@@ -138,7 +137,7 @@ data class StudentDTO(
         var attendancepercentage: Double?,
         var observations: String?,
         var blocked: Boolean,
-        var courseId: Int
+        var courseId: Long
 
 ) {
 
@@ -156,7 +155,7 @@ data class StudentDTO(
                     student.attendancePercentage(),
                     student.observations,
                     student.blocked,
-                    student.course!!.id
+                    student.course!!.id!!
 
             )
         }

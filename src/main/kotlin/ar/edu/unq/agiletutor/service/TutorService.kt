@@ -72,7 +72,7 @@ class TutorService {
     }
 
     @Transactional
-    fun findByID(id: Int): Tutor {
+    fun findByID(id: Long): Tutor {
         val tutor = repository.findById(id)
         if (!(tutor.isPresent)) {
             throw ItemNotFoundException("Tutor with Id:  $id not found")
@@ -87,7 +87,7 @@ class TutorService {
     }
 
     @Transactional
-    fun deleteById(id: Int) {
+    fun deleteById(id: Long) {
         val tutor = repository.findById(id)
         if (!(tutor.isPresent)) {
             throw ItemNotFoundException("Tutor with Id:  $id not found")
@@ -96,7 +96,7 @@ class TutorService {
     }
 
     @Transactional
-    fun update(id: Int, entity: TutorRegisterDTO): Tutor {
+    fun update(id: Long, entity: TutorRegisterDTO): Tutor {
         val tutor = findByID(id)
         tutor.email = entity.email
         tutor.name = entity.name
@@ -106,13 +106,13 @@ class TutorService {
     }
 
     @Transactional
-    fun coursesFromATutor(id: Int): MutableList<Course> {
+    fun coursesFromATutor(id: Long): MutableList<Course> {
         val tutor = findByID(id)
         return tutor.courses.toMutableList()
     }
 
     @Transactional
-    fun studentsFromATutor(id: Int): List<Student> {
+    fun studentsFromATutor(id: Long): List<Student> {
         val students = mutableListOf<Student>()
         val tutor = findByID(id)
         val courses = tutor.courses
@@ -139,10 +139,10 @@ class TutorService {
     }
 
     @Transactional
-    fun moveAStudentIntoAnotherCourse(id: Long, id_course: Int)/*:Student*/ {
+    fun moveAStudentIntoAnotherCourse(id: Long, id_course: Long)/*:Student*/ {
         val courseMoved = courseService.findByID(id_course)
         val student = studentService.findByID(id)
-        val course = courseService.findByID(student.course!!.id)
+        val course = courseService.findByID(student.course!!.id!!)
         if (courseMoved.id == course.id) {
             throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
         }
@@ -173,13 +173,13 @@ class TutorService {
     }
 
     @Transactional
-    fun removeAnStudentFromNotification(tutorId: Int, studentId: Int) {
+    fun removeAnStudentFromNotification(tutorId: Long, studentId: Long) {
         val notifyer = this.findByID(tutorId).notifyer
         senderService.removeStudentFromNotify(notifyer!!, studentId)
     }
 
     @Transactional
-    fun studentsToNotifyFromTutor(tutorId: Int): List<StudentDTO> {
+    fun studentsToNotifyFromTutor(tutorId: Long): List<StudentDTO> {
         val notifyer = this.findByID(tutorId).notifyer
         return senderService.studentsToNotify(notifyer!!)
     }

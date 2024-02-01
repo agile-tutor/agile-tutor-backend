@@ -5,19 +5,14 @@ import java.io.Serializable
 
 @Entity
 @Table(name = "percent")
-class PercentageByDefault: Serializable {
-
-    @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_percentageByDefault")
-    var id: Int = 1
+class PercentageByDefault : BaseEntity {
 
     @Column (nullable = false)
     var percentageApprovedDefault: Double = 75.00
 
     constructor() : super() {}
     constructor(
-        id: Int,
+        id: Long,
         percentageApprovedDefault: Double
         ) : super() {
         this.id = id

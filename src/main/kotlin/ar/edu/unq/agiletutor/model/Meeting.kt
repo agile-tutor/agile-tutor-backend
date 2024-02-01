@@ -7,12 +7,7 @@ import java.io.Serializable
 
 @Entity
 @Table(name = "meeting")
-class Meeting : Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_meeting")
-    var id: Int? = null
+class Meeting : BaseEntity {
 
     @Column(nullable = false)
     @NotNull("el day es obligatorio")
@@ -36,7 +31,7 @@ class Meeting : Serializable {
 
     constructor() : super() {}
     constructor(
-            id: Int?,
+            id: Long?,
             day: Int?,
             date: String?,
             title: String,

@@ -9,9 +9,9 @@ import java.util.*
 
 @Configuration
 @Repository
-interface PercentageRepository  : CrudRepository<PercentageByDefault?, Int?> {
+interface PercentageRepository  : CrudRepository<PercentageByDefault?, Long?> {
 
     fun save(percantage: PercentageByDefault): PercentageByDefault
-    override fun findById(id: Int): Optional<PercentageByDefault?>
+    override fun findById(id: Long): Optional<PercentageByDefault?>
     override fun findAll(): List<PercentageByDefault>
 }

@@ -56,7 +56,7 @@ class CourseService {
     }
 
     @Transactional
-    fun findByID(id: Int): Course {
+    fun findByID(id: Long): Course {
         val course = repository.findById(id)
         if (!(course.isPresent)) {
             throw ItemNotFoundException("Course with Id:  $id not found")
@@ -74,26 +74,26 @@ class CourseService {
     }
 
     @Transactional
-    fun tutorFromACourse(id: Int): Tutor {
+    fun tutorFromACourse(id: Long): Tutor {
         val course = findByID(id)
         return course.tutor!!
     }
 
     @Transactional
-    fun studentsFromACourse(id: Int): List<Student> {
+    fun studentsFromACourse(id: Long): List<Student> {
         val course = findByID(id)
         return course.students.toMutableList()
     }
 
     @Transactional
-    fun studentsApprovedFromACourse(id: Int): List<Student> {
+    fun studentsApprovedFromACourse(id: Long): List<Student> {
         val course = findByID(id)
         val percentageByDefault = percentageService.percentageByDefault()
         return course.students.toMutableList().filter { it.approvedAccordingPercentageDefault(percentageByDefault) }
     }
 
     @Transactional
-    fun studentsFillSurveydFromACourse(id: Int): List<Student> {
+    fun studentsFillSurveydFromACourse(id: Long): List<Student> {
         val course = findByID(id)
         val studentsIds = surveyService.findAll().toMutableList().map { it.studentId }
         return course.students.toMutableList().filter { it.fillSurvey(studentsIds) }
@@ -106,7 +106,7 @@ class CourseService {
     }
 
     @Transactional
-    fun studentsAbsentAtaDayFromACourse(id: Int, day: Int): List<Student> {
+    fun studentsAbsentAtaDayFromACourse(id: Long, day: Int): List<Student> {
         return studentsFromACourse(id).filter { !it.attendedDay(day) }
     }
 
@@ -157,7 +157,7 @@ class CourseService {
     */
 
     @Transactional
-    fun updateStudentsAttendancesFromACourse(id: Int, studentAttendances: List<StudentAttendanceDTO>) {
+    fun updateStudentsAttendancesFromACourse(id: Long, studentAttendances: List<StudentAttendanceDTO>) {
         val course = findByID(id)
         println(course.toString() + "courseupdateget " + course.id + "day " + studentAttendances.first().attendance.day)
         // val courseMarked =  markdownAttendance(course, studentAttendances.first().attendance.day!!)
@@ -178,7 +178,7 @@ class CourseService {
 
 
     @Transactional
-    fun update(id: Int, entity: CourseDTO): Course {
+    fun update(id: Long, entity: CourseDTO): Course {
         val course = findByID(id)
         course.name = entity.name
         return repository.save(course)
@@ -186,7 +186,7 @@ class CourseService {
 
 
     @Transactional
-    fun averageAttendancesFromACourse(id: Int): Double {
+    fun averageAttendancesFromACourse(id: Long): Double {
         val course = findByID(id)
         if (course.students.isNotEmpty()) {
             return course.students.sumOf { it.attendancePercentage() } / course.students.size
@@ -196,7 +196,7 @@ class CourseService {
     }
 
     @Transactional
-    fun addAStudentToACourse(student: Student, id: Int) {
+    fun addAStudentToACourse(student: Student, id: Long) {
         val course = findByID(id)
         student.course = course
         studentService.register(student)
@@ -206,21 +206,20 @@ class CourseService {
     }
 
     @Transactional
-    fun removeAStudentFromACourse(student: Student, id: Int) {
+    fun removeAStudentFromACourse(student: Student, id: Long) {
         val course = findByID(id)
         course.students.remove(student)
         repository.save(course)
     }
 
     @Transactional
-    fun markedDownAttendanceAFromACourseATaParticularDay(id: Int, day: Int): Boolean {
+    fun markedDownAttendanceAFromACourseATaParticularDay(id: Long, day: Int): Boolean {
         val course = findByID(id)
         return course.markedDowndDay(day)
-
     }
 
     @Transactional
-    fun attendedAtDay(id: Int): MutableSet<DayBooleanDTO> {
+    fun attendedAtDay(id: Long): MutableSet<DayBooleanDTO> {
         val course = findByID(id)
         return course.attendedAtDays()
     }

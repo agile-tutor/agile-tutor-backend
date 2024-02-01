@@ -46,7 +46,7 @@ class MeetingRestService {
 
     /**get meeting by id**/
     @GetMapping("/api/meeting/{id}")
-    fun meetingById(@PathVariable("id") id: Int): ResponseEntity<*> {
+    fun meetingById(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -64,7 +64,7 @@ class MeetingRestService {
 
     /** Update a meeting*/
     @PutMapping("/api/meeting/{id}")
-    fun update(@PathVariable("id") id: Int, @RequestBody entity: MeetingRegisterDTO): ResponseEntity<*> {
+    fun update(@PathVariable("id") id: Long, @RequestBody entity: MeetingRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
             val meeting = meetingService.update(id, entity)
@@ -83,13 +83,13 @@ class MeetingRestService {
 
     /**Delete meeting by id*/
     @DeleteMapping("/api/meeting/{id}")
-    fun deleteMeetingById(@PathVariable("id") id: Int): ResponseEntity<*> {
+    fun deleteMeetingById(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            meetingService.deleteById(id.toInt())
-            val resultado: MutableMap<String, Int> = HashMap()
+            meetingService.deleteById(id)
+            val resultado: MutableMap<String, Long> = HashMap()
             resultado["meeting with ID $id deleted"] = id
-            response = ResponseEntity.ok().body<Map<String, Int>>(resultado)
+            response = ResponseEntity.ok().body<Map<String, Long>>(resultado)
 
         } catch (e: Exception) {
             ResponseEntity.status(404)

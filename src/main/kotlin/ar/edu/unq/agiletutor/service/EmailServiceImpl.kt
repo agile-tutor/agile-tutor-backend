@@ -159,7 +159,7 @@ class EmailServiceImpl {
         return notifyer.getAbsentToNotify().map { StudentDTO.desdeModelo(it) }
     }
 
-    fun removeStudentFromNotify(notifyer: Notifyer, studentId: Int) {
+    fun removeStudentFromNotify(notifyer: Notifyer, studentId: Long) {
         val student = studentService.findByID(studentId.toLong())
         notifyer.delabsent(student)
     }

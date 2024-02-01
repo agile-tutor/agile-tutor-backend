@@ -54,7 +54,7 @@ class CourseRestService {
 
     /**get course by id**/
     @GetMapping("/api/course/{id}")
-    fun courserById(@PathVariable("id") id: Int): ResponseEntity<*> {
+    fun courserById(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -90,7 +90,7 @@ class CourseRestService {
 
     /**get the tutor from a course*/
     @GetMapping("/api/course/tutor/{id}")
-    fun tutorFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {
+    fun tutorFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -109,7 +109,7 @@ class CourseRestService {
 
     /** Update a course*/
     @PutMapping("/api/course/{id}")
-    fun update(@PathVariable("id") id: Int, @RequestBody entity: CourseDTO): ResponseEntity<*> {
+    fun update(@PathVariable("id") id: Long, @RequestBody entity: CourseDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
             val courseview = courseService.update(id, entity)
@@ -128,7 +128,7 @@ class CourseRestService {
 
     /**Students From a Course*/
     @GetMapping("/api/course/students/{id}")
-    fun studentsFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {
+    fun studentsFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -153,7 +153,7 @@ class CourseRestService {
 //    @PuMapping("/api/students/attendances/update/{id}/{day}")
     @PutMapping("/api/course/students/attendances/update/{id}")
     fun updateStudentsAttendancesFromACourse(
-        @PathVariable("id") id: Int,
+        @PathVariable("id") id: Long,
         @RequestBody attendances: List<StudentAttendanceDTO>
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
@@ -176,7 +176,7 @@ class CourseRestService {
 
     /** Average of Attendances  from a Course*/
     @GetMapping("/api/course/students/attendances/average/{id}")
-    fun averageAttendancesFromACouurse( @PathVariable("id") id: Int): ResponseEntity<*> {
+    fun averageAttendancesFromACouurse( @PathVariable("id") id: Long): ResponseEntity<*> {
 
         val averageAttendances = courseService.averageAttendancesFromACourse(id)
 
@@ -186,7 +186,7 @@ class CourseRestService {
 
     /**  Marked Down attendances at a particular day*/
     @GetMapping("/api/course/attendances/{id}")
-    fun markedDownAttendanceAFromACourseATaParticularDay( @PathVariable("id") id: Int, @PathVariable("day") day: Int): ResponseEntity<*> {
+    fun markedDownAttendanceAFromACourseATaParticularDay( @PathVariable("id") id: Long, @PathVariable("day") day: Int): ResponseEntity<*> {
 
         val narkedDown = courseService.markedDownAttendanceAFromACourseATaParticularDay(id,day)
 
@@ -196,7 +196,7 @@ class CourseRestService {
 
     /**Students approved From a Course*/
     @GetMapping("/api/course/students/approved/{id}")
-    fun studentsApprovedFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {
+    fun studentsApprovedFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -218,7 +218,7 @@ class CourseRestService {
 
     /**Students fill the survey From a Course*/
     @GetMapping("/api/course/students/survey/{id}")
-    fun studentsFillSurveyFromACourse(@PathVariable("id") id: Int): ResponseEntity<*> {
+    fun studentsFillSurveyFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
@@ -239,7 +239,7 @@ class CourseRestService {
 
     /** Course attended at days*/
     @GetMapping("/api/course/attended/{course}")
-    fun courseAttendedAtDay(@PathVariable("course") course_id: Int)
+    fun courseAttendedAtDay(@PathVariable("course") course_id: Long)
             : ResponseEntity<*> {
         var response: ResponseEntity<*>?
 

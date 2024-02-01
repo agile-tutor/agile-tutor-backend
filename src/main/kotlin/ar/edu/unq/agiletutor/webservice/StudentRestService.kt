@@ -269,7 +269,7 @@ class StudentRestService {
 
     /** register Many students */
     @PostMapping("/api/students/many/register/{id}")
-    fun registerMany(@PathVariable("id") id: Int, @RequestBody studentdata: MutableList<StudentFromACourseDTO>): ResponseEntity<*> {
+    fun registerMany(@PathVariable("id") id: Long, @RequestBody studentdata: MutableList<StudentFromACourseDTO>): ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {

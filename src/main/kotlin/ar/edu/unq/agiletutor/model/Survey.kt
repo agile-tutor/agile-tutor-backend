@@ -4,10 +4,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "survey")
-class Survey {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0
+class Survey : BaseEntity {
 
     var studentId: Long = 0
 

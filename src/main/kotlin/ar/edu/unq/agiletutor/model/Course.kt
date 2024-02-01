@@ -3,22 +3,17 @@ package ar.edu.unq.agiletutor.model
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.service.DayBooleanDTO
 import jakarta.persistence.*
+import jakarta.validation.constraints.Size
 import org.jetbrains.annotations.NotNull
 import java.io.Serializable
 
 @Entity
 @Table(name = "course")
-
-class Course : Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_course")
-    var id: Int = 0
+class Course : BaseEntity {
 
     @Column(nullable = false)
     @NotNull("El nonbre es obligatorio")
-    // @Size(min = 1, max = 30, message = "el campo name debe contener un minimo de 3 y un máximo de 30 caracteres")
+    @Size(min = 1, max = 30, message = "el campo name debe contener un minimo de 1 y un máximo de 30 caracteres")
     var name: String? = null
 
     // @Column(nullable = false)
@@ -36,7 +31,7 @@ class Course : Serializable {
 
     constructor() : super() {}
     constructor(
-            id: Int,
+            id: Long,
             name: String?,
             students: MutableSet<Student>,
             tutor: Tutor?,

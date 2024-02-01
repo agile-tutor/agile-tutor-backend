@@ -9,7 +9,7 @@ data class TutorLoginDTO(
 )
 
 data class TutorRegisterDTO(
-        var id: Int?,
+        var id: Long?,
         var name: String?,
         var surname: String?,
         var email: String?,
@@ -28,7 +28,7 @@ data class TutorRegisterDTO(
 }
 
 data class TutorDTO(
-        var id: Int?,
+        var id: Long?,
         var name: String?,
         var surname: String?,
         var email: String?
@@ -61,13 +61,13 @@ data class TutorDTO(
 }
 
 data class CourseRegisterDTO(
-        var id: Int,
+        var id: Long,
         var name: String?,
-        var tutorId: Int
+        var tutorId: Long
 ) {
     companion object {
         fun desdeModelo(course: Course): CourseDTO {
-            return CourseDTO(course.id, course.name)
+            return CourseDTO(course.id!!, course.name)
         }
     }
 
@@ -83,14 +83,14 @@ data class CourseRegisterDTO(
 }
 
 data class CourseDTO(
-        var id: Int,
+        var id: Long,
         var name: String?,
 
         ) {
     companion object {
         fun desdeModelo(course: Course): CourseDTO {
             println("iddelcurso11" + course.id)
-            return CourseDTO(course.id, course.name)
+            return CourseDTO(course.id!!, course.name)
         }
     }
 
@@ -122,7 +122,7 @@ data class SurveyDataDTO(
 
 //MEETING DTO//
 data class MeetingRegisterDTO(
-        var id: Int,
+        var id: Long,
         var title: String?,
         var date: String?,
         var day: Int
@@ -138,7 +138,7 @@ data class MeetingRegisterDTO(
 }
 
 data class MeetingView(
-        var id: Int?,
+        var id: Long?,
         var title: String?,
         var date: String?,
         var day: Int?

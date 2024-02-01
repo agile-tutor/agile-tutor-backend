@@ -7,12 +7,7 @@ import java.io.Serializable
 @Entity
 @Table(name = "tutor")
 
-class Tutor : Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_tutor")
-    var id: Int? = null
+class Tutor : BaseEntity {
 
     @Column(nullable = false)
     @NotNull("El nonbre es obligatorio")
@@ -21,7 +16,6 @@ class Tutor : Serializable {
     @Column(nullable = false)
     @NotNull("el apellido es obligatorio")
     var surname: String? = null
-
 
     @Column(nullable = false, unique = true)
     @NotNull("El mail es obligatorio")
@@ -39,7 +33,7 @@ class Tutor : Serializable {
 
     constructor() : super() {}
     constructor(
-            id: Int?,
+            id: Long?,
             name: String?,
             surname: String?,
             email: String?,

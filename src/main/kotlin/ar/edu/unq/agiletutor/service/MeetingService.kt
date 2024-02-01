@@ -32,7 +32,7 @@ class MeetingService {
     }
 
     @Transactional
-    fun findByID(id: Int): Meeting {
+    fun findByID(id: Long): Meeting {
         val meeting = repository.findById(id)
         if (!(meeting.isPresent)) {
             throw ItemNotFoundException("Meeting with Id:  $id not found")
@@ -41,7 +41,7 @@ class MeetingService {
     }
 
     @Transactional
-    fun update(id: Int, meetingDto: MeetingRegisterDTO): MeetingView {
+    fun update(id: Long, meetingDto: MeetingRegisterDTO): MeetingView {
         println(meetingDto.date )
         if (meetingDto.date == null) {
             throw ItemNotFoundException("Meeting date is null")
@@ -61,7 +61,7 @@ class MeetingService {
     }
 
     @Transactional
-    fun deleteById(id: Int) {
+    fun deleteById(id: Long) {
         val meeting = repository.findById(id)
         if (!(meeting.isPresent)) {
             throw ItemNotFoundException("Meeting with Id: $id not found")

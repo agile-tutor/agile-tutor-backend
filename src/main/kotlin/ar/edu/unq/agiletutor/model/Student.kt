@@ -7,12 +7,7 @@ import java.io.Serializable
 
 @Entity
 @Table(name = "student")
-class Student : Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_student")
-    var id: Long? = null
+class Student : BaseEntity {
 
     @Column(nullable = false)
     @NotNull("El nonbre es obligatorio")

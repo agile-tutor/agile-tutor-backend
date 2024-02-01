@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Configuration
 @Repository
-interface NotifyerRepository : JpaRepository<Notifyer?, Int?> {
+interface NotifyerRepository : JpaRepository<Notifyer?, Long?> {
 
     override fun findAll(): List<Notifyer>
 }

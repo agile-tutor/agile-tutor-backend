@@ -8,10 +8,10 @@ import java.util.*
 
 @Configuration
 @Repository
-interface CourseRepository : CrudRepository<Course?, Int?> {
+interface CourseRepository : CrudRepository<Course?, Long?> {
 
     fun save(course: Course): Course
     override fun findAll(): List<Course>
-    override fun findById(id: Int): Optional<Course?>
+    override fun findById(id: Long): Optional<Course?>
     fun findByName(name: String): Optional<Course?>
 }
