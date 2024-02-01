@@ -189,7 +189,6 @@ class TutorService {
         return  percentageService.percentageByDefault()
     }
 
-
     @Transactional
     fun updatePercentageByDefault(percentage:Double):PercentageByDefault {
         return  percentageService.updatePercentageByDefault(percentage)

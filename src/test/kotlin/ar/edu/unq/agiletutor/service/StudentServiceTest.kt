@@ -1,13 +1,12 @@
 package ar.edu.unq.agiletutor.service
 
+import ar.edu.unq.agilemeeting.service.MeetingRegisterDTO
 import ar.edu.unq.agilemeeting.service.TutorRegisterDTO
 import ar.edu.unq.agiletutor.ItemNotFoundException
 import ar.edu.unq.agiletutor.UsernameExistException
-import ar.edu.unq.agiletutor.model.Attendance
-import ar.edu.unq.agiletutor.model.Course
-import ar.edu.unq.agiletutor.model.Student
-import ar.edu.unq.agiletutor.model.Tutor
+import ar.edu.unq.agiletutor.model.*
 import ar.edu.unq.agiletutor.persistence.CourseRepository
+import ar.edu.unq.agiletutor.persistence.MeetingRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import ar.edu.unq.agiletutor.persistence.TutorRepository
 import org.junit.jupiter.api.*
@@ -29,6 +28,8 @@ internal class StudentServiceTest {
     @Autowired
     lateinit var studentRepository: StudentRepository
 
+    @Autowired
+    lateinit var meetingRepository: MeetingRepository
 
     @Autowired
     private val courseService: CourseService? = null
@@ -36,6 +37,8 @@ internal class StudentServiceTest {
     @Autowired
     private val tutorService: TutorService? = null
 
+    @Autowired
+    private val meetingService: MeetingService? = null
 
     var tutors = listOf<Tutor>()
     var students = listOf<Student>()
@@ -53,6 +56,12 @@ internal class StudentServiceTest {
     lateinit var tutor2: Tutor
     lateinit var tutorData: TutorRegisterDTO
 
+    lateinit var meeting1: Meeting
+    lateinit var meeting2: Meeting
+    lateinit var meeting3: Meeting
+    lateinit var meeting4: Meeting
+    lateinit var meeting5: Meeting
+    lateinit var meeting6: Meeting
 
     @BeforeEach
     fun setUp() {
@@ -71,6 +80,20 @@ internal class StudentServiceTest {
         val course2Saved = courseService.register(course2)
         val course3Saved = courseService.register(course3)
         val course4Saved = courseService.register(course4)
+
+        val meeting1 = MeetingRegisterDTO(0,"1","",1)
+        val meeting2 = MeetingRegisterDTO(0,"2","",2)
+        val meeting3 = MeetingRegisterDTO(0,"3","",3)
+        val meeting4 = MeetingRegisterDTO(0,"4","",4)
+        val meeting5 = MeetingRegisterDTO(0,"5","",5)
+        val meeting6 = MeetingRegisterDTO(0,"6","",6)
+
+        meetingService!!.register(meeting1)
+        meetingService.register(meeting2)
+        meetingService.register(meeting3)
+        meetingService.register(meeting4)
+        meetingService.register(meeting5)
+        meetingService.register(meeting6)
 
         val firstattendaces = mutableSetOf<Attendance>()
         for (i in (1..6)) {
@@ -517,6 +540,7 @@ internal class StudentServiceTest {
 
     @AfterEach
     fun tearDown() {
+        meetingRepository.deleteAll()
         studentRepository.deleteAll()
         courseRepository.deleteAll()
         tutorRepository.deleteAll()

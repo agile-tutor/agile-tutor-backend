@@ -1,7 +1,6 @@
 package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agiletutor.model.Survey
-import ar.edu.unq.agiletutor.model.Tutor
 import ar.edu.unq.agiletutor.persistence.SurveyRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

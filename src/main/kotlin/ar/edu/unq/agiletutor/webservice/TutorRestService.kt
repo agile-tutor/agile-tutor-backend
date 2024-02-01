@@ -157,8 +157,6 @@ class TutorRestService {
             response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
-
-
     }
 
     /**Students From a Tutor*/
@@ -179,10 +177,7 @@ class TutorRestService {
             response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
         }
         return response!!
-
-
     }
-
 
     /** Move a student to Another Course*/
     @PutMapping("/api/tutor/students/move/{id}/{id_course}")
@@ -205,7 +200,6 @@ class TutorRestService {
         }
         return response!!
     }
-
 
     /** Absent Message From a Tutor*/
     @GetMapping("/api/tutor/absentmessage/{tutorId}")
@@ -319,5 +313,4 @@ class TutorRestService {
       val  percentage = tutorService.updatePercentageByDefault(percentage.toDouble())
         return ResponseEntity.ok().body(percentage)
     }
-
 }

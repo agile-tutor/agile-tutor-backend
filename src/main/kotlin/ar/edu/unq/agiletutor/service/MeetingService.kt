@@ -18,11 +18,9 @@ class MeetingService {
 
     @Transactional
     fun register(meetingDTO: MeetingRegisterDTO): Meeting {
-
         if (existSMeeting(meetingDTO)) {
             throw UsernameExistException("Meeting with title:  ${meetingDTO.title} is used")
         }
-        println("iddelmeeting" + meetingDTO.id)
         return repository.save(meetingDTO.aModelo())
     }
 
@@ -42,16 +40,12 @@ class MeetingService {
 
     @Transactional
     fun update(id: Long, meetingDto: MeetingRegisterDTO): MeetingView {
-        println(meetingDto.date )
-        if (meetingDto.date == null) {
-            throw ItemNotFoundException("Meeting date is null")
-        }
+        (meetingDto.date) ?: throw ItemNotFoundException("Meeting date is null")
         val meeting = findByID(id)
-        println("modifiedmeeting" + meeting.title)
         meeting.title = meetingDto.title
-        meeting.day = meetingDto.day        
+        meeting.day = meetingDto.day
         meeting.date = meetingDto.date
-        println("modifiedmeeting" + meeting.title)
+
         return MeetingView.desdeModelo(repository.save(meeting))
     }
 

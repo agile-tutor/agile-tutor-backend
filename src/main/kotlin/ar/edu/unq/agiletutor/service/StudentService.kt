@@ -6,6 +6,7 @@ import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Survey
+import ar.edu.unq.agiletutor.persistence.MeetingRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
 import ar.edu.unq.agiletutor.persistence.SurveyRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +21,9 @@ class StudentService {
 
     @Autowired
     private lateinit var surveyRepository: SurveyRepository
+
+    @Autowired
+    private lateinit var meetingRepository: MeetingRepository
 
     @Transactional
     fun register(student: Student): Student {
@@ -41,7 +45,6 @@ class StudentService {
 
         return repository.saveAll(students.asIterable()).toMutableList()
     }
-
 
     @Transactional
     fun findAll(): List<Student> {
@@ -92,11 +95,13 @@ class StudentService {
         return StudentDTO.desdeModelo(repository.save(student))
     }
 
+    @Transactional
     fun attendancesFromAStudent(id: Long): Set<Attendance> {
         val student = findByID(id)
         return student.attendances
     }
 
+    @Transactional
     fun attendancesPercentageFromAStudent(id: Long): Double {
         val student = findByID(id)
         return student.attendancePercentage()
@@ -104,10 +109,10 @@ class StudentService {
 
     @Transactional
     fun averageAttendancesFromAllStudents(): Double {
-        if (findAll().isNotEmpty()) {
-            return findAll().sumOf { it.attendancePercentage() } / findAll().size
+        return if (findAll().isNotEmpty()) {
+            findAll().sumOf { it.attendancePercentage() } / findAll().size
         } else {
-            return 0.0
+            0.0
         }
     }
 
@@ -135,29 +140,20 @@ class StudentService {
 
     @Transactional
     fun studentsAttendedAtAParticularDay(day: Int): List<Student> {
-        val rangedays = (1..6)
-        if (!rangedays.contains(day)) {
-            throw ItemNotFoundException(" Day:  $day invalid")
-        }
+        checkValidDay(day)
         return findAll().filter { it.attendedDay(day) }
     }
 
 
     @Transactional
     fun studentsAbsentAtAParticularDay(day: Int): List<Student> {
-        val rangedays = (1..6)
-        if (!rangedays.contains(day)) {
-            throw ItemNotFoundException(" Day:  $day invalid")
-        }
+        checkValidDay(day)
         return findAll().filter { !it.attendedDay(day) }
     }
 
     @Transactional
     fun studentsNotBlockedAbsentAtAParticularDay(courseId: Long, day: Int): List<Student> {
-        val rangedays = (1..6)
-        if (!rangedays.contains(day)) {
-            throw ItemNotFoundException(" Day:  $day invalid")
-        }
+        checkValidDay(day)
         return findAll().filter { it.course!!.id == courseId && (!it.attendedDay(day)) && (!it.blocked) }
     }
 
@@ -201,5 +197,17 @@ class StudentService {
                 surveyDTO.estado)
         println(survey.toString())
         return surveyRepository.save(survey)
+    }
+
+    @Transactional
+    fun numberOfMeetings(): Int {
+        return meetingRepository.findAll().size
+    }
+
+    @Transactional
+    fun checkValidDay(day: Int) {
+        if (day > numberOfMeetings()) {
+            throw ItemNotFoundException(" Day:  $day invalid")
+        }
     }
 }
