@@ -38,6 +38,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     //testImplementation("org.springframework.security:spring-security-test")
     implementation("org.springframework.boot:spring-boot-starter-mail:3.0.5")
+    implementation ("org.hibernate.validator:hibernate-validator:8.0.1.Final")
 }
 
 tasks.withType<KotlinCompile> {

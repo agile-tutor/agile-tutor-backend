@@ -3,7 +3,6 @@ package ar.edu.unq.agiletutor.model
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
-import java.io.Serializable
 
 @Entity
 @Table(name = "meeting")

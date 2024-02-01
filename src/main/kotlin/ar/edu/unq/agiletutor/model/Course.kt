@@ -5,7 +5,6 @@ import ar.edu.unq.agiletutor.service.DayBooleanDTO
 import jakarta.persistence.*
 import jakarta.validation.constraints.Size
 import org.jetbrains.annotations.NotNull
-import java.io.Serializable
 
 @Entity
 @Table(name = "course")

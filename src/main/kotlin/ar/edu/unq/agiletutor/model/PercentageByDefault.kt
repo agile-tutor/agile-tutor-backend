@@ -1,8 +1,6 @@
 package ar.edu.unq.agiletutor.model
 
 import jakarta.persistence.*
-import java.io.Serializable
-
 @Entity
 @Table(name = "percent")
 class PercentageByDefault : BaseEntity {

@@ -1,9 +1,7 @@
 package ar.edu.unq.agiletutor.model
 
-import ar.edu.unq.agiletutor.service.AttendanceDTO
 import jakarta.persistence.*
 import org.jetbrains.annotations.NotNull
-import java.io.Serializable
 
 @Entity
 @Table(name = "student")

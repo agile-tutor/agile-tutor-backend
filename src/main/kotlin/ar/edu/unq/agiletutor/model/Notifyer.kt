@@ -1,8 +1,6 @@
 package ar.edu.unq.agiletutor.model
 
-import jakarta.annotation.PostConstruct
 import jakarta.persistence.*
-import java.time.LocalDate
 
 @Entity
 @Table(name = "notifyer")
