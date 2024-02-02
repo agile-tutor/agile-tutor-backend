@@ -2,6 +2,7 @@ package ar.edu.unq.agiletutor.webservice
 
 import ar.edu.unq.agilemeeting.service.*
 import ar.edu.unq.agiletutor.service.MeetingService
+import ar.edu.unq.agiletutor.webservice.utils.UnifiedResponseMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
@@ -15,24 +16,18 @@ class MeetingRestService {
 
     @Autowired
     private lateinit var meetingService: MeetingService
+    private val unifiedResponse = UnifiedResponseMessage()
 
     /**register meeting*/
     @PostMapping("/api/meeting/register")
     fun register(@RequestBody meetingdata: MeetingRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-    
         try {
             val meetingView = MeetingView.desdeModelo(meetingService.register(meetingdata))
-            println("iddelmeeting" + meetingView.id)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(meetingView)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            //resultado["name of course already exist"] = coursedata.name.toString()
-            resultado["Exception"] = e.localizedMessage
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, e.localizedMessage)
         }
         return response!!
     }
@@ -51,13 +46,9 @@ class MeetingRestService {
 
         try {
             val meetingView = MeetingView.desdeModelo(meetingService.findByID(id))
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(meetingView)
+            response = unifiedResponse.unifiedOkResponse(meetingView)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["meeting with id not found"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Meeting with id $id not found")
         }
         return response!!
     }
@@ -68,15 +59,9 @@ class MeetingRestService {
         var response: ResponseEntity<*>?
         try {
             val meeting = meetingService.update(id, entity)
-            println("modifiedmeetingRest"+meeting.title)
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(meeting)
+            response = unifiedResponse.unifiedOkResponse(meeting)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["meeting con id no encontrado"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Meeting with id $id not found")
         }
         return response!!
     }
@@ -92,11 +77,7 @@ class MeetingRestService {
             response = ResponseEntity.ok().body<Map<String, Long>>(resultado)
 
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["something goes wrong"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Meeting with id $id not found")
         }
         return response!!
     }

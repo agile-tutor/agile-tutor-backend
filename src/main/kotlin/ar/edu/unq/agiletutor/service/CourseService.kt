@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CourseService {
 
-
     @Autowired
     private lateinit var studentService: StudentService
 
@@ -33,7 +32,6 @@ class CourseService {
 
     @Autowired
     private lateinit var percentageService: PercentageService
-
 
     @Transactional
     fun register(course: Course): Course {
@@ -184,7 +182,6 @@ class CourseService {
         return repository.save(course)
     }
 
-
     @Transactional
     fun averageAttendancesFromACourse(id: Long): Double {
         val course = findByID(id)
@@ -202,7 +199,6 @@ class CourseService {
         studentService.register(student)
         //course.students.add(student)
         // repository.save(course)
-
     }
 
     @Transactional

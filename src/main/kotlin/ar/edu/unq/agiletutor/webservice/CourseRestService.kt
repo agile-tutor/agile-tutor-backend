@@ -3,8 +3,8 @@ package ar.edu.unq.agiletutor.webservice
 import ar.edu.unq.agilemeeting.service.CourseDTO
 import ar.edu.unq.agilemeeting.service.CourseRegisterDTO
 import ar.edu.unq.agilemeeting.service.TutorDTO
-import ar.edu.unq.agiletutor.model.Course
 import ar.edu.unq.agiletutor.service.*
+import ar.edu.unq.agiletutor.webservice.utils.UnifiedResponseMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
@@ -22,25 +22,20 @@ class CourseRestService {
     @Autowired
     private lateinit var courseService: CourseService
     private val builder: ResponseEntity.BodyBuilder? = null
+    private val unifiedResponse = UnifiedResponseMessage()
+
 
     /**register a course*/
     @PostMapping("/api/course/register")
     fun register(@RequestBody coursedata: CourseRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             val tutor = tutorService.findByID(coursedata.tutorId)
             val courseview = CourseDTO.desdeModelo(courseService.register(coursedata.aModelo(tutor)))
-            println("iddelcurso2"+courseview.id)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(courseview)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            //resultado["name of course already exist"] = coursedata.name.toString()
-            resultado["Exception"] = e.localizedMessage
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, e.localizedMessage)
         }
         return response!!
     }
@@ -56,16 +51,11 @@ class CourseRestService {
     @GetMapping("/api/course/{id}")
     fun courserById(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             val courseView = CourseDTO.desdeModelo(courseService.findByID(id))
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(courseView)
+            response = unifiedResponse.unifiedOkResponse(courseView)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["course with id not found"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
         }
         return response!!
     }
@@ -74,16 +64,12 @@ class CourseRestService {
     @GetMapping("/api/course/{name}")
     fun courserByName(@PathVariable("name") name: String): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             val courseView = CourseDTO.desdeModelo(courseService.findByName(name))
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(courseView)
+            response = unifiedResponse.unifiedOkResponse(courseView)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["course with name not found"] = name
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with name $name not found")
+
         }
         return response!!
     }
@@ -92,20 +78,14 @@ class CourseRestService {
     @GetMapping("/api/course/tutor/{id}")
     fun tutorFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             val tutorView = TutorDTO.desdeModelo(courseService.tutorFromACourse(id))
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(tutorView)
+            response = unifiedResponse.unifiedOkResponse(tutorView)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["course with id not found"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
         }
         return response!!
     }
-
 
     /** Update a course*/
     @PutMapping("/api/course/{id}")
@@ -113,15 +93,9 @@ class CourseRestService {
         var response: ResponseEntity<*>?
         try {
             val courseview = courseService.update(id, entity)
-
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(courseview)
+            response = unifiedResponse.unifiedOkResponse(courseview)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["usuario con id no encontrado"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
         }
         return response!!
     }
@@ -130,111 +104,72 @@ class CourseRestService {
     @GetMapping("/api/course/students/{id}")
     fun studentsFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
-        val students = courseService.studentsFromACourse(id).map { StudentDTO.desdeModelo(it) }
-        ResponseEntity.status(200)
-        response = ResponseEntity.ok().body(students)
-    } catch (e: Exception) {
-        ResponseEntity.status(404)
-
-        val resultado: MutableMap<String, String> = HashMap()
-        resultado["Not found Course with id"] = id.toString()
-
-        response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            val students = courseService.studentsFromACourse(id).map { StudentDTO.desdeModelo(it) }
+            response = unifiedResponse.unifiedOkResponse(students)
+        } catch (e: Exception) {
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
+        }
+        return response!!
     }
-    return response!!
-
-}
-
-
 
     /**update  students attendances from a course*/
 //    @PuMapping("/api/students/attendances/update/{id}/{day}")
     @PutMapping("/api/course/students/attendances/update/{id}")
     fun updateStudentsAttendancesFromACourse(
-        @PathVariable("id") id: Long,
-        @RequestBody attendances: List<StudentAttendanceDTO>
+            @PathVariable("id") id: Long,
+            @RequestBody attendances: List<StudentAttendanceDTO>
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             println("id desde api: $id")
             courseService.updateStudentsAttendancesFromACourse(id, attendances)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body("students attendances Updated Ok")
-            } catch (e: Exception) {
-                ResponseEntity.status(404)
-    
-                val resultado: MutableMap<String, String> = HashMap()
-                resultado["Course with Id not found"] = id.toString()
-                response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
-            }
+        } catch (e: Exception) {
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
+        }
         return response!!
     }
 
-
     /** Average of Attendances  from a Course*/
     @GetMapping("/api/course/students/attendances/average/{id}")
-    fun averageAttendancesFromACouurse( @PathVariable("id") id: Long): ResponseEntity<*> {
-
+    fun averageAttendancesFromACouurse(@PathVariable("id") id: Long): ResponseEntity<*> {
         val averageAttendances = courseService.averageAttendancesFromACourse(id)
-
         return ResponseEntity.ok().body(averageAttendances)
     }
 
-
     /**  Marked Down attendances at a particular day*/
     @GetMapping("/api/course/attendances/{id}")
-    fun markedDownAttendanceAFromACourseATaParticularDay( @PathVariable("id") id: Long, @PathVariable("day") day: Int): ResponseEntity<*> {
-
-        val narkedDown = courseService.markedDownAttendanceAFromACourseATaParticularDay(id,day)
-
+    fun markedDownAttendanceAFromACourseATaParticularDay(@PathVariable("id") id: Long, @PathVariable("day") day: Int): ResponseEntity<*> {
+        val narkedDown = courseService.markedDownAttendanceAFromACourseATaParticularDay(id, day)
         return ResponseEntity.ok().body(narkedDown)
     }
-
 
     /**Students approved From a Course*/
     @GetMapping("/api/course/students/approved/{id}")
     fun studentsApprovedFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             val students = courseService.studentsApprovedFromACourse(id).map { StudentDTO.desdeModelo(it) }
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(students)
+            response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Not found Course with id"] = id.toString()
-
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
         }
         return response!!
-
     }
-
 
     /**Students fill the survey From a Course*/
     @GetMapping("/api/course/students/survey/{id}")
     fun studentsFillSurveyFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             val students = courseService.studentsFillSurveydFromACourse(id).map { StudentDTO.desdeModelo(it) }
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(students)
+            response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Not found Course with id"] = id.toString()
-
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
         }
         return response!!
-
     }
 
     /** Course attended at days*/
@@ -245,18 +180,10 @@ class CourseRestService {
 
         try {
             val result = courseService.attendedAtDay(course_id)
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(result)
+            response = unifiedResponse.unifiedOkResponse(result)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Course with Id not found"] = course_id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $course_id not found")
         }
         return response!!
     }
-
-
-
 }

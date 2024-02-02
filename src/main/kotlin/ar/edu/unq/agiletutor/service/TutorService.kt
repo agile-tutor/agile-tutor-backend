@@ -7,7 +7,6 @@ import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.*
 import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.StudentRepository
-import ar.edu.unq.agiletutor.persistence.SurveyRepository
 import ar.edu.unq.agiletutor.persistence.TutorRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -2,6 +2,7 @@ package ar.edu.unq.agiletutor.webservice
 
 import ar.edu.unq.agilemeeting.service.*
 import ar.edu.unq.agiletutor.service.*
+import ar.edu.unq.agiletutor.webservice.utils.UnifiedResponseMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
@@ -16,6 +17,7 @@ class TutorRestService {
     @Autowired
     private lateinit var tutorService: TutorService
     private val builder: ResponseEntity.BodyBuilder? = null
+    private val unifiedResponse = UnifiedResponseMessage()
 
     /**register a tutor*/
     @PostMapping("/api/tutor/register")
@@ -23,17 +25,11 @@ class TutorRestService {
         var response: ResponseEntity<*>?
 
         try {
-
             val tutorview = TutorDTO.desdeModelo(tutorService.register(tutordata.aModelo()))
-
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(tutorview)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["email of tutor already exist"] = tutordata.email.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Email of tutor "+ tutordata.email.toString() +" already exist")
         }
         return response!!
     }
@@ -41,7 +37,6 @@ class TutorRestService {
     @GetMapping("/api/tutor")
     fun allTutors(): ResponseEntity<*> {
         val tutors = tutorService.findAll().map { TutorDTO.desdeModelo(it) }
-
         return ResponseEntity.ok().body(tutors)
     }
 
@@ -51,14 +46,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val tutorview = TutorDTO.desdeModelo(tutorService.login(tutor.email, tutor.password))
-
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(tutorview)
+            response = unifiedResponse.unifiedOkResponse(tutorview)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["tutor not found"] = tutor.email
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Tutor with email " + tutor.email + " not found")
         }
         return response!!
     }
@@ -69,14 +59,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val tutorView = TutorDTO.desdeModelo(tutorService.findByID(id))
-
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(tutorView)
+            response = unifiedResponse.unifiedOkResponse(tutorView)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["tutor with id not found"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Tutor with id $id not found")
         }
         return response!!
     }
@@ -87,14 +72,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val tutorView = TutorDTO.desdeModelo(tutorService.findByEmail(email))
-
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(tutorView)
+            response = unifiedResponse.unifiedOkResponse(tutorView)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["tutor with email not found"] = email
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Tutor with email $email not found")
         }
         return response!!
     }
@@ -105,16 +85,10 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val userview = tutorService.update(id, entity)
-
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(userview)
+            response = unifiedResponse.unifiedOkResponse(userview)
         } catch (e: Exception) {
             ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            //resultado["Not found Tutor with id"] = id.toString()
-            resultado["Exception"] = e.message.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, e.message.toString())
         }
         return response!!
     }
@@ -128,13 +102,8 @@ class TutorRestService {
             val resultado: MutableMap<String, Long> = HashMap()
             resultado["succesfully tutor deleted with iD"] = id
             response = ResponseEntity.ok().body<Map<String, Long>>(resultado)
-
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["tutor with id not found"] = id.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Tutor with id $id not found")
         }
         return response!!
     }
@@ -145,16 +114,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val courses = tutorService.coursesFromATutor(id).map { CourseDTO.desdeModelo(it) }
-            ResponseEntity.status(200)
-
-            response = ResponseEntity.ok().body(courses)
+            response = unifiedResponse.unifiedOkResponse(courses)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Not found Tutor with id"] = id.toString()
-
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Tutor with id $id not found")
         }
         return response!!
     }
@@ -165,16 +127,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val students = tutorService.studentsFromATutor(id).map { StudentDTO.desdeModelo(it) }
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(students)
-
+            response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Not found Tutor with id"] = id.toString()
-
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Tutor with id $id not found")
         }
         return response!!
     }
@@ -185,18 +140,12 @@ class TutorRestService {
             @PathVariable("id") id: Int, @PathVariable("id_course") id_course: Long
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
-
         try {
             val student = tutorService.moveAStudentIntoAnotherCourse(id.toLong(), id_course)
-            ResponseEntity.status(201)
-            response = ResponseEntity.ok().body(student)
-
+            response = unifiedResponse.unifiedOkResponse(student)
         } catch (e: Exception) {
             ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Exception"] = e.message.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, e.message.toString())
         }
         return response!!
     }
@@ -208,16 +157,9 @@ class TutorRestService {
         try {
             val notifyer = tutorService.findByID(tutorId).notifyer
             val message = tutorService.absentMessageFromTutor(notifyer!!)
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(message)
-
+            response = unifiedResponse.unifiedOkResponse(message)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val result: MutableMap<String, String> = HashMap()
-            result["Not found Absent Message"] = "Error"
-
-            response = ResponseEntity.badRequest().body<Map<String, String>>(result)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Absent Message not found")
         }
         return response!!
     }
@@ -229,16 +171,9 @@ class TutorRestService {
         try {
             val notifyer = tutorService.findByID(tutorId).notifyer
             val message = tutorService.updateAbsentMessageFromTutor(absentMessageDataDTO, notifyer!!)
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(message)
-
+            response = unifiedResponse.unifiedOkResponse(message)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val result: MutableMap<String, String> = HashMap()
-            result["Not found Absent Message"] = "Error"
-
-            response = ResponseEntity.badRequest().body<Map<String, String>>(result)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Absent Message not found")
         }
         return response!!
     }
@@ -249,14 +184,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val students = tutorService.studentsToNotifyFromTutor(tutorId)
-            ResponseEntity.status(201)
-            response = ResponseEntity.ok().body(students)
+            response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Students with tutor: not found"] = tutorId.toString()
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Students from tutorId $tutorId not found")
         }
         return response!!
     }
@@ -267,13 +197,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             tutorService.removeAnStudentFromNotification(tutorId, studentId)
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body { }
+            response = unifiedResponse.unifiedOkResponse("")
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["an error was ocurred"] = ""
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Check requested resource")
         }
         return response!!
     }
@@ -284,16 +210,9 @@ class TutorRestService {
         var response: ResponseEntity<*>?
         try {
             val surveys = tutorService.getAllSurveys()
-            ResponseEntity.status(200)
-            response = ResponseEntity.ok().body(surveys)
-
+            response = unifiedResponse.unifiedOkResponse(surveys)
         } catch (e: Exception) {
-            ResponseEntity.status(404)
-
-            val resultado: MutableMap<String, String> = HashMap()
-            resultado["Not found"] = "Check Error"
-
-            response = ResponseEntity.badRequest().body<Map<String, String>>(resultado)
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Check requested resource")
         }
         return response!!
     }
@@ -302,15 +221,14 @@ class TutorRestService {
     /** Get the percentage by Default */
     @GetMapping("/api/tutor/pecentagebydefault")
     fun percentageByDefault(): ResponseEntity<*> {
-        val percentageByDefault= tutorService.percentageByDefault()
-
+        val percentageByDefault = tutorService.percentageByDefault()
         return ResponseEntity.ok().body(percentageByDefault)
     }
 
     /** Update Percentage by Default */
     @PostMapping("/api/tutor/pecentagebydefault/{percentage}")
     fun updatePercentageByDefault(@PathVariable("percentage") percentage: Int): ResponseEntity<*> {
-      val  percentage = tutorService.updatePercentageByDefault(percentage.toDouble())
-        return ResponseEntity.ok().body(percentage)
+        val savedPercentage = tutorService.updatePercentageByDefault(percentage.toDouble())
+        return ResponseEntity.ok().body(savedPercentage)
     }
 }
