@@ -1,5 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val mysqlConnectorVersion = "8.0.30"
+val hibernateValidatorVersion = "8.0.1.Final"
+val starterMailVersion = "3.0.5"
+
 plugins {
     id("org.springframework.boot") version "3.0.4"
     id("io.spring.dependency-management") version "1.1.0"
@@ -25,20 +29,20 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    //implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("mysql:mysql-connector-java:$mysqlConnectorVersion")
+    implementation("org.springframework.boot:spring-boot-starter-mail:$starterMailVersion")
+    implementation ("org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion")
+    //implementation("org.springframework.boot:spring-boot-starter-security")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    //testImplementation("org.springframework.security:spring-security-test")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     //runtimeOnly("com.mysql:mysql-connector-j")
     //runtimeOnly("mysql:mysql-connector-java")
-    implementation("mysql:mysql-connector-java:8.0.30")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    //testImplementation("org.springframework.security:spring-security-test")
-    implementation("org.springframework.boot:spring-boot-starter-mail:3.0.5")
-    implementation ("org.hibernate.validator:hibernate-validator:8.0.1.Final")
 }
 
 tasks.withType<KotlinCompile> {

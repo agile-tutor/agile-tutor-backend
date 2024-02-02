@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.HashMap
 
 @RestController
 @EnableAutoConfiguration
@@ -213,7 +212,7 @@ class StudentRestService {
 
     /** register Many students */
     @PostMapping("/api/students/many/register/{id}")
-    fun registerMany(@PathVariable("id") id: Long, @RequestBody studentdata: MutableList<StudentFromACourseDTO>): ResponseEntity<*> {
+    fun registerMany(@PathVariable("id") id: Long, @RequestBody studentdata: List<StudentFromACourseDTO>): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
             val course = courseService.findByID(id)

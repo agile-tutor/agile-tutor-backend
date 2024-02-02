@@ -114,9 +114,9 @@ class CourseService {
         if (!rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
-        val meeting = course.meetings.toMutableList().get(day.dec())
+        val meeting = course.meetings.toMutableList()[day.dec()]
         meeting.passed = true
-        course.meetings.toMutableList().set(day.dec(), meeting)
+        course.meetings.toMutableList()[day.dec()] = meeting
         return repository.save(course)
     }
 
