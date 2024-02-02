@@ -5,7 +5,6 @@ import java.util.*
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import ar.edu.unq.agiletutor.model.Survey;
-import ar.edu.unq.agiletutor.model.Tutor
 import org.springframework.data.repository.CrudRepository
 
 @Configuration

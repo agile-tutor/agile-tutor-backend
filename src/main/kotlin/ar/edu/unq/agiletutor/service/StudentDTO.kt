@@ -3,8 +3,6 @@ package ar.edu.unq.agiletutor.service
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Course
-import org.springframework.beans.factory.annotation.Autowired
-
 
 data class StudentFromACourseDTO(
         var id: Long?,

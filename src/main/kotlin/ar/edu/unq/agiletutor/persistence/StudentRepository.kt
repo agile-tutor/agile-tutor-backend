@@ -1,9 +1,7 @@
 package ar.edu.unq.agiletutor.persistence
 
-import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Student
 import org.springframework.context.annotation.Configuration
-import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
