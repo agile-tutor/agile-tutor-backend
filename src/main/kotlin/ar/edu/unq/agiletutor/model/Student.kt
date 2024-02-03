@@ -63,7 +63,7 @@ class Student : BaseEntity {
     }
 
     fun attendedDay(day: Int): Boolean {
-        return attendances.any { it.day == day && it.attended }
+        return attendances.find { it.day == day }!!.attended
     }
 
     fun absent(): List<Attendance> {

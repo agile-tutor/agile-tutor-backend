@@ -27,22 +27,18 @@ class StudentService {
 
     @Transactional
     fun register(student: Student): Student {
-
         if (existStudent(student)) {
             throw UsernameExistException("Student with email:  ${student.email} is used")
         }
-
         return repository.save(student)
     }
 
 
     @Transactional
     fun registerMany(students: List<Student>): List<Student> {
-
         if (students.any { existStudent(it) }) {
             throw UsernameExistException("There is a Student with an used email")
         }
-
         return repository.saveAll(students.asIterable()).toMutableList()
     }
 
@@ -144,7 +140,6 @@ class StudentService {
         return findAll().filter { it.attendedDay(day) }
     }
 
-
     @Transactional
     fun studentsAbsentAtAParticularDay(day: Int): List<Student> {
         checkValidDay(day)
@@ -157,7 +152,6 @@ class StudentService {
         return findAll().filter { it.course!!.id == courseId && (!it.attendedDay(day)) && (!it.blocked) }
     }
 
-
     @Transactional
     fun blockOrUnblockAStudent(id: Long, blocked: Boolean): StudentView {
         val student = findByID(id)
@@ -165,12 +159,10 @@ class StudentService {
         return StudentView.desdeModelo(repository.save(student))
     }
 
-
     @Transactional
     fun deleteById(id: Long) {
         val student = repository.findById(id)
         if (!(student.isPresent)) {
-
             throw ItemNotFoundException("Student with Id:  $id not found")
         }
         repository.deleteById(id)

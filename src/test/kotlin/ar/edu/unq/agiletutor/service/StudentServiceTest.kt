@@ -48,6 +48,7 @@ internal class StudentServiceTest {
     lateinit var student16: Student
     lateinit var student17: Student
     lateinit var studentData: StudentRegisterDTO
+    lateinit var course1Saved : Course
 
     @BeforeEach
     fun setUp() {
@@ -60,7 +61,7 @@ internal class StudentServiceTest {
         val course1 = Course(0, "c1", mutableSetOf(), tutor1saved, mutableSetOf())
         val course3 = Course(0, "c3", mutableSetOf(), tutor2saved, mutableSetOf())
 
-        val course1Saved = courseService!!.register(course1)
+        course1Saved = courseService!!.register(course1)
         val course3Saved = courseService.register(course3)
 
         val meeting1 = MeetingRegisterDTO(0, "1", "", 1)
@@ -187,7 +188,7 @@ internal class StudentServiceTest {
                         course3Saved,
                         false
                 )
-        }
+    }
 
     /**get  Students */
     @Test
@@ -292,6 +293,20 @@ internal class StudentServiceTest {
         Assertions.assertTrue(absents.isEmpty())
     }
 
+    /** Students absent at a particular day */
+    @Test
+    fun me_devuelve_todos_estudiantes_que_asistieron_un_dia_en_particular() {
+        val day = 5
+        studentService.register(student5)
+        studentService.register(student6)
+        studentService.register(student15)
+        studentService.register(student16)
+        studentService.register(student17)
+        val attended = studentService.studentsAttendedAtAParticularDay(day)
+        Assertions.assertTrue(attended.isNotEmpty())
+        Assertions.assertEquals(attended.size, 2)
+    }
+
     /** block or unblock a students */
     @Test
     fun al_intentar_bloquear_O_daesbloquear_un_estudiante_con_id_no_existente_Lanza_excepcion() {
@@ -347,6 +362,31 @@ internal class StudentServiceTest {
         studentService.register(student2)
         val checked = studentService.checkMail(email)
         Assertions.assertFalse(checked)
+    }
+
+    /** Alumno por default no esta bloqueado **/
+    @Test
+    fun al_consultar_si_esta_bloqueado_un_alumno_nuevo_devuelve_False() {
+        val newStudent = studentService.register(studentData.aModelo(course1Saved, meetingService!!.findAll()))
+        val checked = studentService.findByID(newStudent.id!!).blocked
+        Assertions.assertFalse(checked)
+    }
+
+    /** Alumno por default no tiene presentes **/
+    @Test
+    fun al_consultar_si_tiene_algun_presente_un_alumno_nuevo_devuelve_False() {
+        val newStudent = studentService.register(studentData.aModelo(course1Saved, meetingService!!.findAll()))
+        val checked = studentService.attendedDays(newStudent.id!!).any { it.attended }
+        Assertions.assertFalse(checked)
+    }
+
+    /** Alumno por default esta asociado a la cantidad de encuentros creados **/
+    @Test
+    fun al_consultar_la_correspondencia_entre_meetings_asociados_a_un_alumno_nuevo_y_meetings_disponibles_devuelve_True() {
+        val newStudent = studentService.register(studentData.aModelo(course1Saved, meetingService!!.findAll()))
+        val meetingsSetted = studentService.attendancesFromAStudent(newStudent.id!!).size
+        val meetingsAvailable = meetingService.findAll().size
+        Assertions.assertEquals(meetingsSetted, meetingsAvailable)
     }
 
     @AfterEach

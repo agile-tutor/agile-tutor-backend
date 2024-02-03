@@ -21,13 +21,18 @@ class StudentRestService {
     @Autowired
     private lateinit var courseService: CourseService
 
+    @Autowired
+    private lateinit var meetingService: MeetingService
+
+
     /**register a student*/
     @PostMapping("/api/students/register")
     fun register(@RequestBody studentdata: StudentRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
             val course = courseService.findByID(studentdata.courseId)
-            val userview = StudentView.desdeModelo(studentService.register(studentdata.aModelo(course)))
+            val meetings = meetingService.findAll()
+            val userview = StudentView.desdeModelo(studentService.register(studentdata.aModelo(course, meetings)))
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(userview)
         } catch (e: Exception) {

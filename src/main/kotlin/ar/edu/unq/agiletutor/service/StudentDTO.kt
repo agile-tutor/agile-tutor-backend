@@ -3,6 +3,7 @@ package ar.edu.unq.agiletutor.service
 import ar.edu.unq.agiletutor.model.Student
 import ar.edu.unq.agiletutor.model.Attendance
 import ar.edu.unq.agiletutor.model.Course
+import ar.edu.unq.agiletutor.model.Meeting
 
 data class StudentFromACourseDTO(
         var id: Long?,
@@ -11,7 +12,6 @@ data class StudentFromACourseDTO(
         var identifier: String?,
         var email: String?,
         var courseId: Long,
-
         ) {
 
     companion object {
@@ -49,7 +49,6 @@ data class StudentFromACourseDTO(
 
 data class ManyStudentsFromACourse(
         var studentsDTO: MutableSet<StudentFromACourseDTO> = HashSet()
-
 ) {
     fun aModelo(course: Course): List<Student> {
 
@@ -63,7 +62,6 @@ data class ManyStudentsFromACourse(
                     course.id!!
             ).aModelo(course)
         }.toMutableList()
-
     }
 
     companion object {
@@ -82,11 +80,11 @@ data class StudentRegisterDTO(
         var observations: String?,
         var courseId: Long
 ) {
-    fun aModelo(course: Course): Student {
+    fun aModelo(course: Course, meetings: List<Meeting>): Student {
         val student = Student()
         val attendances = mutableSetOf<Attendance>()
-        for (i in (1..6)) {
-            attendances.add(Attendance(i, false))
+        for (m in meetings) {
+            attendances.add(Attendance(m.day, false))
         }
         student.id = id
         student.name = name
@@ -94,7 +92,6 @@ data class StudentRegisterDTO(
         student.identifier = identifier
         student.email = email
         student.attendances = attendances
-        // attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
         student.observations = observations!!
         student.blocked = false
         student.course = course
@@ -102,29 +99,29 @@ data class StudentRegisterDTO(
     }
 }
 
-
 data class StudentView(
         var id: Long?,
         var name: String?,
         var surname: String?,
         var identifier: String?,
+        var attendances: List<AttendanceDTO>,
         var email: String?,
         var attendancepercentage: Double?,
         var observations: String?,
         var blocked: Boolean,
         var courseId: Long
-
 ) {
 
     companion object {
         fun desdeModelo(student: Student): StudentView {
- //           val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
+            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
             return StudentView(
                     student.id,
                     student.name,
                     student.surname,
                     student.identifier,
+                    asistenciasDTO,
                     student.email,
                     student.attendancePercentage(),
                     student.observations,
@@ -139,7 +136,6 @@ data class AttendanceDTO(
         var id: Int?,
         var day: Int?,
         var attended: Boolean
-
 ) {
     companion object {
         fun desdeModelo(asistencia: Attendance): AttendanceDTO {
