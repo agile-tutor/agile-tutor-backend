@@ -142,19 +142,16 @@ data class MeetingView(
         var title: String?,
         var date: String?,
         var day: Int?
-        //var courses: List<CourseDTO>?,
 ) {
 
     companion object {
         fun desdeModelo(meeting: Meeting): MeetingView {
-            //  val coursesDTO = meeting.courses.map { CourseDTO.desdeModelo(it) }
 
             return MeetingView(
                     meeting.id,
                     meeting.title,
                     meeting.date,
                     meeting.day
-                    //    coursesDTO
             )
         }
     }

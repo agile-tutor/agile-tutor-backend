@@ -104,7 +104,7 @@ class CourseRestService {
     fun studentsFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val students = courseService.studentsFromACourse(id).map { StudentDTO.desdeModelo(it) }
+            val students = courseService.studentsFromACourse(id).map { StudentView.desdeModelo(it) }
             response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
@@ -150,7 +150,7 @@ class CourseRestService {
     fun studentsApprovedFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val students = courseService.studentsApprovedFromACourse(id).map { StudentDTO.desdeModelo(it) }
+            val students = courseService.studentsApprovedFromACourse(id).map { StudentView.desdeModelo(it) }
             response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")
@@ -163,7 +163,7 @@ class CourseRestService {
     fun studentsFillSurveyFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val students = courseService.studentsFillSurveydFromACourse(id).map { StudentDTO.desdeModelo(it) }
+            val students = courseService.studentsFillSurveydFromACourse(id).map { StudentView.desdeModelo(it) }
             response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $id not found")

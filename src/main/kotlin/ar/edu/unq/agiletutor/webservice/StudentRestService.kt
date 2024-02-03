@@ -27,7 +27,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
         try {
             val course = courseService.findByID(studentdata.courseId)
-            val userview = StudentRegisterDTO.desdeModelo(studentService.register(studentdata.aModelo(course)))
+            val userview = StudentView.desdeModelo(studentService.register(studentdata.aModelo(course)))
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(userview)
         } catch (e: Exception) {
@@ -38,7 +38,7 @@ class StudentRestService {
 
     @GetMapping("/api/students")
     fun allStudents(): ResponseEntity<*> {
-        val students = studentService.findAll().map { StudentDTO.desdeModelo(it) }
+        val students = studentService.findAll().map { StudentView.desdeModelo(it) }
         return ResponseEntity.ok().body(students)
     }
 
@@ -47,7 +47,7 @@ class StudentRestService {
     fun studentById(@PathVariable("id") id: Int): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val studentView = StudentDTO.desdeModelo(studentService.findByID(id.toLong()))
+            val studentView = StudentView.desdeModelo(studentService.findByID(id.toLong()))
             response = unifiedResponse.unifiedOkResponse(studentView)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, "Student with id $id not found")
@@ -60,7 +60,7 @@ class StudentRestService {
     fun studentsByName(@PathVariable("name") name: String): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val studentsView = studentService.findByName(name).map { StudentDTO.desdeModelo(it) }
+            val studentsView = studentService.findByName(name).map { StudentView.desdeModelo(it) }
             response = unifiedResponse.unifiedOkResponse(studentsView)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, "Student with name $name not found")
@@ -70,7 +70,7 @@ class StudentRestService {
 
     /** Update*/
     @PutMapping("/api/students/{id}")
-    fun update(@PathVariable("id") id: Int, @RequestBody entity: StudentDTO): ResponseEntity<*> {
+    fun update(@PathVariable("id") id: Int, @RequestBody entity: StudentRegisterDTO): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
             val student = studentService.update(id.toLong(), entity)
@@ -89,7 +89,7 @@ class StudentRestService {
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val studentview = StudentDTO.desdeModelo(studentService.updateattendances(id.toLong(), attendances))
+            val studentview = StudentView.desdeModelo(studentService.updateattendances(id.toLong(), attendances))
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body(studentview)
         } catch (e: Exception) {
@@ -124,14 +124,14 @@ class StudentRestService {
     /** students without absents */
     @GetMapping("/api/students/attendances/attended")
     fun studentsWithoutAbsents(): ResponseEntity<*> {
-        val studentsWithoutAbsents = studentService.studentsWirhoutAbsents().map { StudentDTO.desdeModelo(it) }
+        val studentsWithoutAbsents = studentService.studentsWirhoutAbsents().map { StudentView.desdeModelo(it) }
         return ResponseEntity.ok().body(studentsWithoutAbsents)
     }
 
     /** students with absents */
     @GetMapping("/api/students/attendances/absent")
     fun studentsWithAbsents(): ResponseEntity<*> {
-        val studentsWithAbsents = studentService.studentsWithAbsents().map { StudentDTO.desdeModelo(it) }
+        val studentsWithAbsents = studentService.studentsWithAbsents().map { StudentView.desdeModelo(it) }
         return ResponseEntity.ok().body(studentsWithAbsents)
     }
 
@@ -155,7 +155,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
         try {
             val studentsAttendedAtAParticularDay =
-                    studentService.studentsAttendedAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+                    studentService.studentsAttendedAtAParticularDay(day).map { StudentView.desdeModelo(it) }
             response = unifiedResponse.unifiedOkResponse(studentsAttendedAtAParticularDay)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, e.message.toString())
@@ -169,7 +169,7 @@ class StudentRestService {
         var response: ResponseEntity<*>?
         try {
             val studentsAttendedAtAParticularDay =
-                    studentService.studentsAbsentAtAParticularDay(day).map { StudentDTO.desdeModelo(it) }
+                    studentService.studentsAbsentAtAParticularDay(day).map { StudentView.desdeModelo(it) }
             response = unifiedResponse.unifiedOkResponse(studentsAttendedAtAParticularDay)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, e.message.toString())
@@ -236,4 +236,3 @@ class StudentRestService {
         return response!!
     }
 }
-

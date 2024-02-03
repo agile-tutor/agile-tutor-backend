@@ -9,5 +9,4 @@ class AgiletutorApplicationTests {
 	@Test
 	fun contextLoads() {
 	}
-
 }

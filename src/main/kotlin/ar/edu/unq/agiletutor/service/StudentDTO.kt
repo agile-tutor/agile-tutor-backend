@@ -71,7 +71,6 @@ data class ManyStudentsFromACourse(
             return students.map { StudentFromACourseDTO.desdeModelo(it) }
         }
     }
-
 }
 
 data class StudentRegisterDTO(
@@ -80,30 +79,9 @@ data class StudentRegisterDTO(
         var surname: String?,
         var identifier: String?,
         var email: String?,
-        // var attendances: List<AttendanceDTO>?,
         var observations: String?,
-        //  var blocked: Boolean,
         var courseId: Long
 ) {
-
-    companion object {
-        fun desdeModelo(student: Student): StudentRegisterDTO {
-            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
-
-            return StudentRegisterDTO(
-                    student.id,
-                    student.name,
-                    student.surname,
-                    student.identifier,
-                    student.email,
-                    //  asistenciasDTO,
-                    student.observations,
-                    // student.blocked,
-                    student.course!!.id!!
-            )
-        }
-    }
-
     fun aModelo(course: Course): Student {
         val student = Student()
         val attendances = mutableSetOf<Attendance>()
@@ -125,13 +103,12 @@ data class StudentRegisterDTO(
 }
 
 
-data class StudentDTO(
+data class StudentView(
         var id: Long?,
         var name: String?,
         var surname: String?,
         var identifier: String?,
         var email: String?,
-        var attendances: List<AttendanceDTO>?,
         var attendancepercentage: Double?,
         var observations: String?,
         var blocked: Boolean,
@@ -140,40 +117,22 @@ data class StudentDTO(
 ) {
 
     companion object {
-        fun desdeModelo(student: Student): StudentDTO {
-            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
+        fun desdeModelo(student: Student): StudentView {
+ //           val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
-            return StudentDTO(
+            return StudentView(
                     student.id,
                     student.name,
                     student.surname,
                     student.identifier,
                     student.email,
-                    asistenciasDTO,
                     student.attendancePercentage(),
                     student.observations,
                     student.blocked,
                     student.course!!.id!!
-
             )
         }
     }
-
-    fun aModelo(course: Course): Student {
-        val student = Student()
-        student.id = id
-        student.name = name
-        student.surname = surname
-        student.identifier = identifier
-        student.email = email
-        // student.attendances
-        attendances!!.map { AttendanceDTO(it.id, it.day, it.attended).aModelo() }.toMutableSet()
-        student.observations = observations!!
-        student.blocked = blocked
-        student.course = course
-        return student
-    }
-
 }
 
 data class AttendanceDTO(
@@ -206,7 +165,6 @@ data class AttendanceViewDTO(
         }
     }
 }
-
 
 data class StudentAttendanceDTO(
         var studentId: Int,

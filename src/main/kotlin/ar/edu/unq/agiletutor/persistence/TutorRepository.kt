@@ -11,9 +11,12 @@ import java.util.*
 interface TutorRepository : CrudRepository<Tutor?, Long?> {
 
     fun save(tutor: Tutor): Tutor
-    override fun findAll(): List<Tutor>
-    override fun findById(id: Long): Optional<Tutor?>
-    override fun existsById(id: Long): Boolean
-    override fun deleteById(id: Long)
 
+    override fun findAll(): List<Tutor>
+
+    override fun findById(id: Long): Optional<Tutor?>
+
+    override fun existsById(id: Long): Boolean
+
+    override fun deleteById(id: Long)
 }

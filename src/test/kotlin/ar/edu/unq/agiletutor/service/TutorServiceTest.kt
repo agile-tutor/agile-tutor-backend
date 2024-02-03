@@ -46,7 +46,6 @@ internal class TutorServiceTest {
     @Test
     fun al_solicitar_a_una_DB_sin_tutores_no_devuelve_ninguno() {
         tutors = tutorService.findAll()
-
         assertTrue ( tutors.isEmpty())
     }
 
@@ -60,7 +59,6 @@ internal class TutorServiceTest {
     }
 
     /**Register a tutor */
-
     @Test
     fun el_tutor_registrado_mantiene_las_mismas_propiedades_luego_de_registrarse() {
         val tutor1registered = tutorService.register(tutor1)
@@ -68,10 +66,7 @@ internal class TutorServiceTest {
         assertEquals(tutor1.surname, tutor1registered.surname)
         assertEquals(tutor1.email, tutor1registered.email)
         assertEquals(tutor1.password, tutor1registered.password)
-
-
     }
-
 
     @Test
     fun al_Registrar_un_tutor_se_incrementa_la_cantidad_en_una_unidad() {
@@ -86,11 +81,9 @@ internal class TutorServiceTest {
         assertThrows<UsernameExistException> {  tutorService.register(tutor1) }
     }
 
-
     /**loggin a tutor*/
     @Test
     fun al_intentar_loguearse_un_tutor_no_registrado_Lanza_excepcion() {
-
         assertThrows<ItemNotFoundException> {  tutorService.login( "tutor1@gmail.com", "passtut1") }
     }
 
@@ -103,9 +96,7 @@ internal class TutorServiceTest {
         assertEquals(registered.surname, logged.surname)
         assertEquals(registered.email,  logged.email)
         assertEquals(registered.password, logged.password)
-
     }
-
 
     /** find a tutor By Id */
     @Test
@@ -114,9 +105,8 @@ internal class TutorServiceTest {
         assertThrows<ItemNotFoundException> {  tutorService.findByID( 0) }
     }
 
-
     @Test
-    fun Si_el_id_es_existente_Retorna_al_tutor_asociado_con_ese_id_() {
+    fun si_el_id_es_existente_Retorna_al_tutor_asociado_con_ese_id_() {
         val tutorRegistered =tutorService.register(tutor1)
         val userFound = tutorService.findByID(tutorRegistered.id!!)
         assertEquals( tutorRegistered.id, userFound.id)
@@ -124,9 +114,7 @@ internal class TutorServiceTest {
         assertEquals( tutorRegistered.surname, userFound.surname)
         assertEquals( tutorRegistered.email, userFound.email)
         assertEquals( tutorRegistered.password, userFound.password)
-
     }
-
 
     /** update a tutor* */
     @Test
@@ -136,17 +124,14 @@ internal class TutorServiceTest {
     }
 
     @Test
-    fun Al_Intentar_Actualizar_Si_el_mail_es_existente_lanza_excepcion() {
+    fun al_Intentar_Actualizar_Si_el_mail_es_existente_lanza_excepcion() {
         val tutorRegistered = tutorService.register(tutor1)
         tutorService.register(tutor3)
-
         assertThrows<DataIntegrityViolationException> {  tutorService.update(tutorRegistered.id!!, tutorData) }
-
     }
 
-
     @Test
-    fun Si_el_id_es_existente_Actualiza_el_usuario_asociado_con_ese_id_() {
+    fun si_el_id_es_existente_Actualiza_el_usuario_asociado_con_ese_id_() {
         val tutorRegistered = tutorService.register(tutor1)
         val updated = tutorService.update(tutorRegistered.id!!, tutorData)
         val restored= tutorService.findByID(tutorRegistered.id!!)
@@ -155,34 +140,27 @@ internal class TutorServiceTest {
         assertEquals( updated.surname, restored.surname)
         assertEquals( updated.email, restored.email)
         assertEquals( updated.password, restored.password)
-
     }
-
 
     /** Delete By Id */
     @Test
     fun al_intentar_borrar_un_tutor_con_id_no_existente_lanza_excepcionm_y_La_DB_se_mantiene_sin_alterar() {
         tutorService.register(tutor1)
         val tutors = tutorService.findAll()
-
         assertThrows<ItemNotFoundException> {  tutorService.deleteById(0)}
-
         assertTrue( tutors.isNotEmpty() )
     }
 
     @Test
-    fun Si_el_id_es_existente_el_tutor_asociado_con_ese_id_es_eliminado_() {
+    fun si_el_id_es_existente_el_tutor_asociado_con_ese_id_es_eliminado_() {
         val tutorRegistered = tutorService.register(tutor1)
         tutorService.deleteById(tutorRegistered .id!!)
         val tutors = tutorService.findAll()
-
         assertTrue( tutors.isEmpty() )
     }
-
 
     @AfterEach
     fun tearDown() {
       tutorRepository.deleteAll()
     }
-
 }

@@ -1,9 +1,7 @@
 package ar.edu.unq.agiletutor.service
 
 import ar.edu.unq.agilemeeting.service.MeetingRegisterDTO
-import ar.edu.unq.agilemeeting.service.TutorRegisterDTO
 import ar.edu.unq.agiletutor.ItemNotFoundException
-import ar.edu.unq.agiletutor.UsernameExistException
 import ar.edu.unq.agiletutor.model.*
 import ar.edu.unq.agiletutor.persistence.CourseRepository
 import ar.edu.unq.agiletutor.persistence.MeetingRepository
@@ -40,7 +38,6 @@ internal class StudentServiceTest {
     @Autowired
     private val meetingService: MeetingService? = null
 
-    var tutors = listOf<Tutor>()
     var students = listOf<Student>()
 
     lateinit var student1: Student
@@ -50,18 +47,7 @@ internal class StudentServiceTest {
     lateinit var student15: Student
     lateinit var student16: Student
     lateinit var student17: Student
-    lateinit var studentData: StudentDTO
-
-    lateinit var tutor1: Tutor
-    lateinit var tutor2: Tutor
-    lateinit var tutorData: TutorRegisterDTO
-
-    lateinit var meeting1: Meeting
-    lateinit var meeting2: Meeting
-    lateinit var meeting3: Meeting
-    lateinit var meeting4: Meeting
-    lateinit var meeting5: Meeting
-    lateinit var meeting6: Meeting
+    lateinit var studentData: StudentRegisterDTO
 
     @BeforeEach
     fun setUp() {
@@ -72,21 +58,17 @@ internal class StudentServiceTest {
         val tutor2saved = tutorService.register(tutor2)
 
         val course1 = Course(0, "c1", mutableSetOf(), tutor1saved, mutableSetOf())
-        val course2 = Course(0, "c2", mutableSetOf(), tutor1saved, mutableSetOf())
         val course3 = Course(0, "c3", mutableSetOf(), tutor2saved, mutableSetOf())
-        val course4 = Course(0, "c4", mutableSetOf(), tutor2saved, mutableSetOf())
 
         val course1Saved = courseService!!.register(course1)
-        val course2Saved = courseService.register(course2)
         val course3Saved = courseService.register(course3)
-        val course4Saved = courseService.register(course4)
 
-        val meeting1 = MeetingRegisterDTO(0,"1","",1)
-        val meeting2 = MeetingRegisterDTO(0,"2","",2)
-        val meeting3 = MeetingRegisterDTO(0,"3","",3)
-        val meeting4 = MeetingRegisterDTO(0,"4","",4)
-        val meeting5 = MeetingRegisterDTO(0,"5","",5)
-        val meeting6 = MeetingRegisterDTO(0,"6","",6)
+        val meeting1 = MeetingRegisterDTO(0, "1", "", 1)
+        val meeting2 = MeetingRegisterDTO(0, "2", "", 2)
+        val meeting3 = MeetingRegisterDTO(0, "3", "", 3)
+        val meeting4 = MeetingRegisterDTO(0, "4", "", 4)
+        val meeting5 = MeetingRegisterDTO(0, "5", "", 5)
+        val meeting6 = MeetingRegisterDTO(0, "6", "", 6)
 
         meetingService!!.register(meeting1)
         meetingService.register(meeting2)
@@ -108,20 +90,15 @@ internal class StudentServiceTest {
         atendances.add(Attendance(5, false))
         atendances.add(Attendance(6, true))
 
-        //val attendancesSFalseinDay2= atendances.map { AttendanceDTO.desdeModelo(it) }
-
         studentData =
-                StudentDTO(
+                StudentRegisterDTO(
                         0,
                         "Ale",
                         "Trucho",
                         "500",
                         "mailfalso@gmail.com",
-
-                        mutableListOf(),
-                        0.0,
                         "Uma Observación",
-                        true, 999
+                        999
                 )
 
         student1 =
@@ -136,7 +113,6 @@ internal class StudentServiceTest {
                         course1Saved,
                         false
                 )
-        // val studentregistered1 = studentService!!.register(student1)
 
         student2 = Student(
                 0,
@@ -149,34 +125,6 @@ internal class StudentServiceTest {
                 course1Saved,
                 false
         )
-        // val studentregistered2 = studentService.register(student2)
-
-        val student3 =
-                Student(
-                        0, "Pedro",
-                        "Picapiedra",
-                        "456",
-                        "pica@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        //  val studentregistered3 = studentService.register(student3)
-
-        val student4 =
-                Student(
-                        0,
-                        "Pablo",
-                        "Marmol",
-                        "456",
-                        "marmol@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        //    val studentregistered4  =  studentService.register(student4)
 
         student5 =
                 Student(
@@ -189,7 +137,6 @@ internal class StudentServiceTest {
                         course3Saved,
                         false
                 )
-        // val studentregistered5  =studentService.register(student5)
 
         student6 =
                 Student(
@@ -203,116 +150,6 @@ internal class StudentServiceTest {
                         course3Saved,
                         false
                 )
-        //  val studentregistered6  = studentService.register(student6)
-
-        val student7 =
-                Student(
-                        0,
-                        "Alu3",
-                        "Marmol",
-                        "456",
-                        "alu3@gmail.com",
-                        firstattendaces,
-                        "",
-                        course4Saved,
-                        false
-                )
-        //  val studentregistered7  =  studentService.register(student7)
-
-        val student8 =
-                Student(
-                        0,
-                        "Alu4",
-                        "Marmol",
-                        "456",
-                        "alu4@gmail.com",
-                        firstattendaces,
-                        "",
-                        course4Saved,
-                        false
-                )
-        //  val studentregistered8  = studentService.register(student8)
-
-        val student9 =
-                Student(
-                        0, "Pebbles",
-                        "Picapiedra",
-                        "456",
-                        "pebbles@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        //  val studentregistered9= studentService.register(student9)
-
-        val student10 =
-                Student(
-                        0,
-                        "Bam-Bam",
-                        "Marmol",
-                        "456",
-                        "bambam@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        // val studentregistered10   =studentService.register(student10)
-
-        val student11 =
-                Student(
-                        0, "Vilma",
-                        "Picapiedra",
-                        "456",
-                        "vilma@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        //  val studentregistered211 =  studentService.register(student11)
-
-        val student12 =
-                Student(
-                        0,
-                        "Betty",
-                        "Marmol",
-                        "456",
-                        "betty@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        //  val studentregistered12  = studentService.register(student12)
-
-        val student13 =
-                Student(
-                        0, "Mr",
-                        "Slate",
-                        "456",
-                        "slate@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        //  val studentregistered13 =  studentService.register(student13)
-
-        val student14 =
-                Student(
-                        0,
-                        "Creepella",
-                        "Gruesome",
-                        "456",
-                        "creepella@gmail.com",
-                        firstattendaces,
-                        "",
-                        course2Saved,
-                        false
-                )
-        // val studentregistered14  = studentService.register(student14)
 
         student15 =
                 Student(
@@ -325,7 +162,6 @@ internal class StudentServiceTest {
                         course3Saved,
                         false
                 )
-        //  val studentregistered15  = studentService.register(student15)
 
         student16 =
                 Student(
@@ -339,7 +175,6 @@ internal class StudentServiceTest {
                         course3Saved,
                         false
                 )
-        //  val studentregistered16  = studentService.register(student16)
 
         student17 =
                 Student(
@@ -352,23 +187,7 @@ internal class StudentServiceTest {
                         course3Saved,
                         false
                 )
-        // val studentregistered17  =  studentService.register(student17)
-
-        val student18 =
-                Student(
-                        0,
-                        "Mrs",
-                        "Spacely",
-                        "456",
-                        "spacely@gmail.com",
-                        firstattendaces,
-                        "",
-                        course3Saved,
-                        false
-                )
-        //  val studentregistered18 =  studentService.register(student18)
-    }
-
+        }
 
     /**get  Students */
     @Test
@@ -394,9 +213,8 @@ internal class StudentServiceTest {
         assertThrows<ItemNotFoundException> { studentService.findByID(0) }
     }
 
-
     @Test
-    fun Si_el_id_es_existente_Retorna_al_estudiante_asociado_con_ese_id_() {
+    fun si_el_id_es_existente_Retorna_al_estudiante_asociado_con_ese_id_() {
         val studentRegistered = studentService.register(student1)
         val studentFound = studentService.findByID(studentRegistered.id!!)
         Assertions.assertEquals(studentRegistered.id, studentFound.id)
@@ -404,7 +222,6 @@ internal class StudentServiceTest {
         Assertions.assertEquals(studentRegistered.surname, studentFound.surname)
         Assertions.assertEquals(studentRegistered.email, studentFound.email)
     }
-
 
     /** update a student* */
     @Test
@@ -414,7 +231,7 @@ internal class StudentServiceTest {
     }
 
     @Test
-    fun Si_el_id_es_existente_Actualiza_al_estudiante_asociado_con_ese_id_() {
+    fun si_el_id_es_existente_Actualiza_al_estudiante_asociado_con_ese_id_() {
         val studentRegistered = studentService.register(student1)
         val updated = studentService.update(studentRegistered.id!!, studentData)
         val restored = studentService.findByID(studentRegistered.id!!)
@@ -425,7 +242,6 @@ internal class StudentServiceTest {
         Assertions.assertEquals(updated.attendancepercentage, restored.attendancePercentage())
         Assertions.assertEquals(updated.blocked, restored.blocked)
     }
-
 
     /** Delete a student By Id */
     @Test
@@ -465,7 +281,7 @@ internal class StudentServiceTest {
     }
 
     @Test
-    fun Si_ninguno_falto_ese_dia_en_particular_no_devuelve_estudiantes() {
+    fun si_ninguno_falto_ese_dia_en_particular_no_devuelve_estudiantes() {
         val day = 1
         studentService.register(student5)
         studentService.register(student6)
@@ -493,7 +309,6 @@ internal class StudentServiceTest {
         Assertions.assertFalse(student2.blocked)
     }
 
-
     @Test
     fun si_bloqueo_todos_los_estudiantes_al_consultarlos_apareceran_bloqueados() {
         val student1 = studentService.register(student1)
@@ -503,7 +318,6 @@ internal class StudentServiceTest {
         Assertions.assertTrue(blockedOrUnblocked1.blocked)
         Assertions.assertTrue(blockedOrUnblocked2.blocked)
     }
-
 
     @Test
     fun si_por_defecto_estan_todos_desbloqueados_y_bloqueo_a_uno_Solo_ese_aparecera_bloqueado() {
@@ -520,23 +334,20 @@ internal class StudentServiceTest {
     @Test
     fun al_consultar_por_un_mail_existente_devuelve_True() {
         val email = "algoritmosale@gmail.com"
-         studentService.register(student1)
-         studentService.register(student2)
+        studentService.register(student1)
+        studentService.register(student2)
         val checked = studentService.checkMail(email)
         Assertions.assertTrue(checked)
-
     }
-
 
     @Test
     fun al_consultar_por_un_mail_inexistente_devuelve_False() {
         val email = "noexiste@gmail.com"
-         studentService.register(student1)
-         studentService.register(student2)
+        studentService.register(student1)
+        studentService.register(student2)
         val checked = studentService.checkMail(email)
         Assertions.assertFalse(checked)
     }
-
 
     @AfterEach
     fun tearDown() {

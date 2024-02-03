@@ -126,7 +126,7 @@ class TutorRestService {
     fun studentsFromATutor(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val students = tutorService.studentsFromATutor(id).map { StudentDTO.desdeModelo(it) }
+            val students = tutorService.studentsFromATutor(id).map { StudentView.desdeModelo(it) }
             response = unifiedResponse.unifiedOkResponse(students)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, "Tutor with id $id not found")

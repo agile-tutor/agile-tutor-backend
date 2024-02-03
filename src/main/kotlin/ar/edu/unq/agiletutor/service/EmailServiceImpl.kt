@@ -100,18 +100,12 @@ class EmailServiceImpl {
 
     fun sendSimpleMessage(to: String, subject: String, text: String) {
         val message = SimpleMailMessage()
-        message.setFrom(to)
+        message.from = to
         message.setTo(to)
-        message.setSubject(subject)
-        message.setText(text)
+        message.subject = subject
+        message.text = text
         emailSender.send(message)
     }
-
-    //   @Scheduled(cron = "*/5 * * * * *")//cada cinco segundos
-    /*    fun pruebaCronJob() {
-            println("adentro del cronJob de 5 segundos")
-        }
-    */
 
     @Transactional
     @Scheduled(cron = "\${cron.expressionat22hs}")//a las 22 horas
@@ -154,13 +148,13 @@ class EmailServiceImpl {
         }
     }
 
-    fun studentsToNotify(notifyer: Notifyer): List<StudentDTO> {
+    fun studentsToNotify(notifyer: Notifyer): List<StudentView> {
 //        val notifyer: Notifyer = getNotifyer()
-        return notifyer.getAbsentToNotify().map { StudentDTO.desdeModelo(it) }
+        return notifyer.getAbsentToNotify().map { StudentView.desdeModelo(it) }
     }
 
     fun removeStudentFromNotify(notifyer: Notifyer, studentId: Long) {
-        val student = studentService.findByID(studentId.toLong())
+        val student = studentService.findByID(studentId)
         notifyer.delabsent(student)
     }
 }

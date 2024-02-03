@@ -15,7 +15,6 @@ class Course : BaseEntity {
     @Size(min = 1, max = 30, message = "el campo name debe contener un minimo de 1 y un máximo de 30 caracteres")
     var name: String? = null
 
-    // @Column(nullable = false)
     @OneToMany(mappedBy = "course", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     //@OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER )
     //@Size(min = 1, max = 1)
@@ -51,10 +50,8 @@ class Course : BaseEntity {
         if (!rangedays.contains(day)) {
             throw ItemNotFoundException(" Day:  $day invalid")
         }
-        println("aca llegue")
         val meeting = meetings.toMutableList()[day.dec()]
         meeting.passed = true
-        println("a ver" + meeting.day.toString() + meeting.passed.toString())
         meetings.toMutableList()[day.dec()] = meeting
         meetings.forEach { println(it.day.toString() + it.passed.toString()) }
         return this

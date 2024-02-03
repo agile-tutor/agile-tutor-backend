@@ -10,6 +10,8 @@ import org.springframework.data.repository.CrudRepository
 @Configuration
 @Repository
 interface SurveyRepository : CrudRepository<Survey?, Long?> {
+
     fun save(survey: Survey): Survey
+
     override fun findAll(): List<Survey>
 }

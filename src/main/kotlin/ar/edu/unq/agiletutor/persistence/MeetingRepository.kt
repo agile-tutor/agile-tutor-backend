@@ -11,9 +11,10 @@ import java.util.*
 interface MeetingRepository : CrudRepository<Meeting?, Long?> {
 
     fun save(meeting: Meeting): Meeting
+
     override fun findAll(): List<Meeting>
+
     override fun findById(id: Long): Optional<Meeting?>
 
-    //    fun findByName(name: String): Optional<Meeting?>
     override fun deleteById(id: Long)
 }

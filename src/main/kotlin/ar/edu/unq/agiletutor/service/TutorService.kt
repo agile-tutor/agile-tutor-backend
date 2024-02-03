@@ -178,7 +178,7 @@ class TutorService {
     }
 
     @Transactional
-    fun studentsToNotifyFromTutor(tutorId: Long): List<StudentDTO> {
+    fun studentsToNotifyFromTutor(tutorId: Long): List<StudentView> {
         val notifyer = this.findByID(tutorId).notifyer
         return senderService.studentsToNotify(notifyer!!)
     }

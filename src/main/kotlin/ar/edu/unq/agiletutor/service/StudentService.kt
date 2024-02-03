@@ -85,14 +85,14 @@ class StudentService {
     }
 
     @Transactional
-    fun update(id: Long, entity: StudentDTO): StudentDTO {
+    fun update(id: Long, entity: StudentRegisterDTO): StudentView {
         val student = findByID(id)
         student.name = entity.name
         student.surname = entity.surname
         student.identifier = entity.identifier
         student.email = entity.email
         student.observations = entity.observations!!
-        return StudentDTO.desdeModelo(repository.save(student))
+        return StudentView.desdeModelo(repository.save(student))
     }
 
     @Transactional
@@ -159,10 +159,10 @@ class StudentService {
 
 
     @Transactional
-    fun blockOrUnblockAStudent(id: Long, blocked: Boolean): StudentDTO {
+    fun blockOrUnblockAStudent(id: Long, blocked: Boolean): StudentView {
         val student = findByID(id)
         student.blocked = blocked
-        return StudentDTO.desdeModelo(repository.save(student))
+        return StudentView.desdeModelo(repository.save(student))
     }
 
 
