@@ -16,7 +16,6 @@ class TutorRestService {
 
     @Autowired
     private lateinit var tutorService: TutorService
-    private val builder: ResponseEntity.BodyBuilder? = null
     private val unifiedResponse = UnifiedResponseMessage()
 
     /**register a tutor*/

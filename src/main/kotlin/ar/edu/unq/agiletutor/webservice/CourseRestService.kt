@@ -20,7 +20,6 @@ class CourseRestService {
 
     @Autowired
     private lateinit var courseService: CourseService
-    private val builder: ResponseEntity.BodyBuilder? = null
     private val unifiedResponse = UnifiedResponseMessage()
 
 

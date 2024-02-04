@@ -15,7 +15,6 @@ class StudentRestService {
 
     @Autowired
     private lateinit var studentService: StudentService
-    private val builder: ResponseEntity.BodyBuilder? = null
     private val unifiedResponse = UnifiedResponseMessage()
 
     @Autowired
@@ -103,7 +102,6 @@ class StudentRestService {
         return response!!
     }
 
-
     /**Attendances  From a Student*/
     @GetMapping("/api/students/attendances/{id}")
     fun attendancesFromAStudent(@PathVariable("id") id: Int): ResponseEntity<*> {
@@ -117,7 +115,6 @@ class StudentRestService {
         val percentageOfAttendances = studentService.attendancesPercentageFromAStudent(id.toLong())
         return ResponseEntity.ok().body(percentageOfAttendances)
     }
-
 
     /** Average of Attendances  From all Students*/
     @GetMapping("/api/students/attendances/average")

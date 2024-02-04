@@ -74,10 +74,6 @@ class Student : BaseEntity {
         return attended().size
     }
 
-    fun cantidadDeAusentes(): Int {
-        return absent().size
-    }
-
     fun updateAttendanceAtADay(attendance: Attendance) {
         println("updateatendance" + attendance.toString() + attendance.id + attendance.attended)
         //attendances.toMutableList().set(attendance.day!!, attendance)

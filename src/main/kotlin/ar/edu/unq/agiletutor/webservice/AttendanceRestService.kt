@@ -19,7 +19,6 @@ class AttendanceRestService {
 
     @Autowired
     private  lateinit var  studentService: StudentService
-    private val builder: ResponseEntity.BodyBuilder? = null
 
 
     /**update attendances for a student */
