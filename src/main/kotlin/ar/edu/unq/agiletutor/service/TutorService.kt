@@ -138,8 +138,8 @@ class TutorService {
     }
 
     @Transactional
-    fun moveAStudentIntoAnotherCourse(id: Long, id_course: Long)/*:Student*/ {
-        val courseMoved = courseService.findByID(id_course)
+    fun moveAStudentIntoAnotherCourse(id: Long, courseId: Long)/*:Student*/ {
+        val courseMoved = courseService.findByID(courseId)
         val student = studentService.findByID(id)
         val course = courseService.findByID(student.course!!.id!!)
         if (courseMoved.id == course.id) {

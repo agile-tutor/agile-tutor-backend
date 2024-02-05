@@ -99,7 +99,6 @@ class InitService {
             course1Saved,
             false
         )
-        val studentregistered2 = studentService.register(student2)
 
         val student3 =
             Student(

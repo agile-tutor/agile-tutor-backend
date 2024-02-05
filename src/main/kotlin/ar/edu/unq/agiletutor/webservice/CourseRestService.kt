@@ -172,15 +172,15 @@ class CourseRestService {
 
     /** Course attended at days*/
     @GetMapping("/api/course/attended/{course}")
-    fun courseAttendedAtDay(@PathVariable("course") course_id: Long)
+    fun courseAttendedAtDay(@PathVariable("course") courseId: Long)
             : ResponseEntity<*> {
         var response: ResponseEntity<*>?
 
         try {
-            val result = courseService.attendedAtDay(course_id)
+            val result = courseService.attendedAtDay(courseId)
             response = unifiedResponse.unifiedOkResponse(result)
         } catch (e: Exception) {
-            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $course_id not found")
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $courseId not found")
         }
         return response!!
     }

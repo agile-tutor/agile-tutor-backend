@@ -185,10 +185,10 @@ class CourseService {
     @Transactional
     fun averageAttendancesFromACourse(id: Long): Double {
         val course = findByID(id)
-        if (course.students.isNotEmpty()) {
-            return course.students.sumOf { it.attendancePercentage() } / course.students.size
+        return if (course.students.isNotEmpty()) {
+            course.students.sumOf { it.attendancePercentage() } / course.students.size
         } else {
-            return 0.0
+            0.0
         }
     }
 
