@@ -136,12 +136,28 @@ class TutorRestService {
     /** Move a student to Another Course*/
     @PutMapping("/api/tutor/students/move/{id}/{id_course}")
     fun moveAStudentIntoAnotherCourse(
-            @PathVariable("id") id: Int, @PathVariable("id_course") id_course: Long
+            @PathVariable("id") id: Int, @PathVariable("id_course") courseId: Long
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val student = tutorService.moveAStudentIntoAnotherCourse(id.toLong(), id_course)
+            val student = tutorService.moveAStudentIntoAnotherCourse(id.toLong(), courseId)
             response = unifiedResponse.unifiedOkResponse(student)
+        } catch (e: Exception) {
+            ResponseEntity.status(404)
+            response = unifiedResponse.unifiedNotFoundResponse(e, e.message.toString())
+        }
+        return response!!
+    }
+
+    /** Move a Course to Another Tutor **/
+        @PutMapping("/api/tutor/course/move/{tutorId}/{courseId}")
+    fun changeTutorFromACourse(
+            @PathVariable("tutorId") tutorId: Long, @PathVariable("courseId") courseId: Long
+    ): ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val course = tutorService.changeTutorFromACourse(tutorId, courseId)
+            response = unifiedResponse.unifiedOkResponse(course)
         } catch (e: Exception) {
             ResponseEntity.status(404)
             response = unifiedResponse.unifiedNotFoundResponse(e, e.message.toString())

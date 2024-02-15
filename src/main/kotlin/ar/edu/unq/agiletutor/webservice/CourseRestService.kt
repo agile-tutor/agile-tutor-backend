@@ -73,7 +73,7 @@ class CourseRestService {
     }
 
     /**get the tutor from a course*/
-    @GetMapping("/api/course/tutor/{id}")
+                    @GetMapping("/api/course/tutor/{id}")
     fun tutorFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
@@ -113,15 +113,16 @@ class CourseRestService {
 
     /**update  students attendances from a course*/
 //    @PuMapping("/api/students/attendances/update/{id}/{day}")
-    @PutMapping("/api/course/students/attendances/update/{id}")
+    @PutMapping("/api/course/students/attendances/update/{id}/{day}")
     fun updateStudentsAttendancesFromACourse(
             @PathVariable("id") id: Long,
+            @PathVariable("day") day: Int,
             @RequestBody attendances: List<StudentAttendanceDTO>
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
             println("id desde api: $id")
-            courseService.updateStudentsAttendancesFromACourse(id, attendances)
+            courseService.updateStudentsAttendancesFromACourse(id, day, attendances)
             ResponseEntity.status(201)
             response = ResponseEntity.ok().body("students attendances Updated Ok")
         } catch (e: Exception) {
@@ -136,14 +137,14 @@ class CourseRestService {
         val averageAttendances = courseService.averageAttendancesFromACourse(id)
         return ResponseEntity.ok().body(averageAttendances)
     }
-
+/*
     /**  Marked Down attendances at a particular day*/
     @GetMapping("/api/course/attendances/{id}")
     fun markedDownAttendanceAFromACourseATaParticularDay(@PathVariable("id") id: Long, @PathVariable("day") day: Int): ResponseEntity<*> {
         val narkedDown = courseService.markedDownAttendanceAFromACourseATaParticularDay(id, day)
         return ResponseEntity.ok().body(narkedDown)
     }
-
+*/
     /**Students approved From a Course*/
     @GetMapping("/api/course/students/approved/{id}")
     fun studentsApprovedFromACourse(@PathVariable("id") id: Long): ResponseEntity<*> {
@@ -181,6 +182,20 @@ class CourseRestService {
             response = unifiedResponse.unifiedOkResponse(result)
         } catch (e: Exception) {
             response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $courseId not found")
+        }
+        return response!!
+    }
+
+    /** Students from a course whit attendance state at meeting day */
+    @GetMapping("/api/course/students/attended/{course}/{meetingday}")
+    fun courseAttendedAtDay(@PathVariable("course") courseId: Long, @PathVariable("meetingday") meetingDay: Int)
+            : ResponseEntity<*> {
+        var response: ResponseEntity<*>?
+        try {
+            val result = courseService.studentsFromCourseWhitAttendanceAtDay(courseId, meetingDay)
+            response = unifiedResponse.unifiedOkResponse(result)
+        } catch (e: Exception) {
+            response = unifiedResponse.unifiedNotFoundResponse(e, "Course with id $courseId or meeting day with id $meetingDay not found")
         }
         return response!!
     }

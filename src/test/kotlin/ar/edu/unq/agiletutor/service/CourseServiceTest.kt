@@ -30,6 +30,9 @@ internal class CourseServiceTest {
     @Autowired
     private val tutorService: TutorService? = null
 
+    @Autowired
+    private val studentService: StudentService? = null
+
     lateinit var student1: Student
     lateinit var student2: Student
     lateinit var studentData: StudentRegisterDTO
@@ -110,8 +113,8 @@ internal class CourseServiceTest {
     @Test
     fun al_consultar_Los_estudiantes_de_un_curso_no_vacio_devuelve_sus_estudiantes() {
         val courseId = course1Saved.id!!
-        tutorService!!.addAStudentToACourse(student1, course1Saved)
-        tutorService.addAStudentToACourse(student2, course1Saved)
+        studentService!!.register(student1)
+        studentService.register(student2)
         val students = courseService!!.studentsFromACourse(courseId)
         Assertions.assertTrue(students.isNotEmpty())
         Assertions.assertEquals(students.size, 2)

@@ -59,7 +59,7 @@ class StudentRestService {
         return response!!
     }
 
-    /**get tutor by email**/
+    /**get student by name**/
     @GetMapping("/api/students/name/{name}")
     fun studentsByName(@PathVariable("name") name: String): ResponseEntity<*> {
         var response: ResponseEntity<*>?

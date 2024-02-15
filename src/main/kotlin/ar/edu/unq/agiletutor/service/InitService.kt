@@ -88,18 +88,6 @@ class InitService {
             )
         val studentregistered1 = studentService!!.register(student1)
 
-        val student2 = Student(
-            0,
-            "Cristian",
-            "Gonzalez",
-            "456",
-            "cristian.gonzalez.unq@gmail.com",
-            firstattendaces,
-            "",
-            course1Saved,
-            false
-        )
-
         val student3 =
             Student(
                 0, "Pedro",

@@ -104,7 +104,6 @@ data class StudentView(
         var name: String?,
         var surname: String?,
         var identifier: String?,
-        var attendances: List<AttendanceDTO>,
         var email: String?,
         var attendancepercentage: Double?,
         var observations: String?,
@@ -114,14 +113,13 @@ data class StudentView(
 
     companion object {
         fun desdeModelo(student: Student): StudentView {
-            val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
+ //           val asistenciasDTO = student.attendances.map { AttendanceDTO.desdeModelo(it) }
 
             return StudentView(
                     student.id,
                     student.name,
                     student.surname,
                     student.identifier,
-                    asistenciasDTO,
                     student.email,
                     student.attendancePercentage(),
                     student.observations,
@@ -163,8 +161,8 @@ data class AttendanceViewDTO(
 }
 
 data class StudentAttendanceDTO(
-        var studentId: Int,
-        var attendance: AttendanceDTO
+        var studentId: Long,
+            var attendance: AttendanceDTO
 )
 
 data class StudentBlockDTO(

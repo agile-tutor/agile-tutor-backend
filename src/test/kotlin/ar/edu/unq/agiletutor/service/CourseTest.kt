@@ -25,6 +25,7 @@ internal class CourseTest{
 
 
     }
+    /*
     /** Mark down a Course from a particular day */
     @Test
     fun al_consultar_por_un_dia_invalido_Lanza_excepcion() {
@@ -47,7 +48,7 @@ internal class CourseTest{
         val meeting = course.meetings.toMutableList()[dayNotPassed.dec()]
         Assertions.assertFalse(meeting.passed)
     }
-
+*/
     @AfterEach
     fun tearDown() {
     }

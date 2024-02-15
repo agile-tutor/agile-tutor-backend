@@ -87,7 +87,7 @@ data class CourseDTO(
         var name: String?,
 
         ) {
-    companion object {
+    companion   object {
         fun desdeModelo(course: Course): CourseDTO {
             println("iddelcurso11" + course.id)
             return CourseDTO(course.id!!, course.name)

@@ -123,12 +123,9 @@ class TutorService {
     }
 
     @Transactional
-    fun addAStudentToACourse(student: Student, course: Course)/*:Student*/ {
+    fun addAStudentToACourse(student: Student, course: Course):Student {
         student.course = course
-        /*val studentRegistered=*/ studentRepository.save(student)
-        // course.students.add(student)
-        //courseRepository.save(course)
-        //return studentRegistered
+        return studentRepository.save(student)
     }
 
     @Transactional
@@ -138,18 +135,32 @@ class TutorService {
     }
 
     @Transactional
-    fun moveAStudentIntoAnotherCourse(id: Long, courseId: Long)/*:Student*/ {
-        val courseMoved = courseService.findByID(courseId)
+    fun moveAStudentIntoAnotherCourse(id: Long, courseId: Long):Student {
+        val courseToMove = courseService.findByID(courseId)
         val student = studentService.findByID(id)
-        val course = courseService.findByID(student.course!!.id!!)
-        if (courseMoved.id == course.id) {
-            throw UsernameExistException("Do not can moved a student to the same course:  ${course.id}")
+        val courseToRemove = courseService.findByID(student.course!!.id!!)
+        if (courseToMove.id == courseToRemove.id) {
+            throw UsernameExistException("can not moved a student to the same course: $courseId")
         }
-        /*val studentRegistered = */addAStudentToACourse(student, courseMoved)
         removeAStudentFromACourse(student, student.course!!)
-        /*return studentRegistered*/
+        return addAStudentToACourse(student, courseToMove)
     }
 
+    @Transactional
+    fun changeTutorFromACourse(tutorId: Long, courseId: Long):Course {
+        val tutorToAssign = findByID(tutorId)
+        val course = courseService.findByID(courseId)
+        if (course.tutor!!.id == tutorId) {
+            throw UsernameExistException("can not assign a course to the same tutor: $tutorId")
+        }
+        return addATutorToACourse(tutorToAssign, course)
+    }
+
+    @Transactional
+    fun addATutorToACourse(tutorToAssign: Tutor, course: Course):Course {
+        course.tutor = tutorToAssign
+        return courseRepository.save(course)
+    }
     @Transactional
     fun absentMessageFromTutor(notifyer: Notifyer): AbsentMessageDataDTO {
 //        val notifyer = senderService.getNotifyer()

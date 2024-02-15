@@ -91,6 +91,12 @@ class CourseService {
     }
 
     @Transactional
+    fun studentsFromCourseWhitAttendanceAtDay(courseId: Long, meetingDay: Int): List<StudentAttendanceDTO> {
+        val course = findByID(courseId)
+        return course.students.toList().map { StudentAttendanceDTO(it.id!!, AttendanceDTO.desdeModelo(it.meetingDayAttendance(meetingDay))) }
+    }
+
+    @Transactional
     fun studentsFillSurveydFromACourse(id: Long): List<Student> {
         val course = findByID(id)
         val studentsIds = surveyService.findAll().toMutableList().map { it.studentId }
@@ -155,18 +161,17 @@ class CourseService {
     */
 
     @Transactional
-    fun updateStudentsAttendancesFromACourse(id: Long, studentAttendances: List<StudentAttendanceDTO>) {
+    fun updateStudentsAttendancesFromACourse(id: Long, day: Int, studentAttendances: List<StudentAttendanceDTO>) {
         val course = findByID(id)
-        println(course.toString() + "courseupdateget " + course.id + "day " + studentAttendances.first().attendance.day)
+        println(course.toString() + "courseupdateget " + course.id + "day " + day)
         // val courseMarked =  markdownAttendance(course, studentAttendances.first().attendance.day!!)
-        course.markAttendanceAtaDay(studentAttendances.first().attendance.day!!)
+       // course.markAttendanceAtaDay(day)
         println(course.toString() + "courseupdatepostmark")
         for (studentAttendance in studentAttendances) {
             println(studentAttendance.toString() + "courseupdateattendancesfor")
             val student = studentService.findByID(studentAttendance.studentId.toLong())
             println(student.name + "courseupdateattendancesstudent")
             student.updateAttendanceAtADay(studentAttendance.attendance.aModelo())
-
         }
         repository.save(course)
         val students = studentService.studentsNotBlockedAbsentAtAParticularDay(id, studentAttendances.first().attendance.day!!).toMutableSet()
@@ -192,28 +197,13 @@ class CourseService {
         }
     }
 
-    @Transactional
-    fun addAStudentToACourse(student: Student, id: Long) {
-        val course = findByID(id)
-        student.course = course
-        studentService.register(student)
-        //course.students.add(student)
-        // repository.save(course)
-    }
-
-    @Transactional
-    fun removeAStudentFromACourse(student: Student, id: Long) {
-        val course = findByID(id)
-        course.students.remove(student)
-        repository.save(course)
-    }
-
+/*
     @Transactional
     fun markedDownAttendanceAFromACourseATaParticularDay(id: Long, day: Int): Boolean {
         val course = findByID(id)
         return course.markedDowndDay(day)
     }
-
+*/
     @Transactional
     fun attendedAtDay(id: Long): MutableSet<DayBooleanDTO> {
         val course = findByID(id)

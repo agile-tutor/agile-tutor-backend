@@ -44,7 +44,7 @@ class Course : BaseEntity {
         this.meetings = meetings
 
     }
-
+/*
     fun markAttendanceAtaDay(day: Int): Course {
         val rangedays = (1..6)
         if (!rangedays.contains(day)) {
@@ -55,12 +55,12 @@ class Course : BaseEntity {
         meetings.toMutableList()[day.dec()] = meeting
         meetings.forEach { println(it.day.toString() + it.passed.toString()) }
         return this
-    }
-
+    }*/
+/*
     fun markedDowndDay(day: Int): Boolean {
         return meetings.any { it.day == day && it.passed }
     }
-
+*/
     fun attendedAtDays(): MutableSet<DayBooleanDTO> {
         val daysAttended: MutableSet<DayBooleanDTO> = HashSet()
         val day1 = students.filter { it.attendedDay(1) }.size
