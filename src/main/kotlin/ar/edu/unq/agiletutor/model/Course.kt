@@ -20,14 +20,14 @@ class Course : BaseEntity {
     //@Size(min = 1, max = 1)
     var students: MutableSet<Student> = HashSet()
 
-    @ManyToOne(optional = true)
+        @ManyToOne(optional = true)
     var tutor: Tutor? = null
 
     @OneToMany(mappedBy = "course", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var meetings: MutableSet<Meeting> = HashSet()
 
 
-    constructor() : super() {}
+    constructor() : super() {}  
     constructor(
             id: Long,
             name: String?,

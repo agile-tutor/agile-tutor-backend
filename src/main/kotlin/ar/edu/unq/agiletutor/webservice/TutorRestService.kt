@@ -140,7 +140,7 @@ class TutorRestService {
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val student = tutorService.moveAStudentIntoAnotherCourse(id.toLong(), courseId)
+            val student = StudentView.desdeModelo(tutorService.moveAStudentIntoAnotherCourse(id.toLong(), courseId))
             response = unifiedResponse.unifiedOkResponse(student)
         } catch (e: Exception) {
             ResponseEntity.status(404)
@@ -156,7 +156,7 @@ class TutorRestService {
     ): ResponseEntity<*> {
         var response: ResponseEntity<*>?
         try {
-            val course = tutorService.changeTutorFromACourse(tutorId, courseId)
+            val course = CourseDTO.desdeModelo(tutorService.changeTutorFromACourse(tutorId, courseId))
             response = unifiedResponse.unifiedOkResponse(course)
         } catch (e: Exception) {
             ResponseEntity.status(404)
